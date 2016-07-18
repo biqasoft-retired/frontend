@@ -57,11 +57,15 @@ gulp.task('copyManifest', function () {
 });
 
 gulp.task('copySafariPinned', function () {
-    return gulp.src(['./safari-pinned-tab.svg']).pipe(gulp.dest('./build'));
+    return gulp.src(['./assets/favicon/safari-pinned-tab.svg']).pipe(gulp.dest('./build/assets/favicon'));
 });
 
 gulp.task('copyCheckmarkImage', function () {
     return gulp.src(['./assets/css/img/checkmark.png']).pipe(gulp.dest('./build/build/img'));
+});
+
+gulp.task('copyFlagImage', function () {
+    return gulp.src(['./assets/css/ui/images/flags.png']).pipe(gulp.dest('./build/build/assets/css/ui/images/flags.png'));
 });
 
 gulp.task('copyAssets', function () {
@@ -119,6 +123,6 @@ gulp.task(
         'copyFontAwesome',
         'compileJavaScript',
         'cleanTemps',
-        gulp.parallel('copyMaterialIcons', 'copyRobotsTxt', 'copyCheckmarkImage', 'copyBrowserconfig', 'copyManifest', 'copySafariPinned')
+        gulp.parallel('copyMaterialIcons', 'copyRobotsTxt', 'copyCheckmarkImage', 'copyBrowserconfig', 'copyManifest', 'copySafariPinned', 'copyFlagImage')
     )
 );

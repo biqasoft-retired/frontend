@@ -46,6 +46,9 @@ LE.log("Hello, logger!");
  * http://fortawesome.github.io/Font-Awesome/icon/pencil-square-o/
  * http://fortawesome.github.io/Font-Awesome/icon/check-circle-o/
 
+### Build
+ - [Gulp 4](https://demisx.github.io/gulp4/2015/01/15/install-gulp4.html) `gulp` - result in `build`folder
+
 ### i18n
 Translate text. 
 

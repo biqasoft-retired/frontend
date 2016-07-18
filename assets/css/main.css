@@ -9648,7 +9648,7 @@ img.img80_80 {
 }
 
 .flags-american, .flags-china, .flags-france, .flags-germany, .flags-italy, .flags-japan, .flags-korea, .flags-portugal, .flags-russia, .flags-spain, .flags-sprite {
-    background: url(ui/images/flags-s61ea563cec.png) no-repeat
+    background: url('assets/css/ui/images/flags.png') no-repeat
 }
 
 .flags-american {

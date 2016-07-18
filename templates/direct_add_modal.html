@@ -1,0 +1,34 @@
+<md-dialog aria-label="" style="">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span translate="EXTERNAL_SERVICES.YANDEX.DIRECT.ADD.HEADER"></span>
+                </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+
+            <div style="padding: 10px">
+
+                <br>
+                <b>1. </b> <span translate="EXTERNAL_SERVICES.YANDEX.DIRECT.ADD.POINT_1"></span>
+                <img src="assets/img//yandex_direct/1.png" class="img-responsive">
+
+                <br><br><br>
+                <b> 2. </b> <span translate="EXTERNAL_SERVICES.YANDEX.DIRECT.ADD.POINT_2"></span>
+                <img src="assets/img/yandex_direct/2.png" class="img-responsive">
+                <hr>
+                <br><br><br>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <a class="md-button md-raised md-primary" ng-show="yandexClientId" href="{{yandexClientId}}" target="_blank">
+                <span translate="APP.COMMON.ACTION.CONTINUE"></span>
+            </a>
+        </md-dialog-actions>
+
+    </form>
+</md-dialog>

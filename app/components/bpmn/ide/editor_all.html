@@ -1,0 +1,131 @@
+<style>
+    .CodeMirror {
+        border: 1px solid #eee;
+        height: auto;
+    }
+</style>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <section class="panel panel-primary" style="  margin-bottom: 3px;">
+                    <div class="panel-heading">
+                        <small>Frontend</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <b> This code will be executed in browser </b>
+                            <table class="{{$root.tableClasses}}">
+                                <thead></thead>
+                                <tbody>
+                                <tr>
+                                    <td >
+                                        <md-icon md-font-icon="info_outline"
+                                                 tooltip-placement="right" tooltip="{{'WIDGETS.CREATE.CUSTOM.NOTES.P1' | translate}} {{'WIDGETS.CREATE.CUSTOM.NOTES.P2' | translate}}"
+                                                 tooltip-append-to-body="true"
+                                        >info_outline</md-icon>
+                                    </td>
+                                    <td>
+                                        <select ng-model="clientSideCode" ng-options="funce.name for funce in allBackgroundWidgetsMy"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        ID
+                                    </td>
+                                    <td>
+                                        {{clientSideCode.id}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                    </td>
+
+                                    <td>
+                                        <a href="#" editable-text="clientSideCode.name">{{ clientSideCode.name || printEmptyField() }}</a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.CUSTOM.ACTIVE.HEADER"></span>
+                                    </td>
+                                    <td>
+                                        <md-switch type="checkbox" ng-model="clientSideCode.enabled"><i></i>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div ui-codemirror ui-codemirror-opts="editorOptions" data-ng-model="clientSideCode.jsExec" data-ng-change="">
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <md-button class="md-raised md-primary" ng-click="executeJsCode()">
+                                        Execute
+                                    </md-button>
+                                </div>
+                                <div class="col-md-4" ng-if="clientSideCode.id">
+                                    <md-button class="md-raised md-primary" ng-click="updateWidgetToServer()">
+                                        Update
+                                    </md-button>
+                                </div>
+                                <div class="col-md-4" ng-if="!clientSideCode.id">
+                                    <md-button class="md-raised md-primary" ng-click="addClientSideWidget()">
+                                        Add
+                                    </md-button>
+                                </div>
+                            </div>
+
+                            <span ng-show="lastClientSideExecuterError.error.length > 0">
+                            <br><br><br>
+                              Last error <br> {{lastClientSideExecuterError.error | json}}
+                        </span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+                <section class="panel panel-primary" style="  margin-bottom: 3px;">
+                    <div class="panel-heading">
+                        <small>Backend</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <b>
+                                <span translate="BPMN.EXECUTE_CODE.HEADER"></span>
+                            </b>
+                            <div ui-codemirror ui-codemirror-opts="editorOptions" data-ng-model="executeRequest.code"
+                                 data-ng-change="">
+                            </div>
+
+                            <md-button ng-click="execute()" class="md-raised md-primary">
+                                <span translate="BPMN.EXECUTE_CODE.EXECUTE.BUTTON"></span>
+                            </md-button>
+
+                            <br>
+                            <div>
+                                <div ng-show="result && result.result">
+                                    <b>
+                                        <span translate="BPMN.EXECUTE_CODE.EXECUTE.RESULT.HEADER"></span>
+                                    </b>
+                                    <json-printer result="result"></json-printer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </div>
+</section>

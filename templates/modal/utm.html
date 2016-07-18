@@ -1,0 +1,33 @@
+<md-dialog aria-label="" style="">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span translate="LEADGEN_METHOD.PROJECT.UTM.VIEW.HEADER"></span>
+                </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style=" ">
+            <div class="panel-body text-center">
+                <b>
+                    <span translate="LEADGEN_METHOD.PROJECT.UTM.ADDRESS"></span>
+                </b>
+                <br>
+                <input type="text" ng-model="utm_address" class="form-control"> <br>
+                <br><br>
+
+                <div class="row nopadding">
+                    <div class="col-md-10 nopadding">
+                        <input id="foo" type="text" ng-model="utm_address_full" class="form-control" readonly> <br>
+                    </div>
+                    <div class="col-md-2 nopadding">
+                        <button class="btn" ngclipboard data-clipboard-target="#foo">
+                            <img src="assets/clippy.svg" alt="Copy to clipboard" width="13">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

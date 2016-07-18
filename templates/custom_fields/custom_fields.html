@@ -1,0 +1,238 @@
+<div>
+    <div ng-if="currentCompany.customFields.length   == 0">
+        <div class="callout callout-warning">
+            <h4>
+                <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.NO_FIELDS.P1"></span>
+            </h4>
+            <p>
+                <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.NO_FIELDS.P2"></span>
+            </p>
+        </div>
+    </div>
+
+    <div ui-tree="options" ng-if="currentCompany.customFields.length > 0">
+        <section class="panel panel-primary nopadding">
+            <div class="panel-heading">
+                <div class="row nopadding">
+                    <div class="col-md-1">
+                        №
+                    </div>
+                    <div class="col-md-2">
+                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.TYPES.HEADER"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.DEFAULT.HEADER"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text"
+                               ng-model="fieldsNameFilter" class="form-control background-input-color">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <ol ui-tree-nodes ng-model="currentCompany.customFields">
+            <li ng-repeat="item in currentCompany.customFields | filter:fieldsNameFilter" ui-tree-node
+                ng-include="'custom_field_row.html'"></li>
+        </ol>
+    </div>
+
+    <div class="text-center">
+        <md-button data-ng-click="addNewAdditionalField()">
+            <md-icon md-font-icon="add">add</md-icon>
+        </md-button>
+        <br/><br/>
+    </div>
+
+    <script type="text/ng-template" id="custom_field_row.html">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="angular-ui-tree-handle">
+                    <div class="row">
+
+                        <div class="col-md-1">
+                            <b style="padding-left: 5px;">
+                                {{$index +1 }}
+                                <md-icon md-font-icon="lise">list</md-icon>
+                            </b>
+                        </div>
+
+                        <div class="col-md-2 nopadding">
+                            <input type="text" data-ng-model="item.name" data-nodrag class="form-control">
+
+                            <br>
+
+                            <textarea class="textarea-fill-all-parent ng-pristine ng-untouched ng-valid form-control"
+                                      style="margin: 0px -0.5px -5px 0px; height: 58px; width: 288px;"
+                                      placeholder="{{'CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.DESCRIPTION_PLACEHOLDER' | translate}}"
+                                      ng-model="item.description"
+                                      ng-model-options="{ debounce: 600 }">
+                        </textarea>
+                        </div>
+
+                        <div class="col-md-2">
+
+                            <select ng-model="item.type" class="form-control">
+                                <option ng-repeat="val in customFieldTypes" value="{{val.value}}">
+                                    {{val.name | translate}}
+                                </option>
+                            </select>
+
+                            <br>
+
+                            <div ng-if="item.type == 'STRING'">
+                                <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.STYLE"></span>:
+
+                                <select ng-model="item.style" class="form-control">
+                                    <option ng-repeat="val in customFieldStringStyles" value="{{val.value}}">
+                                        {{val.name | translate}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div ng-if="item.type == 'DATE'">
+                                <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.STYLE"></span>:
+
+                                <select ng-model="item.style" class="form-control">
+                                    <option ng-repeat="val in customFieldDateStyles" value="{{val.value}}">
+                                        {{val.name | translate}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" data-nodrag>
+
+                            <div ng-if="item.type == 'STRING'">
+                                <input ng-model="item.value.stringVal" ng-pattern="{{item.pattern | to_trusted}}"
+                                       name="anim" class="form-control my-input">
+                                <!--<input ng-model="item.pattern" placeholder="pattern regex">-->
+                            </div>
+
+                            <div ng-if="item.type == 'DATE'">
+
+                            </div>
+
+                            <div ng-if="item.type == 'INTEGER'">
+                                <input ng-model="item.value.intVal" class="form-control" type="number">
+                            </div>
+
+                            <div ng-if="item.type == 'DOCUMENT_FILE'">
+                                <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.DOCUMENT_FILE.EXAMPLE"></span>
+                            </div>
+
+                            <div ng-if="item.type == 'USER_ACCOUNTS'">
+                                <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.USERACCOUNT.EXAMPLE"></span>
+                                <user-accounts-selector ng-model="item.value.stringList"
+                                                        account-options="{addCurrentUser: false}"></user-accounts-selector>
+                            </div>
+
+                            <div ng-if="item.type == 'BOOLEAN'">
+                                <md-checkbox ng-model="item.value.boolVal">
+                            </div>
+
+                            <div ng-if="item.type == 'DICTIONARY'" class="text-center">
+                                <select ng-model="item.value.dictVal.value" class="form-control"
+                                        ng-options="field as field.name for field in item.value.dictVal.values track by field.id">
+                                </select>
+                                <br>
+
+                                {{item.value.dictVal.values.length}}
+                                <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.DICT_VALUES"></span>
+                                <br/>
+                                <div data-ng-repeat="itemDict in $parent.item.value.dictVal.values "
+                                >
+                                    <div class="row">
+                                        <div class="col-md-1 nopadding" style="margin-top: 6px !important;">
+                                            {{$index+1}}.
+                                        </div>
+
+                                        <div class="col-md-9 nopadding">
+                                            <input type="text"
+                                                   data-ng-model="$parent.$parent.item.value.dictVal.values[$index].name"
+                                                   class="form-control">
+                                        </div>
+
+                                        <div class="col-md-2" data-nodrag>
+                                            <md-button class="nopadding" data-ng-click="deleteAdditionalFieldDictionary($index, $parent.$parent.item)"
+                                                       style="opacity: 0.4;">
+                                                <md-icon md-font-icon="delete">delete</md-icon>
+                                                <md-tooltip>
+                                                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                </md-tooltip>
+                                            </md-button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <md-button data-ng-click="addAdditionalFieldDictionary( $parent.item)">
+                                    <md-icon md-font-icon="add">add</md-icon>
+                                </md-button>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" data-nodrag>
+                            <md-menu>
+                                <md-button aria-label=" " class=""
+                                           ng-click="openMenu($mdOpenMenu, $event)">
+                                    <i class="fa fa-cog" style="font-size: 120%;"
+                                    ></i>
+                                    <md-tooltip md-direction="left">
+                                        <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                    </md-tooltip>
+                                </md-button>
+
+                                <md-menu-content width="4">
+                                    <md-menu-item>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <span translate="CUSTOM_FIELDS.PROPERTY.REQUIRED"></span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <md-checkbox class="nopadding md-primary"
+                                                             type="checkbox"
+                                                             ng-model="item.required">
+                                                </md-checkbox>
+                                            </div>
+                                        </div>
+                                    </md-menu-item>
+
+                                    <md-menu-item>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <span translate="CUSTOM_FIELDS.PROPERTY.HIDDEN"></span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <md-checkbox class="nopadding md-primary"
+                                                             type="checkbox"
+                                                             ng-model="item.hidden">
+                                                </md-checkbox>
+                                            </div>
+                                        </div>
+                                    </md-menu-item>
+
+                                    <md-menu-item>
+                                        <md-button class="" data-ng-click="delteAField($index)">
+                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                            <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+</div>
+
+<style>
+    .angular-ui-tree-node, .angular-ui-tree-placeholder {
+        background-color: rgb(243, 243, 243);
+    }
+</style>

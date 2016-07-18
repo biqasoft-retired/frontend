@@ -1,0 +1,1060 @@
+<div style="">
+    <div class="callout callout-warning">
+        <h4>Примечание
+            <i class="fa fa-cubes" data-ng-click="showStringRoles =!showStringRoles"
+               tooltip-placement="right" tooltip="показать результирующий массив ролей" tooltip-append-to-body="true"></i> <br>
+            <span data-ng-if="showStringRoles">
+       {{ngModel | json}}
+   </span>
+        </h4>
+        <p>Если вы добавляете роли 'Неограниченный доступ' и 'Супер Администратор' , то добавлять другие не обязательно </p>
+    </div>
+
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_ALLOW_ALL_DOMAIN_BASED"
+                     data-ng-change="changeRole('ROLE_ALLOW_ALL_DOMAIN_BASED')"
+        >
+        <span> <b> Неограниченный доступ </b>
+                <br> <small> Доступ ко всем операциям, за исключением особо критичных (как например DirectDB на тарифе Pro) </small>
+        </span>
+    </label>
+
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_ADMIN"
+                     data-ng-change="changeRole('ROLE_ADMIN')"
+        >
+        <span> <b> Супер Администратор </b>
+                <br> <small> Доступ ко всем операциям, включая особо критичные (как например DirectDB на тарифе Pro) </small>
+        </span>
+    </label>
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_CUSTOMER_ROOT"
+                     data-ng-change="changeRole('ROLE_CUSTOMER_ROOT')"
+        >
+        <span> <b> Клиенты и лиды </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_CUSTOMER_ROOT">
+
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_CUSTOMER_ROOT"
+                             data-ng-model="roles.ROLE_CUSTOMER_GET_ALL"
+                             data-ng-change="changeRole('ROLE_CUSTOMER_GET_ALL')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_CUSTOMER_ROOT }"> Получить клиентов/лидов </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_CUSTOMER_ROOT"
+                             data-ng-model="roles.ROLE_CUSTOMER_EDIT"
+                             data-ng-change="changeRole('ROLE_CUSTOMER_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_CUSTOMER_ROOT }"> Редактировать клиентов/лидов </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_CUSTOMER_ROOT"
+                             data-ng-model="roles.ROLE_CUSTOMER_ADD"
+                             data-ng-change="changeRole('ROLE_CUSTOMER_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_CUSTOMER_ROOT }"> Добавлять новых клиентов/лидов </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_CUSTOMER_ROOT"
+                             data-ng-model="roles.ROLE_CUSTOMER_DOWNLOAD_EXCEL"
+                             data-ng-change="changeRole('ROLE_CUSTOMER_DOWNLOAD_EXCEL')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_CUSTOMER_ROOT }"> Скачивать клиентов/лидов в Excel</span>
+            </label>
+        </div>
+    </div>
+
+    <!--// ANALYTICS-->
+
+    <div data-ng-show="roles.ROLE_ANALYTIC_PRIVATE_ROOT">
+        <br>
+        <label class="ui-checkbox">
+            <md-checkbox class=""
+                         data-ng-model="roles.ROLE_ANALYTIC_PRIVATE_ROOT"
+                         data-ng-change="changeRole('ROLE_ANALYTIC_PRIVATE_ROOT')"
+            >
+        <span> <b> Веб-аналитика </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+        </label>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_ANALYTIC_PRIVATE_ROOT"
+                             data-ng-model="roles.ROLE_ANALYTIC_ADD_COUNTER"
+                             data-ng-change="changeRole('ROLE_ANALYTIC_ADD_COUNTER')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_ANALYTIC_PRIVATE_ROOT }"> Добавить новых веб-счётчик</span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_ANALYTIC_PRIVATE_ROOT"
+                             data-ng-model="roles.ROLE_ANALYTIC_GET_COUNTERS"
+                             data-ng-change="changeRole('ROLE_ANALYTIC_GET_COUNTERS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_ANALYTIC_PRIVATE_ROOT }"> Получить все веб-счётчики</span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_ANALYTIC_PRIVATE_ROOT"
+                             data-ng-model="roles.ROLE_ANALYTIC_RECORDS_MAP_REDUCE_FILTERS"
+                             data-ng-change="changeRole('ROLE_ANALYTIC_RECORDS_MAP_REDUCE_FILTERS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_ANALYTIC_PRIVATE_ROOT }"> Отчёт по веб-счётчику аналитики</span>
+            </label>
+        </div>
+
+    </div>
+
+    <!--// b2b-->
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_COMPANY_ROOT"
+                     data-ng-change="changeRole('ROLE_COMPANY_ROOT')"
+        >
+        <span> <b> Контрагенты </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_COMPANY_ROOT">
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_COMPANY_ROOT"
+                             data-ng-model="roles.ROLE_COMPANY_GET_ALL"
+                             data-ng-change="changeRole('ROLE_COMPANY_GET_ALL')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_COMPANY_ROOT }"> Список всех контрагентов</span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_COMPANY_ROOT"
+                             data-ng-model="roles.ROLE_COMPANY_ADD"
+                             data-ng-change="changeRole('ROLE_COMPANY_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_COMPANY_ROOT }"> Добавить нового контрагента</span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_COMPANY_ROOT"
+                             data-ng-model="roles.ROLE_COMPANY_EDIT"
+                             data-ng-change="changeRole('ROLE_COMPANY_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_COMPANY_ROOT }"> Редактировать контрагента</span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_COMPANY_ROOT"
+                             data-ng-model="roles.ROLE_COMPANY_DELETE"
+                             data-ng-change="changeRole('ROLE_COMPANY_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_COMPANY_ROOT }">
+                    <span translate="APP.COMMON.DELETE.BUTTON"></span></span>
+            </label>
+        </div>
+    </div>
+
+    <!--///////-->
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_LEAD_GEN_METHOD_ROOT"
+                     data-ng-change="changeRole('ROLE_LEAD_GEN_METHOD_ROOT')"
+        >
+        <span> <b> Методы продаж </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_LEAD_GEN_METHOD_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_LEAD_GEN_METHOD_ROOT"
+                             data-ng-model="roles.ROLE_LEAD_GEN_METHOD_GET_ALL"
+                             data-ng-change="changeRole('ROLE_LEAD_GEN_METHOD_GET_ALL')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_LEAD_GEN_METHOD_ROOT }"> Получить все методы продаж</span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_LEAD_GEN_METHOD_ROOT"
+                             data-ng-model="roles.ROLE_LEAD_GEN_METHOD_ADD"
+                             data-ng-change="changeRole('ROLE_LEAD_GEN_METHOD_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_LEAD_GEN_METHOD_ROOT }"> Добавить новый метод продаж</span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_LEAD_GEN_METHOD_ROOT"
+                             data-ng-model="roles.ROLE_LEAD_GEN_METHOD_EDIT"
+                             data-ng-change="changeRole('ROLE_LEAD_GEN_METHOD_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_LEAD_GEN_METHOD_ROOT }"> Редактировать метод продаж</span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_LEAD_GEN_METHOD_ROOT"
+                             data-ng-model="roles.ROLE_LEAD_GEN_METHOD_EXCEL"
+                             data-ng-change="changeRole('ROLE_LEAD_GEN_METHOD_EXCEL')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_LEAD_GEN_METHOD_ROOT }"> Скачать отчёт метод продаж в Excel</span>
+            </label>
+        </div>
+    </div>
+
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_DATA_SOURCES_ROOT"
+                     data-ng-change="changeRole('ROLE_DATA_SOURCES_ROOT')"
+        >
+        <span> <b> KPI </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_DATA_SOURCES_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_DATA_SOURCES_ROOT"
+                             data-ng-model="roles.ROLE_DATA_SOURCES_GET"
+                             data-ng-change="changeRole('ROLE_DATA_SOURCES_GET')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_DATA_SOURCES_ROOT }"> Получить все источники данных </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_DATA_SOURCES_ROOT"
+                             data-ng-model="roles.ROLE_DATA_SOURCES_DELETE"
+                             data-ng-change="changeRole('ROLE_DATA_SOURCES_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_DATA_SOURCES_ROOT }">
+                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                    </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_DATA_SOURCES_ROOT"
+                             data-ng-model="roles.ROLE_DATA_SOURCES_EDIT"
+                             data-ng-change="changeRole('ROLE_DATA_SOURCES_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_DATA_SOURCES_ROOT }"> Редактировать источник данных </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_DATA_SOURCES_ROOT"
+                             data-ng-model="roles.ROLE_DATA_SOURCES_ADD"
+                             data-ng-change="changeRole('ROLE_DATA_SOURCES_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_DATA_SOURCES_ROOT }"> Добавить новый источник данных </span>
+            </label>
+        </div>
+
+    </div>
+
+    <!--// PAYMENTS-->
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_PAYMENT_ROOT"
+                     data-ng-change="changeRole('ROLE_PAYMENT_ROOT')"
+        >
+        <span> <b> Платежи </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_PAYMENT_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_PAYMENT_ROOT"
+                             data-ng-model="roles.ROLE_PAYMENT_GET_CUSTOMER_DEALS"
+                             data-ng-change="changeRole('ROLE_PAYMENT_GET_CUSTOMER_DEALS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_PAYMENT_ROOT }"> Получить все сделки клиентов </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_PAYMENT_ROOT"
+                             data-ng-model="roles.ROLE_PAYMENT_GET_COMPANY_COST"
+                             data-ng-change="changeRole('ROLE_PAYMENT_GET_COMPANY_COST')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_PAYMENT_ROOT }"> Получить все затраты </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_PAYMENT_ROOT"
+                             data-ng-model="roles.ROLE_PAYMENT_ADD_COMPANY_COST"
+                             data-ng-change="changeRole('ROLE_PAYMENT_ADD_COMPANY_COST')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_PAYMENT_ROOT }"> Добавить затрату в компании </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_PAYMENT_ROOT"
+                             data-ng-model="roles.ROLE_PAYMENT_EDIT_COMPANY_COST"
+                             data-ng-change="changeRole('ROLE_PAYMENT_EDIT_COMPANY_COST')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_PAYMENT_ROOT }"> Редактировать затрату компании </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_PAYMENT_ROOT"
+                             data-ng-model="roles.ROLE_PAYMENT_EDIT_CUSTOMER_DEALS"
+                             data-ng-change="changeRole('ROLE_PAYMENT_EDIT_CUSTOMER_DEALS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_PAYMENT_ROOT }"> Редактировать сделку клиента </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_PAYMENT_ROOT"
+                             data-ng-model="roles.ROLE_PAYMENT_DELETE_CUSTOMER_DEALS"
+                             data-ng-change="changeRole('ROLE_PAYMENT_DELETE_CUSTOMER_DEALS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_PAYMENT_ROOT }"> <span translate="APP.COMMON.DELETE.BUTTON"></span> </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_PAYMENT_ROOT"
+                             data-ng-model="roles.ROLE_PAYMENT_ADD_CUSTOMER_DEAL"
+                             data-ng-change="changeRole('ROLE_PAYMENT_ADD_CUSTOMER_DEAL')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_PAYMENT_ROOT }"> Добавить сделку клиента </span>
+            </label>
+        </div>
+
+    </div>
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_SEARCH_ROOT"
+                     data-ng-change="changeRole('ROLE_SEARCH_ROOT')"
+        >
+        <span>  <b> Поиск </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_SEARCH_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_SEARCH_ROOT"
+                             data-ng-model="roles.ROLE_SEARCH_EVERYWHERE"
+                             data-ng-change="changeRole('ROLE_SEARCH_EVERYWHERE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_SEARCH_ROOT }"> Глобальный поиск </span>
+            </label>
+        </div>
+
+    </div>
+
+    <!--......-->
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_STATS_DOMAIN_BASIC"
+                     data-ng-change="changeRole('ROLE_STATS_DOMAIN_BASIC')"
+        >
+        <span> <b> Получить базовую статистику по домену </b>
+        </span>
+    </label>
+
+    <!--/////////-->
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_DOMAIN_COMPANY_ROOT"
+                     data-ng-change="changeRole('ROLE_DOMAIN_COMPANY_ROOT')"
+        >
+        <span> <b> Получить настроки по домену </b>
+            <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_DOMAIN_COMPANY_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_DOMAIN_COMPANY_ROOT"
+                             data-ng-model="roles.ROLE_DOMAIN_COMPANY_GET_BASIC"
+                             data-ng-change="changeRole('ROLE_DOMAIN_COMPANY_GET_BASIC')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_DOMAIN_COMPANY_ROOT }"> Получить настроки домена </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_DOMAIN_COMPANY_ROOT"
+                             data-ng-model="roles.ROLE_DOMAIN_COMPANY_UPDATE_SETTINGS"
+                             data-ng-change="changeRole('ROLE_DOMAIN_COMPANY_UPDATE_SETTINGS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_DOMAIN_COMPANY_ROOT }"> Редактировать настроки домена </span>
+            </label>
+        </div>
+
+    </div>
+
+
+    <!--......-->
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_EXTERNAL_SERVICES_ROOT"
+                     data-ng-change="changeRole('ROLE_EXTERNAL_SERVICES_ROOT')"
+        >
+        <span> <b> Внешние сервисы интеграции </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_EXTERNAL_SERVICES_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_EXTERNAL_SERVICES_ROOT"
+                             data-ng-model="roles.ROLE_EXTERNAL_SERVICES_GET_ALL_ACCOUNTS"
+                             data-ng-change="changeRole('ROLE_EXTERNAL_SERVICES_GET_ALL_ACCOUNTS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_EXTERNAL_SERVICES_ROOT }"> Получить мета-информацию обо всех аккаунтах </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_EXTERNAL_SERVICES_ROOT"
+                             data-ng-model="roles.ROLE_EXTERNAL_SERVICES_ADD_ACCOUNTS"
+                             data-ng-change="changeRole('ROLE_EXTERNAL_SERVICES_ADD_ACCOUNTS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_EXTERNAL_SERVICES_ROOT }"> Добавить новый аккаунт </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_EXTERNAL_SERVICES_ROOT"
+                             data-ng-model="roles.ROLE_EXTERNAL_SERVICES_EDIT_ACCOUNTS"
+                             data-ng-change="changeRole('ROLE_EXTERNAL_SERVICES_EDIT_ACCOUNTS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_EXTERNAL_SERVICES_ROOT }"> Редактировать аккаунт </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_EXTERNAL_SERVICES_ROOT"
+                             data-ng-model="roles.ROLE_EXTERNAL_SERVICES_DELETE_ACCOUNTS"
+                             data-ng-change="changeRole('ROLE_EXTERNAL_SERVICES_DELETE_ACCOUNTS')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_EXTERNAL_SERVICES_ROOT }"> <span translate="APP.COMMON.DELETE.BUTTON"></span> </span>
+            </label>
+        </div>
+    </div>
+
+    <br>
+
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_OPPORTUNITY_ROOT"
+                     data-ng-change="changeRole('ROLE_OPPORTUNITY_ROOT')"
+        >
+        <span> <b> Возможности клиентов/лидов </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_OPPORTUNITY_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_OPPORTUNITY_ROOT"
+                             data-ng-model="roles.ROLE_OPPORTUNITY_GET"
+                             data-ng-change="changeRole('ROLE_OPPORTUNITY_GET')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_OPPORTUNITY_ROOT }"> Получить возможности </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_OPPORTUNITY_ROOT"
+                             data-ng-model="roles.ROLE_OPPORTUNITY_ADD"
+                             data-ng-change="changeRole('ROLE_OPPORTUNITY_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_OPPORTUNITY_ROOT }"> Добавить возможности </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_OPPORTUNITY_ROOT"
+                             data-ng-model="roles.ROLE_OPPORTUNITY_EDIT"
+                             data-ng-change="changeRole('ROLE_OPPORTUNITY_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_OPPORTUNITY_ROOT }"> Редактировать возможности </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_OPPORTUNITY_ROOT"
+                             data-ng-model="roles.ROLE_OPPORTUNITY_DELETE"
+                             data-ng-change="changeRole('ROLE_OPPORTUNITY_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_OPPORTUNITY_ROOT }"> <span translate="APP.COMMON.DELETE.BUTTON"></span> </span>
+            </label>
+        </div>
+
+    </div>
+
+    <br>
+
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_TASK_ROOT"
+                     data-ng-change="changeRole('ROLE_TASK_ROOT')"
+        >
+        <span> <b> Задачи </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_TASK_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_ROOT"
+                             data-ng-model="roles.ROLE_TASK_ADD"
+                             data-ng-change="changeRole('ROLE_TASK_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_ROOT }"> Добавить задачи </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_ROOT"
+                             data-ng-model="roles.ROLE_TASK_EDIT"
+                             data-ng-change="changeRole('ROLE_TASK_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_ROOT }"> Редактировать задачи </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_ROOT"
+                             data-ng-model="roles.ROLE_TASK_DELETE"
+                             data-ng-change="changeRole('ROLE_TASK_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_ROOT }"> Удалять задачи </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_ROOT"
+                             data-ng-model="roles.ROLE_TASK_GET"
+                             data-ng-change="changeRole('ROLE_TASK_GET')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_ROOT }"> Получить задачи </span>
+            </label>
+        </div>
+
+    </div>
+
+    <br>
+
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_TASK_TEMPLATE_ROOT"
+                     data-ng-change="changeRole('ROLE_TASK_TEMPLATE_ROOT')"
+        >
+        <span> <b> Шаблоны задач</b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+
+    <div data-ng-show="roles.ROLE_TASK_TEMPLATE_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_TEMPLATE_ROOT"
+                             data-ng-model="roles.ROLE_TASK_TEMPLATE_ADD"
+                             data-ng-change="changeRole('ROLE_TASK_TEMPLATE_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_TEMPLATE_ROOT }"> Добавить шаблоны задачи </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_TEMPLATE_ROOT"
+                             data-ng-model="roles.ROLE_TASK_TEMPLATE_EDIT"
+                             data-ng-change="changeRole('ROLE_TASK_TEMPLATE_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_TEMPLATE_ROOT }"> Редактировать шаблоны задач </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_TEMPLATE_ROOT"
+                             data-ng-model="roles.ROLE_TASK_TEMPLATE_DELETE"
+                             data-ng-change="changeRole('ROLE_TASK_TEMPLATE_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_TEMPLATE_ROOT }"> <span translate="APP.COMMON.DELETE.BUTTON"></span> </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_TEMPLATE_ROOT"
+                             data-ng-model="roles.ROLE_TASK_TEMPLATE_GET"
+                             data-ng-change="changeRole('ROLE_TASK_TEMPLATE_GET')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_TEMPLATE_ROOT }"> Получить шаблоны задач </span>
+            </label>
+        </div>
+
+    </div>
+
+    <!--// Task project-->
+
+    <br>
+
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_TASK_PROJECT_ROOT"
+                     data-ng-change="changeRole('ROLE_TASK_PROJECT_ROOT')"
+        >
+        <span> <b> Проекты задач</b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_TASK_PROJECT_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_PROJECT_ROOT"
+                             data-ng-model="roles.ROLE_TASK_PROJECT_ADD"
+                             data-ng-change="changeRole('ROLE_TASK_PROJECT_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_PROJECT_ROOT }"> Добавить проекты задач </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_PROJECT_ROOT"
+                             data-ng-model="roles.ROLE_TASK_PROJECT_EDIT"
+                             data-ng-change="changeRole('ROLE_TASK_PROJECT_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_PROJECT_ROOT }"> Редактировать проекты задач </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_PROJECT_ROOT"
+                             data-ng-model="roles.ROLE_TASK_PROJECT_DELETE"
+                             data-ng-change="changeRole('ROLE_TASK_PROJECT_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_PROJECT_ROOT }"> Удалять проекты задач </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_TASK_PROJECT_ROOT"
+                             data-ng-model="roles.ROLE_TASK_PROJECT_GET"
+                             data-ng-change="changeRole('ROLE_TASK_PROJECT_GET')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_TASK_PROJECT_ROOT }"> Получить проекты задач </span>
+            </label>
+        </div>
+    </div>
+
+    <br>
+
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_USER_ACCOUNT_ROOT"
+                     data-ng-change="changeRole('ROLE_USER_ACCOUNT_ROOT')"
+        >
+        <span> <b> Пользователи </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <div data-ng-show="roles.ROLE_USER_ACCOUNT_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_USER_ACCOUNT_ROOT"
+                             data-ng-model="roles.ROLE_USER_ACCOUNT_ADD"
+                             data-ng-change="changeRole('ROLE_USER_ACCOUNT_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_USER_ACCOUNT_ROOT }"> Создать новый аккаунт </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_USER_ACCOUNT_ROOT"
+                             data-ng-model="roles.ROLE_USER_ACCOUNT_EDIT"
+                             data-ng-change="changeRole('ROLE_USER_ACCOUNT_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_USER_ACCOUNT_ROOT }"> Редактировать аккаунт </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_USER_ACCOUNT_ROOT"
+                             data-ng-model="roles.ROLE_USER_ACCOUNT_DELETE"
+                             data-ng-change="changeRole('ROLE_USER_ACCOUNT_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_USER_ACCOUNT_ROOT }"> <span translate="APP.COMMON.DELETE.BUTTON"></span> </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_USER_ACCOUNT_ROOT"
+                             data-ng-model="roles.ROLE_USER_ACCOUNT_GET"
+                             data-ng-change="changeRole('ROLE_USER_ACCOUNT_GET')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_USER_ACCOUNT_ROOT }"> Получить данные аккаунта </span>
+            </label>
+        </div>
+
+    </div>
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_WIDGET_ROOT"
+                     data-ng-change="changeRole('ROLE_WIDGET_ROOT')"
+        >
+        <span> <b> Виджеты/дашборды </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <br>
+    <div data-ng-show="roles.ROLE_WIDGET_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_WIDGET_ROOT"
+                             data-ng-model="roles.ROLE_WIDGET_GET"
+                             data-ng-change="changeRole('ROLE_WIDGET_GET')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_WIDGET_ROOT }"> Получить виджет </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_WIDGET_ROOT"
+                             data-ng-model="roles.ROLE_WIDGET_ADD"
+                             data-ng-change="changeRole('ROLE_WIDGET_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_WIDGET_ROOT }"> Добавить новый виджет </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_WIDGET_ROOT"
+                             data-ng-model="roles.ROLE_WIDGET_EDIT"
+                             data-ng-change="changeRole('ROLE_WIDGET_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_WIDGET_ROOT }"> Редактировать виджет </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_WIDGET_ROOT"
+                             data-ng-model="roles.ROLE_WIDGET_DELETE"
+                             data-ng-change="changeRole('ROLE_WIDGET_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_WIDGET_ROOT }"> <span translate="APP.COMMON.DELETE.BUTTON"></span> </span>
+            </label>
+        </div>
+
+    </div>
+
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_YANDEX_DIRECT_ROOT"
+                     data-ng-change="changeRole('ROLE_YANDEX_DIRECT_ROOT')"
+        >
+        <span> <b> Яндекс.Директ </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <!--<br>-->
+    <!--<label class="ui-checkbox">-->
+    <!--<md-checkbox class=""-->
+    <!--data-ng-model="roles.ROLE_ROLE_CALLER"-->
+    <!--data-ng-change="changeRole('ROLE_ROLE_CALLER')"-->
+    <!--&gt;-->
+    <!--<span> <b> ROLE_CALLER </b>-->
+    <!--<br> <small> ROLE_CALLER </small>-->
+    <!--</span>-->
+    <!--</label>-->
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_ROLE_UPDATE_MYACCOUNT"
+                     data-ng-change="changeRole('ROLE_ROLE_UPDATE_MYACCOUNT')"
+        >
+        <span> <b> Обновлить свой профиль </b>
+         <br> <small> Обновлять ФИО/email своего же профиля </small>
+        </span>
+    </label>
+
+    <br>
+    <label class="ui-checkbox">
+        <md-checkbox class=""
+                     data-ng-model="roles.ROLE_SEGMENT_ROOT"
+                     data-ng-change="changeRole('ROLE_SEGMENT_ROOT')"
+        >
+        <span> <b> Сегментация клиентов </b>
+         <br> <small> Необходим для вложенных ролей</small>
+        </span>
+    </label>
+
+    <br>
+    <div data-ng-show="roles.ROLE_SEGMENT_ROOT">
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_SEGMENT_ROOT"
+                             data-ng-model="roles.ROLE_SEGMENT_ADD"
+                             data-ng-change="changeRole('ROLE_SEGMENT_ADD')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_SEGMENT_ROOT }"> Добавить новый сегмент </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_SEGMENT_ROOT"
+                             data-ng-model="roles.ROLE_SEGMENT_EDIT"
+                             data-ng-change="changeRole('ROLE_SEGMENT_EDIT')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_SEGMENT_ROOT }"> Редактировать сегмент </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_SEGMENT_ROOT"
+                             data-ng-model="roles.ROLE_SEGMENT_DELETE"
+                             data-ng-change="changeRole('ROLE_SEGMENT_DELETE')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_SEGMENT_ROOT }"> <span translate="APP.COMMON.DELETE.BUTTON"></span> </span>
+            </label>
+        </div>
+
+        <br>
+        <div style="padding-left: 25px;">
+            <label class="ui-checkbox">
+                <md-checkbox class=""
+                             data-ng-disabled="!roles.ROLE_SEGMENT_ROOT"
+                             data-ng-model="roles.ROLE_SEGMENT_GET"
+                             data-ng-change="changeRole('ROLE_SEGMENT_GET')"
+                >
+                    <span data-ng-class="{'roleDenied' : !roles.ROLE_SEGMENT_ROOT }"> Получить мета-информацию по сегменту </span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<style>
+    .roleDenied {
+        /*background-color: #dddddd;;*/
+        text-decoration: line-through;
+    }
+</style>

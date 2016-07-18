@@ -1,0 +1,145 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="сохранить изменения"
+               tooltip-append-to-body="true"
+               data-ng-click="updateStaticSegment()">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                Динамический сегмент
+            </div>
+            <div class="panel-body text-center">
+
+                <div ng-if="::debugMode">
+                    {{segmentDetails | json}}
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <th><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                        <td><input class="form-control" data-ng-model="segmentDetails.name"
+                                   placeholder="введите название..."></td>
+                    </tr>
+
+                    <tr>
+                        <th><span translate="APP.COMMON.OBJECT.DESCRIPTION"></span></th>
+
+                        <td><input class="form-control" data-ng-model="segmentDetails.description"
+                                   placeholder="введите название..."></td>
+                    </tr>
+
+                    <tr>
+                        <th><span translate="APP.COMMON.CREATED_DATE.SECTION"></span></th>
+                        <td>
+                            {{::printDate(segmentDetails.createdInfo.createdDate)}} <br>
+                            {{ printUser ( resolveUser ( segmentDetails.createdInfo.createdById ) ) }}
+                        </td>
+                    </tr>
+
+                    <tr ng-show="::debugMode">
+                        <td> raw data </td>
+                        <td>
+                            <textarea json-text ng-model='segmentDetails' rows="15"></textarea>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</section>
+
+<style>
+
+    .panel {
+        position: relative;
+    }
+
+    .panel-default > .panel-leftheading {
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+
+    .panel-primary > .panel-leftheading {
+        color: #fff;
+        background-color: #428bca;
+        border-color: #428bca;
+    }
+
+    .panelSuccess > .panel-leftheading {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .panel-info > .panel-leftheading {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+    }
+
+    .panel-warning > .panel-leftheading {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+    }
+
+    .panelDanger > .panel-leftheading {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+    .panel-leftheading {
+        width: 42px;
+        padding: 10px 15px;
+        border-right: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        float: left;
+        height: 100%;
+        position: absolute;
+    }
+
+    .panel-lefttitle {
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 15px;
+        font-size: 16px;
+        color: inherit;
+        -webkit-transform: rotate(90deg);
+        -webkit-transform-origin: left top;
+        -moz-transform: rotate(90deg);
+        -moz-transform-origin: left top;
+        -ms-transform: rotate(90deg);
+        -ms-transform-origin: left top;
+        -o-transform: rotate(90deg);
+        -o-transform-origin: left top;
+        transform: rotate(90deg);
+        transform-origin: left top;
+        position: absolute;
+        white-space: nowrap;
+    }
+
+    .panel-rightbody {
+        float: left;
+        margin-left: 45px;
+        padding: 15px;
+    }
+
+</style>

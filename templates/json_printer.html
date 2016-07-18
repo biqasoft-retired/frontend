@@ -1,0 +1,15 @@
+<div>
+     <span ng-click="prettyShowResult = false" ng-show="prettyShowResult">
+             <u>Pretty view</u>
+     </span>
+    <span ng-click="prettyShowResult = true" ng-show="!prettyShowResult">
+           <u>Source</u>
+     </span>
+
+    <br> <br>
+    <div ng-if="!prettyShowResult">
+        <b> {{result | json}} </b>
+    </div>
+
+    <json-formatter open="1" json="result" ng-if="prettyShowResult"></json-formatter>
+</div>

@@ -1,0 +1,115 @@
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="badge">{{allSegments.length}}</span>
+                Динамические сегменты
+            </div>
+            <div class="panel-body text-center">
+                <div class="visible-lg visible-md">
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                            <th class="">№</th>
+                            <th ng-if="showObjectIDs()">ID</th>
+                            <th class=""><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                            <th class=""><span translate="APP.COMMON.OBJECT.DESCRIPTION"></span></th>
+
+                            <th class="">Клиенты / лиды</th>
+
+                            <th class=""> Сделки</th>
+                            <th class=""> Возможности </th>
+
+                            <th class=""> Лидов</th>
+                            <th class=""> Клиентов</th>
+                            <th class="col-md-1"><span translate="APP.COMMON.CREATED_DATE.SECTION"></span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-repeat="project in allSegments">
+
+                            <td ng-if="::debugMode">
+                                {{project | json}}
+                            </td>
+
+                            <td><a href="/segment/dynamic/details/{{project.id}}"> {{$index+1}} </a></td>
+
+                            <td><a href="/segment/dynamic/details/{{project.id}}"> {{project.name}} </a></td>
+                            <td data-ng-class="{'warning' : !project.description }"> {{project.description}}</td>
+
+                            <td ng-if="showObjectIDs()">{{project.id}}</td>
+
+                            <td>
+                                <md-button href='/customer/all/?dynamicSegmentsIDs=["{{project.id}}"]' class="btn">
+                                    <span translate="APP.COMMON.SHOW.BUTTON"></span>
+                                </md-button>
+                            </td>
+
+                            <td data-ng-class="{'warning' : getAllSegmentsStats(project.id).dealsAmount ===  0 }"
+                                class="mini-col-md-2">
+                                           <span class=""
+                                                 tooltip-placement="right"
+                                                 tooltip="Сумма сделок"
+                                                 tooltip-append-to-body="true">
+                                              <b> {{ printCurrencyPrintable(getAllSegmentsStats(project.id).dealsAmount)[0] }} </b>
+                                          <small> {{ printCurrencyPrintable(getAllSegmentsStats(project.id).dealsAmount)[1] }}</small>
+                                      </span>
+                                <br/>
+                                    <span class="badge pull-left " tooltip-placement="right" tooltip="Число сделок"
+                                          tooltip-append-to-body="true">
+                                     {{ getAllSegmentsStats(project.id).dealsNumber}} шт.
+                                    </span>
+                                 <span class="pull-right"
+                                       tooltip-placement="right" tooltip="Средний чек сделок"
+                                       tooltip-append-to-body="true">
+                                     <small>   {{( (getAllSegmentsStats(project.id).dealsAmount  / getAllSegmentsStats(project.id).dealsNumber ) | number:2 ) || 0 }} </small>
+
+                                          </span>
+                            </td>
+
+                            <td data-ng-class="{'warning' : getAllSegmentsStats(project.id).opportunityAmount ===  0 }"
+                                class="mini-col-md-2">
+                                           <span class=""
+                                                 tooltip-placement="right"
+                                                 tooltip="Сумма возможностей"
+                                                 tooltip-append-to-body="true">
+                                              <b> {{ printCurrencyPrintable(getAllSegmentsStats(project.id).opportunityAmount)[0] }} </b>
+                                          <small> {{ printCurrencyPrintable(getAllSegmentsStats(project.id).opportunityAmount)[1] }}</small>
+                                      </span>
+                                <br/>
+                                    <span class="badge pull-left " tooltip-placement="right" tooltip="Число возможностей"
+                                          tooltip-append-to-body="true">
+                                     {{ getAllSegmentsStats(project.id).opportunityNumber}} шт.
+                                    </span>
+                                 <span class="pull-right"
+                                       tooltip-placement="right" tooltip="Средний чек возможностей"
+                                       tooltip-append-to-body="true">
+                                            <small>
+                                                {{( (getAllSegmentsStats(project.id).opportunityAmount  / getAllSegmentsStats(project.id).opportunityNumber ) | number:2 ) || 0 }}
+                                            </small>
+                                 </span>
+                            </td>
+
+                            <td><span class="badge">{{getAllSegmentsStats(project.id).leadsCount}}</span></td>
+                            <td><span class="badge">{{getAllSegmentsStats(project.id).customerCount}}</span></td>
+
+                            <td>
+                                <a href="/user_account/details/{{::project.createdInfo.createdById}}"> {{ printUser (
+                                    resolveUser ( project.createdInfo.createdById ) ) }} </a>
+
+                                <br/>
+
+                                <span class="pull-right">
+                                    <small> {{::printDate(project.createdInfo.createdDate)}}</small>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

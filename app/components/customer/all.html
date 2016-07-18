@@ -1,0 +1,1098 @@
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary" style="  margin-bottom: 3px;" data-ng-show="filterPanelShow ">
+            <div class="panel-heading"><span class="fa fa-filter"></span>
+                <span translate="CUSTOMER_ALL_HEADER_FILTER"></span>
+                <button class="btn btn-primary btn-sm" ng-click="$parent.filterPanelShow=false"
+                        ng-if="filterPanelShow">
+                    <span translate="APP.COMMON.HIDE.BUTTON"></span>
+                </button>
+
+            </div>
+            <div class="panel-body text-center">
+
+                <div class="row">
+                    <div class="col-lg-5 col-md-6">
+                        <table class="table table-bordered">
+
+                            <thead>
+                            <tr>
+                                <td colspan="3" class="info">
+                                    <b> {{ 'NAV.CUSTOMER_ALL.SCORING' | translate }}</b>
+                                </td>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.showOnlyWhenIamResponsible }">
+
+                                <td>
+                                    <md-checkbox type="checkbox"
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.showOnlyWhenIamResponsible"
+                                                 data-ng-change="pageChanged(currentPage)">
+                                    </md-checkbox>
+                                </td>
+
+                                <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Будут показаны только те лиды или клиенты, где ответсвенный менеджер - текущий пользователь"
+                                          tooltip-append-to-body="true">
+                                        Где я ответственный
+                                      </span>
+                                </td>
+
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.active }">
+
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.active"
+                                                 data-ng-change="pageChanged(currentPage)">
+                                    </md-checkbox>
+                                </td>
+
+                                <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Будут показаны только те лиды или клиенты, с которыми сейчас непосредственно работаем - лидов закрываем на продажу
+                                    , а с клиентами продолжаем работать" tooltip-append-to-body="true">
+                                            Активный
+                                          </span>
+                                </td>
+
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.customer }">
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.customer"
+                                                 data-ng-change="onShowOnlyCustomerChange(); updateSalesFunnelStatusesForCurrentMethod(); customerAndLeadGetRequestCriteriaDao.salesFunnelStatusID = 'ANY';">
+                                    </md-checkbox>
+                                </td>
+                                <td>Клиент</td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.lead }">
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.lead"
+                                                 data-ng-change="onShowOnlyLeadChange(); updateSalesFunnelStatusesForCurrentMethod(); customerAndLeadGetRequestCriteriaDao.salesFunnelStatusID = 'ANY';">
+                                    </md-checkbox>
+                                </td>
+                                <td>Лид</td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.important }">
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.important"
+                                                 data-ng-change="pageChanged(currentPage)">
+                                    </md-checkbox>
+                                </td>
+                                <td>Важный</td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.leadGenMethodId !='ANY' }">
+                                <td>
+                                <span class="" tooltip-placement="right"
+                                      tooltip="Способ / канал продаж; способ ведения клиента по определенной воронке"
+                                      tooltip-append-to-body="true">
+                                        Метод продаж
+                                      </span>
+                                </td>
+                                <td>
+                                    <select data-ng-model="customerAndLeadGetRequestCriteriaDao.leadGenMethodId"
+                                            class="form-control"
+                                            data-ng-change="updateSalesFunnelStatusesForCurrentMethod(); pageChanged(currentPage)">
+                                        <option value="ANY">Любой</option>
+                                        <option data-ng-repeat="method in allLeadGenMethodsArray  track by method.id"
+                                                value="{{method.id}}">{{method.name}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.salesFunnelStatusID !='ANY' }"
+                                data-ng-show="customerAndLeadGetRequestCriteriaDao.leadGenMethodId !='ANY'
+                                && ( customerAndLeadGetRequestCriteriaDao.customer || customerAndLeadGetRequestCriteriaDao.lead )">
+                                <td>
+
+                                <span class="" tooltip-placement="right"
+                                      tooltip="статус в воронке продаж"
+                                      tooltip-append-to-body="true">
+                                      Статус в воронке продаж
+                                      </span>
+                                </td>
+                                <td>
+                                    <select data-ng-model="customerAndLeadGetRequestCriteriaDao.salesFunnelStatusID"
+                                            class="form-control"
+                                            data-ng-change="pageChanged(currentPage)">
+                                        <option value="ANY">Любой</option>
+                                        <option data-ng-repeat="method in salesFunnelStatusesForCurrentMethod   track by method.id"
+                                                value="{{method.id}}">{{method.name}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.leadGenProjectId !='ANY' }">
+                                <td>
+
+                                <span class="" tooltip-placement="right"
+                                      tooltip="проект продаж в определенном методе"
+                                      tooltip-append-to-body="true">
+                                       Проект продаж
+                                      </span>
+                                </td>
+                                <td>
+                                    <select data-ng-model="customerAndLeadGetRequestCriteriaDao.leadGenProjectId"
+                                            class="form-control"
+                                            data-ng-change="loadLeadGenProjects()">
+                                        <option value="ANY">Любой</option>
+                                        <option data-ng-repeat="method in allLeadGenProjects   track by method.id"
+                                                value="{{method.id}}">{{method.name}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useResponsiblesManagersList }">
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.useResponsiblesManagersList"
+                                    ></md-checkbox>
+                                </td>
+
+                                <td>
+                                    По ответственным менеджерам
+                                    <div ng-if="customerAndLeadGetRequestCriteriaDao.useResponsiblesManagersList">
+                                        <user-accounts-selector
+                                                ng-model="customerAndLeadGetRequestCriteriaDao.responsiblesManagersList"></user-accounts-selector>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useStaticSegments }">
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.useStaticSegments"
+                                                 data-ng-change="loadStaticSegments()"
+                                    ></md-checkbox>
+                                </td>
+
+                                <td>
+                                            <span class="" tooltip-placement="right" tooltip="
+                                             Входит в один или несколько выбранных сегментов"
+                                                  tooltip-append-to-body="true">
+                                                    Статические сегменты
+                                                  </span>
+
+                                    <div ng-show="customerAndLeadGetRequestCriteriaDao.useStaticSegments">
+
+                                        <div fs-multiselect="" items="allSegments" freetext=""
+                                             ng-disabled="disabled" data-ng-disabled="editMode"
+                                             data-ng-change="pageChanged()"
+
+                                             ng-model="staticSegmentsIDs">
+                                                                    <span ng-show="item"><span
+                                                                            class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>
+                                                                        &nbsp;{{item.name}} </span>
+                                            <span ng-hide="item"> нет пользователей </span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td colspan="3" class="info"><b> Задачи </b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    Активных задач
+                                </td>
+                                <td>
+
+                                    <from-to-selector object="customerAndLeadGetRequestCriteriaDao"
+                                                      from-value="'activeTaskNumberMoreThan'"
+                                                      from-use="'useActiveTaskNumberMoreThan'"
+                                                      to-value="'activeTaskNumberLessThan'"
+                                                      to-use="'useActiveTaskNumberLessThan'"
+                                    ></from-to-selector>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-lg-5 col-md-6">
+
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td colspan="3" class="info"><b> Сделки </b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    Сумма сделок
+                                </td>
+                                <td>
+
+                                    <from-to-selector object="customerAndLeadGetRequestCriteriaDao"
+                                                      from-value="'dealsAmountMoreThan'"
+                                                      from-use="'useDealsAmountMoreThan'"
+                                                      to-value="'dealsAmountLessThan'"
+                                                      to-use="'useDealsAmountLessThan'"
+                                    ></from-to-selector>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    Число сделок
+                                </td>
+                                <td>
+
+                                    <from-to-selector object="customerAndLeadGetRequestCriteriaDao"
+                                                      from-value="'dealsNumberMoreThan'"
+                                                      from-use="'useDealsNumberMoreThan'"
+                                                      to-value="'dealsNumberLessThan'"
+                                                      to-use="'useDealsNumberLessThan'"
+                                    ></from-to-selector>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeLastDealDateFrom }">
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeLastDealDateFrom"
+                                                 data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    ></md-checkbox>
+                                </td>
+
+                                <td>
+                                    последняя сделка позже
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeLastDealDateFrom">
+                                    <date-selector
+                                            ng-model="customerAndLeadGetRequestCriteriaDao.relativeLastDealDateFrom"
+                                            ng-change="pageChanged(currentPage)"
+                                    ></date-selector>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeLastDealDateTo }">
+
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeLastDealDateTo"
+                                                 data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                    ></md-checkbox>
+                                </td>
+
+                                <td>
+                                    последняя сделка раньше
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeLastDealDateTo">
+                                    <date-selector
+                                            ng-model="customerAndLeadGetRequestCriteriaDao.relativeLastDealDateTo"
+                                            data-ng-change="pageChanged(currentPage)"></date-selector>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td colspan="3" class="info"><b> Возможности </b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    Сумма возможностей
+                                </td>
+                                <td>
+
+                                    <from-to-selector object="customerAndLeadGetRequestCriteriaDao"
+                                                      from-value="'opportunityAmountMoreThan'"
+                                                      from-use="'useOpportunityAmountMoreThan'"
+                                                      to-value="'opportunityAmountLessThan'"
+                                                      to-use="'useOpportunityAmountLessThan'"
+                                    ></from-to-selector>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    Число возможностей
+                                </td>
+                                <td>
+
+                                    <from-to-selector object="customerAndLeadGetRequestCriteriaDao"
+                                                      from-value="'opportunityNumberMoreThan'"
+                                                      from-use="'useOpportunityNumberMoreThan'"
+                                                      to-value="'opportunityNumberLessThan'"
+                                                      to-use="'useOpportunityNumberLessThan'"
+                                    ></from-to-selector>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeLastOpportunityDateFrom }">
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeLastOpportunityDateFrom"
+                                                 data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    ></md-checkbox>
+                                </td>
+
+                                <td>
+                                    последняя возможность позже
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeLastOpportunityDateFrom">
+                                    <date-selector
+                                            ng-model="customerAndLeadGetRequestCriteriaDao.relativeLastOpportunityDateFrom"
+                                            ng-change="pageChanged(currentPage)"
+                                    ></date-selector>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeLastOpportunityDateTo }">
+
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeLastOpportunityDateTo"
+                                                 data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                    ></md-checkbox>
+                                </td>
+
+                                <td>
+                                    последняя возможность раньше
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeLastOpportunityDateTo">
+                                    <date-selector
+                                            ng-model="customerAndLeadGetRequestCriteriaDao.relativeLastOpportunityDateTo"
+                                            data-ng-change="pageChanged(currentPage)"></date-selector>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary" data-ng-click=" pageChanged(currentPage)">Поиск
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-success" data-ng-click=" saveAsDynamicSegment( $eve)">
+                                        Сохранить
+                                        как динамический сегмент
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <filter-class-abstract ng-model="customerAndLeadGetRequestCriteriaDao"></filter-class-abstract>
+
+                    </div>
+
+                    <div class="col-md-12"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-8">
+                        <span class="badge">  {{allCustomersCount}}  </span>
+
+                        <span ng-if="customerAndLeadGetRequestCriteriaDao.customer">
+                            <span data-ng-show="getFlag() ===  'ru'">
+                                  {{declOfNum (allCustomersCount, ['клиент', 'клиента', 'клиентов']  ) }}
+                            </span>
+
+                            <span data-ng-show="getFlag() != 'ru'">
+                                <span translate="CUSTOMER_ENTITY_NUMBER"></span>
+                            </span>
+                        </span>
+
+                        <span ng-if="customerAndLeadGetRequestCriteriaDao.lead">
+                             <span data-ng-show="getFlag() ===  'ru'">
+                                {{declOfNum (allCustomersCount, ['лид', 'лида', 'лидов']  ) }}
+                            </span>
+
+                            <span data-ng-show="getFlag() != 'ru'">
+                                <span translate="CUSTOMER_LEAD_ENTITY_NUMBER"></span>
+                            </span>
+                        </span>
+
+                        <md-menu>
+                            <md-button class="btn-sm"
+                                       ng-click="openMenu($mdOpenMenu, $event)">
+                                <span translate="APP.COMMON.MORE.BUTTON"></span>
+                            </md-button>
+
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-button class=""
+                                               ng-show="hasRole(['ROLE_CUSTOMER_DOWNLOAD_EXCEL','ROLE_ALLOW_ALL_DOMAIN_BASED'])"
+                                               ng-click="downloadFileExcel()">
+                                        <md-icon md-font-icon="file_download">file_download</md-icon>
+                                        <span translate="CUSTOMER_SAVE_EXCEL"></span>
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <md-button class=""
+                                               ng-show="currentDynamicSegmentObjectEdited"
+                                               ng-click="saveUpdateDynamicSegment()">
+                                        <md-icon md-font-icon="save">save</md-icon>
+                                        Сохранить изменения в критерии сегмента <b> {{currentDynamicSegment.name || ''}} </b>
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+
+                        <md-button class="btn-sm"
+                                   ng-show="$root.customerSelected"
+                                   ng-click="$root.customerSelected = null">
+                            Сбросить клиента
+                        </md-button>
+
+                        <md-button class="btn-sm"
+                                   data-ng-show="customerAndLeadGetRequestCriteriaDao.useCustomSort"
+                                   ng-click="customerAndLeadGetRequestCriteriaDao.useCustomSort = false;
+                                                                          customerAndLeadGetRequestCriteriaDao.customSortField = '';
+                                                                          pageChanged(currentPage);
+                       ">
+                            {{ 'CUSTOMER_RESET_SORTING' | translate}}
+                        </md-button>
+
+                        <md-button class="btn-sm" ng-click="$parent.filterPanelShow=true; "
+                                   ng-if="!filterPanelShow"> фильтры, ЦА, сегментация
+                        </md-button>
+
+                        <!-- this mean - we show dynamic segment-->
+                        <div ng-if="currentDynamicSegment && currentDynamicSegment.id && !currentDynamicSegmentObjectEdited">
+                            <div ng-init=" $parent.filterPanelShow = false"></div>
+                            <small> {{ 'CUSTOMER_IN_DYNAMIC_SEGMENT' | translate}}</small>
+                            <a href="segment/dynamic/details/{{currentDynamicSegment.id}}"> <b>
+                                {{currentDynamicSegment.name}} </b>
+                            </a>
+                            <br/>
+                            {{currentDynamicSegment.description || ''}}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <input ng-model="customerAndLeadGetRequestCriteriaDao.fullTextSearchRequest"
+                               ng-model-options="{ debounce: 600 }"
+                               data-ng-change="pageChanged(currentPage)"
+                               id="searchCustomer" class="form-control background-input-color"
+                               placeholder="{{ 'CUSTOMER_SEARCH' | translate}}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body text-center"
+                 style="max-height: 90px; overflow-x: hidden;  overflow-y: auto;; background-color: #DDDDDD; padding-bottom: 8px; padding-top: 10px;">
+                <div class="row">
+
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div data-ng-repeat="segment in alltDynamicSegments | filter:dynamicSegmentFilter track by segment.id"
+                                 class="col-lg-2 col-md-2 nopadding" style="padding-top: 10px !important;"
+                                 tooltip-placement="bottom"
+                                 tooltip="{{segment.description}}"
+                                 tooltip-append-to-body="true"
+                                 data-ng-click="getByDynamicSegment(segment)"
+                            >
+                                <span class="label label-info" ng-if="segment.id != activeDynamicSegmentID">
+                                    {{segment.name}}
+                                    <span ng-if="segment.lastUpdate">
+                              <small> ({{segment.lastUpdateNumber}})</small>
+                            </span>
+                                </span>
+                                <span class="label label-success" ng-if="segment.id ===  activeDynamicSegmentID"> {{segment.name}}  </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 nopadding">
+                        <input ng-model="dynamicSegmentFilter" allExistingDealsAmount
+                               placeholder="{{ 'CUSTOMER_DYNAMIC_SEGMENTS' | translate}}" class="form-control"
+                               style="color: rgb(255, 255, 255); background-color: #DDDDDD;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body text-center" style="padding-top: 0px;">
+                <div class="visible-lg visible-md">
+                    <div class="row">
+
+                        <div ng-class="{'col-md-12' : !customerSelected, 'col-md-2' : customerSelected }"
+                             class="nopadding" style="    padding: 10px !important; padding-top: 0px !important;">
+
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <th class="mini-col-md ">№</th>
+                                    <th class="" ng-if="::debugMode">ID</th>
+
+                                    <th class=""
+                                        data-ng-class="{'danger' : customerAndLeadGetRequestCriteriaDao.customSortField ===  'firstName' }"
+                                        data-ng-click="customerAndLeadGetRequestCriteriaDao.useCustomSort = true;
+                                                customerAndLeadGetRequestCriteriaDao.customSortField = 'firstName';
+                                                customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField = !customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                ">
+                                        <i class="fa fa-sort-alpha-asc"
+                                           ng-if="!customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <i class="fa fa-sort-alpha-desc"
+                                           ng-if="customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <span>{{ 'CUSTOMER_ALL_FIRST_NAME' | translate}} </span>
+                                    </th>
+
+                                    <th class=" "
+                                        data-ng-class="{'danger' : customerAndLeadGetRequestCriteriaDao.customSortField ===  'lastName' }"
+                                        data-ng-click="customerAndLeadGetRequestCriteriaDao.useCustomSort = true;
+                                                customerAndLeadGetRequestCriteriaDao.customSortField = 'lastName';
+                                                customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField = !customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                ">
+                                        <i class="fa fa-sort-alpha-asc"
+                                           ng-if="customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <i class="fa fa-sort-alpha-desc"
+                                           ng-if="!customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <span>{{ 'CUSTOMER_ALL_LAST_NAME' | translate}} </span>
+                                    </th>
+
+
+                                    <th class="" ng-show="!customerSelected">
+                                        <span>{{ 'CUSTOMER_ALL_SCORE' | translate}} </span>
+                                    </th>
+
+                                    <th class="mini-col-md-2" ng-show="!customerSelected"
+                                        data-ng-class="{'danger' : customerAndLeadGetRequestCriteriaDao.customSortField ===  'customerOverview.opportunityAmount' }"
+                                        data-ng-click="customerAndLeadGetRequestCriteriaDao.useCustomSort = true;
+                                                customerAndLeadGetRequestCriteriaDao.customSortField = 'customerOverview.opportunityAmount';
+                                                customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField = !customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                ">
+                                        <i class="fa fa-sort-amount-desc"
+                                           ng-if="customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <i class="fa fa-sort-amount-asc"
+                                           ng-if="!customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <span>{{ 'CUSTOMER_ALL_OPPORTUNITY' | translate}} </span>
+                                    </th>
+
+
+                                    <th class="col-md-1" ng-show="!customerSelected"
+                                        data-ng-class="{'danger' : customerAndLeadGetRequestCriteriaDao.customSortField ===  'customerOverview.dealsAmount' }"
+                                        data-ng-click="customerAndLeadGetRequestCriteriaDao.useCustomSort = true;
+                                                customerAndLeadGetRequestCriteriaDao.customSortField = 'customerOverview.dealsAmount';
+                                                customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField = !customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                ">
+                                        <i class="fa fa-sort-amount-desc"
+                                           ng-if="customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <i class="fa fa-sort-amount-asc"
+                                           ng-if="!customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <span>{{ 'CUSTOMER_ALL_DEALS' | translate}} </span>
+                                    </th>
+
+                                    <th class="mini-col-md" style="width: 5% !important;"
+                                        ng-show="!customerSelected"
+                                        data-ng-class="{'danger' : customerAndLeadGetRequestCriteriaDao.customSortField ===  'customerOverview.activeTaskNumber' }"
+                                        data-ng-click="customerAndLeadGetRequestCriteriaDao.useCustomSort = true;
+                                                customerAndLeadGetRequestCriteriaDao.customSortField = 'customerOverview.activeTaskNumber';
+                                                customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField = !customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);">
+                                        <i class="fa fa-sort-amount-desc"
+                                           ng-if="customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <i class="fa fa-sort-amount-asc"
+                                           ng-if="!customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField"></i>
+                                        <span>{{ 'CUSTOMER_ALL_TASKS_NUMBER' | translate}} </span>
+                                    </th>
+
+                                    <th class="" ng-show="!customerSelected"
+                                        tooltip-placement="right" tooltip="Ответственный менеджер"
+                                        tooltip-append-to-body="true"
+
+                                        data-ng-class="{'danger' : customerAndLeadGetRequestCriteriaDao.customSortField ===  'responsibleManagerID' }"
+                                        data-ng-click="customerAndLeadGetRequestCriteriaDao.useCustomSort = true;
+                                                customerAndLeadGetRequestCriteriaDao.customSortField = 'responsibleManagerID';
+                                                customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField = !customerAndLeadGetRequestCriteriaDao.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                "><i class="fa fa-sort"></i>
+                                        <span>{{ 'CUSTOMER_ALL_MANAGER' | translate}} </span>
+                                    </th>
+
+                                    <th class="visible-lg" ng-show="!customerSelected">
+                                        <span>{{ 'CUSTOMER_ALL_TELEPHONE' | translate}} </span>
+                                    </th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr dir-paginate="project in projects | itemsPerPage: itemsPerPage  track by project.id "
+                                    current-page="currentPage"
+                                    data-ng-click="clickedCustomerLine(project)"
+                                    total-items="allCustomersCount">
+
+                                    <td class="mini-col-md"
+                                        ng-style="{'background-color' :  getCustomerPercentStatusByStatusId(project.salesFunnelStatus.id, project.leadGenMethod)[2] }">
+                                        <a href="/customer/details/{{::project.id}}">
+                                            {{ (currentPage-1)*itemsPerPage + $index+1}}
+                                        </a>
+                                    </td>
+
+                                    <td ng-if="::debugMode">{{project.id}}</td>
+
+                                    <td data-ng-class="::{'warning' : !project.firstName }">
+                                        <a href="/customer/details/{{::project.id}}">
+
+                                            <i class="fa fa-star" ng-if="::project.important"
+                                               tooltip-placement="left"
+                                               tooltip="Важный"
+                                               tooltip-append-to-body="true"
+                                            ></i>
+                                            {{::project.firstName}}
+                                        </a>
+                                    </td>
+
+                                    <td data-ng-class="::{'warning' : !project.lastName }">
+                                        {{::project.lastName}}
+                                    </td>
+
+                                    <td ng-show="!customerSelected">
+                                        <b> {{::project.salesFunnelStatus.name}} </b>
+                                        <br>
+                                        <progressbar class="progressbar-sm progress-rounded progress-striped"
+                                                     style="margin-bottom: 2px;"
+                                                     value="getPercentFromArrayStatus ( getCustomerPercentStatusByStatusId(project.salesFunnelStatus.id, project.leadGenMethod) ) *100 "
+                                                     type="{{project.lead ? 'warning' : 'info' }}"
+                                        >
+                                        </progressbar>
+
+                                        <div class="row" style="    margin-top: -18px;">
+                                            <div class="col-lg-3   visible-lg">
+                                                0%
+                                            </div>
+
+                                            <div class="col-md-12 col-lg-6 col-sm-12">
+                                                <b>
+                                                    {{:: getPercentFromArrayStatus(getCustomerPercentStatusByStatusId(project.salesFunnelStatus.id,
+                                                    project.leadGenMethod) ) *100 |number:2 }} %
+                                                </b>
+                                            </div>
+
+                                            <div class="col-lg-3 visible-lg">
+                                                100%
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+
+                                    <td data-ng-class="::{'warning' : project.customerOverview.opportunityAmount ===  0 }"
+                                        ng-show="!customerSelected"
+                                        class="mini-col-md-2">
+                                           <span class=""
+                                                 tooltip-placement="right"
+                                                 tooltip="Сумма возможностей"
+                                                 tooltip-append-to-body="true">
+                                              <b> {{::  printCurrencyPrintable(project.customerOverview.opportunityAmount)[0]  }} </b>
+                                          <small> {{::printCurrencyPrintable(project.customerOverview.opportunityAmount)[1] }}
+                                          </small>
+                                      </span>
+                                        <br/>
+                                        <span class="badge pull-left " tooltip-placement="right"
+                                              tooltip="Число возможностей"
+                                              tooltip-append-to-body="true">
+                                     {{:: project.customerOverview.opportunityNumber}} шт.
+                                    </span>
+                                        <span class="pull-right"
+                                              tooltip-placement="right" tooltip="Средний чек возможностей"
+                                              tooltip-append-to-body="true">
+                                              {{::( (project.customerOverview.opportunityAmount  / project.customerOverview.opportunityNumber ) | number:2 ) || 0 }}
+                                          </span>
+                                    </td>
+
+                                    <td class="mini-col-md-2"
+                                        ng-show="!customerSelected"
+                                        data-ng-class="::{'warning' : project.customerOverview.opportunityAmount ===  0 }">
+                                      <span class=""
+                                            tooltip-placement="right"
+                                            tooltip="Сумма сделок"
+                                            tooltip-append-to-body="true">
+                                              <b> {{:: printCurrencyPrintable(project.customerOverview.dealsAmount)[0]  }} </b>
+                                          <small>
+                                              {{:: printCurrencyPrintable(project.customerOverview.dealsAmount)[1] }}
+                                          </small>
+                                      </span>
+                                        <br/>
+                                        <span class="badge pull-left " tooltip-placement="right" tooltip="Число сделок"
+                                              tooltip-append-to-body="true">
+                                        {{:: project.customerOverview.dealsNumber}} шт.
+                                    </span>
+                                        <span class="pull-right"
+                                              tooltip-placement="right" tooltip="Средний чек сделок"
+                                              tooltip-append-to-body="true">
+                                                      {{::((project.customerOverview.dealsAmount  / project.customerOverview.dealsNumber ) | number:2 ) || 0 }}
+                                          </span>
+                                    </td>
+
+                                    <td data-ng-class=":: { warning : project.customerOverview.activeTaskNumber < 1  }"
+                                        ng-show="!customerSelected"
+                                        class="mini-col-md">
+                                  <span class="" tooltip-placement="right" tooltip="Число активных задач"
+                                        tooltip-append-to-body="true">
+                                      {{:: project.customerOverview.activeTaskNumber}}
+                                  </span>
+                                    </td>
+
+
+                                    <td ng-if="::!project.responsibleManagerID && !customerSelected" class="danger">
+                                        <h3> {{ 'CUSTOMER_NO_RESPONSIBLE' | translate}}</h3>
+                                    </td>
+
+
+                                    <td ng-if="::project.responsibleManagerID && project.responsibleManagerID!=currentUser.id && !customerSelected">
+                                        <a href="/user_account/details/{{::project.responsibleManagerID}}">
+                                            {{ printUser( resolveUser (project.responsibleManagerID) ) }}
+                                        </a>
+                                    </td>
+
+                                    <td ng-if="::project.responsibleManagerID && project.responsibleManagerID==currentUser.id && !customerSelected "
+                                        class="success col-md-1">
+                                        <a href="/user_account/details/{{::project.responsibleManagerID}}">
+                                            <h6>{{ 'CUSTOMER_RESPONSIBLE_MANAGER_CURRENT_USER' | translate}}</h6>
+                                        </a>
+                                    </td>
+
+                                    <td class="visible-lg" data-ng-class="{'warning' : !project.telephone }"
+                                        ng-show="!customerSelected">
+                                        {{:: project.telephone}}
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+
+
+                            <dir-pagination-controls
+                                    template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                                    boundary-links="true"
+                                    on-page-change="pageChanged(newPageNumber)">
+                            </dir-pagination-controls>
+
+                        </div>
+
+                        <div ng-class="{'col-md-10' : customerSelected }" ng-if="customerSelected"
+                             style="padding: 0px;">
+                            <div relink-event="redrawCustomerDetails">
+                                <div ng-controller="CustomerDetailsCtrl">
+                                    <div ng-include="'app/components/customer/details.html'"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <floating-pagination-panel pages-numbers="pagesNumbers" current-page="currentPage"
+                                               pages-numbers="pagesNumbers" page-changed="pageChanged">
+                    </floating-pagination-panel>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!--SMALL DEVICE-->
+
+        <div class="visible-sm visible-xs">
+            <div ng-repeat="project in projects track by project.id">
+
+                <div class="panel "
+                     ng-class="{
+                                     'panelSuccess': project.important === false ,
+                                     'panelDanger': project.important === true
+                                      }
+                                     "
+                >
+                    <div class="panel-leftheading">
+                        <h3 class="panel-lefttitle">
+                            <div ng-if="project.important">
+                                Важный
+                            </div>
+
+                            <div ng-if="!project.important">
+                                Не важный
+                            </div>
+                        </h3>
+                    </div>
+
+                    <div class="panel-rightbody " style="width: 85%;">
+                        <table class="{{$root.tableClasses}} cf  " width="100%">
+                            <tbody>
+
+
+                            <tr ng-if="project.responsibleManagerID && project.responsibleManagerID==currentUser.id "
+                                class="success">
+                                <td colspan="2" ng-if="project.firstName || project.lastName">
+                                    <h3><a href="/customer/details/{{project.id}}">
+                                        {{ (currentPage-1)*itemsPerPage + $index+1}}
+                                        {{project.firstName}} {{project.lastName}} </a></h3>
+                                </td>
+
+                                <td colspan="3" ng-if="!project.firstName && !project.lastName"
+                                    class="danger">
+                                    <h3> Имя и Фамилия не указаны! </h3>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td ng-if="!project.responsibleManagerID " class="danger" colspan="3">
+                                    <h3>
+                                        <span translate="CUSTOMER.COMMON.NO_RESPONSIBLE"></span>
+                                    </h3>
+                                </td>
+
+
+                                <td ng-if="project.responsibleManagerID && project.responsibleManagerID!=currentUser.id "
+                                    colspan="3">
+                                    <a href="/user_account/details/{{project.responsibleManagerID}}">
+                                        {{ resolveUser (project.responsibleManagerID).firstname }}
+                                        {{ resolveUser (project.responsibleManagerID).lastname }}
+                                        [{{ resolveUser (project.responsibleManagerID).username }}]
+                                    </a>
+                                </td>
+
+                                <td ng-if="project.responsibleManagerID && project.responsibleManagerID==currentUser.id "
+                                    colspan="3"
+                                    class="success">
+                                    <a href="/user_account/details/{{project.responsibleManagerID}}">
+                                        <h5>Я ответсвенный
+                                        </h5>
+                                    </a>
+                                </td>
+
+                            </tr>
+
+
+                            <tr ng-if="!project.responsibleManagerID " class="danger">
+                                <td colspan="3">
+                                    <span translate="CUSTOMER.COMMON.NO_RESPONSIBLE"></span>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td colspan="3">
+                                    <b> {{project.salesFunnelStatus.name}} </b>
+                                    <br>
+                                    <progressbar class="progressbar-sm progress-rounded progress-striped"
+
+                                                 value=" getPercentFromArrayStatus  ( getCustomerPercentStatusByStatusId(project.salesFunnelStatus.id, project.leadGenMethod)  )  *100 "
+                                                 type="info"></progressbar>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <b> [ {{ getPercentFromArrayStatus (
+                                                getCustomerPercentStatusByStatusId(project.salesFunnelStatus.id,
+                                                project.leadGenMethod) ) *100 |number:2 }} % ]</b>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Сумма возможностей</td>
+                                <td data-ng-class="{'warning' : project.opportunityAmount ===  0 }"> {{
+                                    project.opportunityAmount}}
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>Сумма сделок</td>
+
+                                <td>
+                                      <span class=""
+                                            tooltip-placement="right"
+                                            tooltip="Сумма сделок"
+                                            tooltip-append-to-body="true">
+                                              <b> {{ printCurrencyPrintable(project.dealsAmount)[0] }} </b>
+                                          <small> {{ printCurrencyPrintable(project.dealsAmount)[1] }}</small>
+                                      </span>
+                                    <br/>
+                                    [ <span class="" tooltip-placement="right" tooltip="Число сделок"
+                                            tooltip-append-to-body="true">
+                                      {{ project.dealsNumber}}
+                                  </span>
+                                    ]
+                                    <br/>
+                                    <span class="" tooltip-placement="right" tooltip="Средний чек сделок"
+                                          tooltip-append-to-body="true">
+                                          ( {{ project.dealsAmount / project.dealsNumber || 0 }} )
+                                      </span>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td> Число задач</td>
+
+                                <td data-ng-class="{ warning : project.activeTaskNumber < 1 }">
+                                  <span class="" tooltip-placement="right" tooltip="Число активных задач"
+                                        tooltip-append-to-body="true">
+                                      {{ project.activeTaskNumber}}
+                                  </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">
+                                    <a class="btn btn-success" href="/customer/details/{{project.id}}">
+                                        Подробнее </a>
+                                </td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                </div>
+
+            </div>
+
+            <dir-pagination-controls
+                    template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                    boundary-links="true">
+            </dir-pagination-controls>
+
+        </div>
+
+        <!--SMALL DEVIE-->
+
+        <div ng-if="allCustomersCount ===  0">
+            <div class="callout callout-warning">
+                <h4>Клиентов нет!</h4>
+                <p>Добавьте клиентов вручную или через API, или измените фильтры.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<style>
+    .panel {
+        position: relative;
+    }
+
+    .panel-default > .panel-leftheading {
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+
+    .panel-primary > .panel-leftheading {
+        color: #fff;
+        background-color: #428bca;
+        border-color: #428bca;
+    }
+
+    .panelSuccess > .panel-leftheading {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .panel-info > .panel-leftheading {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+    }
+
+    .panel-warning > .panel-leftheading {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+    }
+
+    .panelDanger > .panel-leftheading {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+    .panel-leftheading {
+        width: 42px;
+        padding: 10px 15px;
+        border-right: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        float: left;
+        height: 100%;
+        position: absolute;
+    }
+
+    .panel-lefttitle {
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 15px;
+        font-size: 16px;
+        color: inherit;
+        -webkit-transform: rotate(90deg);
+        -webkit-transform-origin: left top;
+        -moz-transform: rotate(90deg);
+        -moz-transform-origin: left top;
+        -ms-transform: rotate(90deg);
+        -ms-transform-origin: left top;
+        -o-transform: rotate(90deg);
+        -o-transform-origin: left top;
+        transform: rotate(90deg);
+        transform-origin: left top;
+        position: absolute;
+        white-space: nowrap;
+    }
+
+    .panel-rightbody {
+        float: left;
+        margin-left: 45px;
+        padding-top: 5px;;
+    }
+</style>

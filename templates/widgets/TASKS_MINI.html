@@ -1,0 +1,228 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-lg-12">
+        <div>
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    {{allWidgetsData["|currentWidget|"].widgetName || 'Задачи'}}
+                </div>
+                <div class="panel-body text-center" ng-controller="TaskAllCtrl">
+                    <div class="divider"></div>
+                    <tabset justified="true" class="ui-tab">
+
+                        <tab>
+                            <tab-heading>
+                                <i class="icon-bell"></i>Сегодня <span class="badge">{{pr.length}}</span>
+                            </tab-heading>
+
+                            <div class="table-responsive">
+                                <table class="{{$root.tableClasses}} cf">
+                                    <thead>
+                                    <tr>
+                                        <th><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                                        <th>Важное</th>
+                                        <th>Приоритет</th>
+                                        <th> Дата начала</th>
+                                        <th> Дата окончания</th>
+                                        <th>Ответственные</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="project in projects | reverse | limitTo:filterToShow.maxToShowInDashboard |filter:todayTasksFilter as pr">
+                                        <td ng-if="project.completed" class="success"><a
+                                                href="/task/details/{{project.id}}">{{project.name}} </a></td>
+                                        <td ng-if="!project.completed" class="danger"><a
+                                                href="/task/details/{{project.id}}">{{project.name}} </a></td>
+                                        <td ng-if="project.favourite"><i class="fa fa-star" style="color: grey;"></i>
+                                        </td>
+                                        <td ng-if="!project.favourite"></td>
+                                        <td>
+                                            <div ng-if="project.priority==6"><span
+                                                    class="label label-danger"> 6 / 6</span></div>
+                                            <div ng-if="project.priority==5"><span
+                                                    class="label label-warning"> 5 / 6 </span></div>
+                                            <div ng-if="project.priority==4"><span
+                                                    class="label label-info"> 4 / 6 </span></div>
+                                            <div ng-if="project.priority==3"><span
+                                                    class="label label-success"> 3 / 6 </span></div>
+                                            <div ng-if="project.priority==2"><span
+                                                    class="label label-primary"> 2 / 6 </span></div>
+                                            <div ng-if="project.priority==1"><span
+                                                    class="label label-default"> 1 / 6 </span></div>
+                                        </td>
+                                        <td> {{ project.startDate | date:'medium'}}</td>
+                                        <td ng-if="project.finalDate < timeNow && !project.completed" class="danger">
+                                            {{ printDate(project.finalDate)}}
+                                        </td>
+                                        <td ng-if="project.finalDate >= timeNow || project.completed">
+                                            {{ printDate(project.finalDate)}}
+                                        </td>
+
+                                        <td ng-if="!project.finalDate">
+
+                                        </td>
+                                        <td>
+                                            <div data-ng-repeat="resp in project.responsibles.userAccountsIDs">
+                                                <div class="col-md-6 col-lg-4 " style="
+                                                    padding-left: 6px; padding-right: 6px;
+                                                "
+                                                     tooltip-placement="right" tooltip="
+                                               {{ printUser(  resp  ) }}
+                                              " tooltip-append-to-body="true"
+
+                                                >
+                                                    <a href="/user_account/details/{{resp}}">
+                                                        <img class="img-rounded  " width="30" height="30"
+                                                             ng-src="{{getAvatarUrlByUser(resolveUser(resp) )}}"/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </tab>
+                        <tab>
+
+                            <tab-heading>
+                                <i class="icon-bell"></i>Просроченные <span class="badge">{{prPast.length}}</span>
+                            </tab-heading>
+
+                            <div class="table-responsive">
+                                <table class="{{$root.tableClasses}} cf">
+                                    <thead>
+                                    <tr>
+                                        <th><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                                        <th>Важное</th>
+                                        <th>Приоритет</th>
+                                        <th> Дата начала</th>
+                                        <th> Дата окончания</th>
+                                        <th>Ответственные</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="project in projects | reverse | limitTo:filterToShow.maxToShowInDashboard |filter:pastNotCompletedTasksFilter as prPast">
+                                        <td ng-if="project.completed" class="success"><a
+                                                href="/task/details/{{project.id}}">{{project.name}} </a></td>
+                                        <td ng-if="!project.completed" class="danger"><a
+                                                href="/task/details/{{project.id}}">{{project.name}} </a></td>
+                                        <td ng-if="project.favourite"><i class="fa fa-star" style="color: grey;"></i>
+                                        </td>
+                                        <td ng-if="!project.favourite"></td>
+                                        <td>
+                                            <div ng-if="project.priority==6"><span
+                                                    class="label label-danger"> 6 / 6</span></div>
+                                            <div ng-if="project.priority==5"><span
+                                                    class="label label-warning"> 5 / 6 </span></div>
+                                            <div ng-if="project.priority==4"><span
+                                                    class="label label-info"> 4 / 6 </span></div>
+                                            <div ng-if="project.priority==3"><span
+                                                    class="label label-success"> 3 / 6 </span></div>
+                                            <div ng-if="project.priority==2"><span
+                                                    class="label label-primary"> 2 / 6 </span></div>
+                                            <div ng-if="project.priority==1"><span
+                                                    class="label label-default"> 1 / 6 </span></div>
+                                        </td>
+                                        <td> {{ printDate(project.startDate)}}</td>
+                                        <td ng-if="project.finalDate < timeNow && !project.completed" class="danger"> {{
+                                            printDate(project.finalDate)}}
+                                        </td>
+                                        <td ng-if="project.finalDate >= timeNow || project.completed"> {{
+                                            printDate(project.finalDate)}}
+                                        </td>
+                                        <td>
+
+                                            <div data-ng-repeat="resp in project.responsibles.userAccountsIDs">
+                                                <div class="col-md-6 " style="padding: 13px;;"
+                                                     tooltip-placement="right" tooltip="
+                                               {{ printUser(  resp  ) }}
+                                              " tooltip-append-to-body="true"
+
+                                                >
+                                                    <a href="/user_account/details/{{resp}}">
+                                                        <img class="img-rounded  " width="30" height="30"
+                                                             ng-src="{{getAvatarUrlByUser(resolveUser(resp) )}}"/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </tab>
+                        <tab>
+
+                            <tab-heading>
+                                <i class="icon-bell"></i>Будущее <span class="badge">{{prFuture.length}}</span>
+                            </tab-heading>
+
+                            <div class="table-responsive">
+                                <table class="{{$root.tableClasses}} cf">
+                                    <thead>
+                                    <tr>
+                                        <th><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                                        <th>Важное</th>
+                                        <th>Приоритет</th>
+                                        <th> Дата начала</th>
+                                        <th> Дата окончания</th>
+                                        <th>Ответственные</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="project in projects | reverse | limitTo:filterToShow.maxToShowInDashboard |filter:futureTasksFilter as prFuture">
+                                        <td ng-if="project.completed" class="success"><a
+                                                href="/task/details/{{project.id}}">{{project.name}} </a></td>
+                                        <td ng-if="!project.completed" class="danger"><a
+                                                href="/task/details/{{project.id}}">{{project.name}} </a></td>
+                                        <td ng-if="project.favourite"><i class="fa fa-star" style="color: grey;"></i>
+                                        </td>
+                                        <td ng-if="!project.favourite"></td>
+                                        <td>
+                                            <div ng-if="project.priority==6"><span
+                                                    class="label label-danger"> 6 / 6</span></div>
+                                            <div ng-if="project.priority==5"><span
+                                                    class="label label-warning"> 5 / 6 </span></div>
+                                            <div ng-if="project.priority==4"><span
+                                                    class="label label-info"> 4 / 6 </span></div>
+                                            <div ng-if="project.priority==3"><span
+                                                    class="label label-success"> 3 / 6 </span></div>
+                                            <div ng-if="project.priority==2"><span
+                                                    class="label label-primary"> 2 / 6 </span></div>
+                                            <div ng-if="project.priority==1"><span
+                                                    class="label label-default"> 1 / 6 </span></div>
+                                        </td>
+                                        <td> {{ printDate(project.startDate)}}</td>
+                                        <td ng-if="project.finalDate < timeNow && !project.completed" class="danger"> {{
+                                            printDate(project.finalDate)}}
+                                        </td>
+                                        <td ng-if="project.finalDate >= timeNow || project.completed"> {{
+                                            printDate(project.finalDate)}}
+                                        </td>
+                                        <td>
+                                            <div data-ng-repeat="resp in project.responsibles.userAccountsIDs">
+                                                <div class="col-md-6 " style="padding: 13px;;"
+                                                     tooltip-placement="right" tooltip="
+                                               {{ printUser(  resp  ) }}
+                                              " tooltip-append-to-body="true"
+
+                                                >
+                                                    <a href="/user_account/details/{{resp}}">
+                                                        <img class="img-rounded  " width="30" height="30"
+                                                             ng-src="{{getAvatarUrlByUser(resolveUser(resp) )}}"/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+

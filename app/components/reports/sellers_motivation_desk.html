@@ -1,0 +1,249 @@
+<style>
+    .white-color-blue-back {
+        background-color: #2196F3 !important;
+        color: white !important;
+    }
+</style>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary" ng-show="filterPanelShow">
+            <div class="panel-heading"><span class="fa fa-filter"></span> Фильтры
+                <md-button class="btn-sm" ng-click="$parent.filterPanelShow=false"
+                           ng-if="filterPanelShow ">
+                    <span translate="APP.COMMON.HIDE.BUTTON"></span>
+                </md-button>
+                <md-button class="btn-sm" ng-click="$parent.filterPanelShow=true; "
+                           ng-if="!filterPanelShow ">
+                    <span translate="APP.COMMON.SHOW.BUTTON"></span>
+                </md-button>
+            </div>
+            <div class="panel-body text-center" data-ng-show="filterPanelShow ">
+
+                <table class="table table-bordered">
+
+                    <thead>
+
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td class="warning">Автообновление</td>
+                        <td>
+                            <md-checkbox name="checkbox1" type="checkbox"
+                                         data-ng-model="autoUpdate"></md-checkbox>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="warning">Сортировка по сумме</td>
+                        <td>
+                            <md-checkbox name="checkbox1" type="checkbox"
+                                         data-ng-model="paymentBuilder.sortByDealsAmount">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="warning">Время автообновления</td>
+                        <td>
+
+                            <div class="ro">
+                                <div class="col-md-4">
+                                    [ {{secondStart}} ]
+                                </div>
+
+                                <div class="col-md-4">
+                                    <progressbar class="progressbar-sm progress-rounded progress-striped"
+                                                 value=" percentToUpdate()  *100 " type="info"></progressbar>
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="row">
+                                        <div class="col-sm-2" style="font-size: 200%">
+
+                                        </div>
+
+                                        <div class="col-sm-3">
+                                            <input data-ng-model="autoUpdateSecs" class="form-control">
+                                        </div>
+
+                                        <div class="col-sm-2" style="font-size: 200%">
+
+                                        </div>
+                                    </div>
+                                    <br/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                    <div class="col-lg-5 col-md-6">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td colspan="3" class="info"><b> Фильтры по дате создания сделок</b></td>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+
+                            <tr data-ng-class="{'info' : paymentBuilder.useRelativeCreatedDateFrom }">
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="paymentBuilder.useRelativeCreatedDateFrom"
+                                               data-ng-change=" "
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    создано с
+                                </td>
+
+                                <td ng-if="paymentBuilder.useRelativeCreatedDateFrom">
+                                    <date-selector ng-model="paymentBuilder.relativeCreatedDateFrom"
+                                                   ng-change=" "
+                                    ></date-selector>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo }">
+
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="paymentBuilder.useRelativeCreatedDateTo"
+                                               data-ng-change=""
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    создано до
+                                </td>
+
+                                <td ng-if="paymentBuilder.useRelativeCreatedDateTo">
+                                    <date-selector ng-model="paymentBuilder.relativeCreatedDateTo"
+                                                   data-ng-change=""></date-selector>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <br/>
+                    </div>
+                </table>
+            </div>
+        </section>
+    </div>
+</section>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="row">
+                            <div class="col-md-8 col-lg-8">
+                                <span class="fa fa-users"></span>
+                                Рейтинг для отдела продаж
+                                <md-button class="btn-sm" ng-click="$parent.filterPanelShow=true; "
+                                           ng-if="!filterPanelShow ">фильтры
+                                </md-button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <progressbar class="progressbar-sm progress-rounded progress-striped"
+                                     value=" percentToUpdate()  *100 " type="info"></progressbar>
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel-body text-center nopadding">
+
+                <div class="row nopadding">
+                    <div class="col-md-12 nopadding">
+                        <table class="table table-bordered">
+
+                            <thead>
+                            <tr>
+                                <th class="white-color-blue-back">№</th>
+                                <th class="white-color-blue-back" colspan="3">Имя</th>
+                                <th class="white-color-blue-back">Сумма продаж</th>
+                                <th class="white-color-blue-back">Число продаж</th>
+                                <th class="white-color-blue-back">Последняя дата</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="manager in allManagersStats">
+                                <td class="">{{$index + 1}}</td>
+
+                                <td>
+                                    <a href="/user_account/details/{{manager.userAccount.id}}">
+                                        <img class="img-rounded  " width="50" height="50"
+                                             ng-src="{{getAvatarUrlByUser(manager.userAccount)}}"/>
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a href="/user_account/details/{{manager.userAccount.id}}">
+                                        {{manager.userAccount.firstname}}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{manager.userAccount.lastname}}
+                                </td>
+
+                                <td>
+                                    <span style="font-size: 200%;">
+                                        <b> {{ printCurrencyPrintable(manager.allDealsAmount)[0] }} </b>
+                                    </span>
+                                    <small> {{ printCurrencyPrintable(manager.allDealsAmount)[1] }}</small>
+
+                                </td>
+                                <td>
+                                    <h4>
+                                        {{manager.allDealsCount}}
+                                    </h4>
+                                </td>
+
+                                <td>
+                                    <span ng-if="manager.latestDealDate">
+                                        <a href="customer/details/{{manager.latestDeal.connectedInfo.connectedCustomerId}}">
+                                            {{printDate(manager.latestDealDate)}}
+                                        </a>
+                                        <br>
+                                        <small><b> {{manager.latestDealDate | timeAgo}} </b></small>
+                                        <br>
+                                       <b> (
+                                           {{ printCurrencyPrintable(manager.latestDeal.amount)[0] }}
+                                           {{ printCurrencyPrintable(manager.latestDeal.amount)[1] }}
+                                           )
+                                       </b>
+                                    </span>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

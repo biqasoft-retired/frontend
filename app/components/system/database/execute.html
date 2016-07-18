@@ -1,0 +1,84 @@
+<style>
+    .CodeMirror {
+        border: 1px solid #eee;
+        height: auto;
+    }
+</style>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary" style="  margin-bottom: 3px;">
+            <div class="panel-heading">
+                <small>Запрос к базе данных MongoDB</small>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    Запрос:
+                    <br><br>
+                    <div ui-codemirror ui-codemirror-opts="editorOptions"
+                         data-ng-model="executeDatabaseCommandRequest.command"
+                    >
+                    </div>
+
+                    <br>
+                    <md-button class="md-raised md-primary" ng-click="executeDatabaseCommand()">
+                        Execute
+                    </md-button>
+
+                    <br><br>
+
+                    <md-menu>
+                        <md-button class=""
+                                   ng-click="openMenu($mdOpenMenu, $event)">
+                            примеры запросов
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button class="" ng-click="exampleTask()">Создать задачу</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button class="" ng-click="exampleGetAllCustomers()">Получить всех клиентов и лидов
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                    <md-menu>
+                        <md-button class=""
+                                   ng-click="openMenu($mdOpenMenu, $event)">
+                            Документация
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button href="https://docs.mongodb.org/manual/reference/command/nav-crud/"
+                                           target="_blank">Документация БД
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                </div>
+                <div class="col-md-6">
+                    Результат:
+
+                    <span ng-click="prettyShowResult = false" ng-show="prettyShowResult">
+                        <u>Pretty view</u>
+                    </span>
+                    <span ng-click="prettyShowResult = true" ng-show="!prettyShowResult">
+                        <u>Source</u>
+                    </span>
+
+                    <br> <br>
+                    <div ng-if="!prettyShowResult">
+                        <b> {{result | json}} </b>
+                    </div>
+
+                    <json-formatter open="1" json="result" ng-if="prettyShowResult"></json-formatter>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

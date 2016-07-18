@@ -1,0 +1,160 @@
+<div>
+    <div layout="column" ng-cloak="" class="chipsdemoContactChips">
+        <md-content class="md-padding autocomplete" layout="column" style="background-color: white !important;">
+            <!--{{querySearch($query)}}-->
+            <!--{{contacts}}-->
+            <!--{{accountOptions.editMode}}-->
+            <md-contact-chips
+                    ng-model="contacts"
+                    md-contacts="querySearch($query)"
+                    md-contact-name="name"
+                    md-contact-image="image"
+                    md-contact-email="email"
+                    md-require-match="true"
+                    md-highlight-flags="i"
+                    filter-selected="filterSelected"
+                    ng-disabled="!accountOptions.editMode"
+                    placeholder="{{'APP.USERACCOUNT.USER_ACCOUNTS_SELECTOR.SEARCH' | translate}}">
+            </md-contact-chips>
+            <md-list class="fixedRows">
+
+                <div class="row nopadding">
+                    <div class="col-md-6 nopadding">
+                        <md-subheader class="md-no-sticky" style="background-color: white;" ng-click="showAllUsers = !showAllUsers" ng-show="accountOptions.editMode">
+                            <span translate="APP.USERACCOUNT.USER_ACCOUNTS_SELECTOR.ALL"></span>
+                        </md-subheader>
+                    </div>
+                    <div class="col-md-6 nopadding" ng-show="showAllUsers && accountOptions.editMode">
+                        <md-input-container flex class="nopadding">
+                            <input ng-model="userAccountsFilter.filter" class="form-control" style="min-width: 50px !important;">
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <md-list-item class="md-2-line contact-item" ng-repeat="(index, contact) in allContacts | filter:userAccountsFilter.filter"
+                              ng-show="showAllUsers && accountOptions.editMode"
+                              ng-if="contacts.indexOf(contact) < 0">
+
+                    <a href="userAccount/details/{{contact.id}}">
+                        <img ng-src="{{contact.image}}" class="md-avatar" alt="{{contact.name}}"/>
+                    </a>
+
+                    <div class="md-list-item-text compact" ng-click="contacts.push(contact)">
+                        <h3>{{contact.name}}</h3>
+                        <p ng-show="contact.position"> (<b>{{contact.position}}</b>)</p>
+                    </div>
+                </md-list-item>
+                <md-list-item class="md-2-line contact-item selected" ng-repeat="(index, contact) in contacts  | filter:userAccountsFilter.filter"
+                              ng-show="showAllUsers && accountOptions.editMode">
+                    <a href="userAccount/details/{{contact.id}}">
+                        <img ng-src="{{contact.image}}" class="md-avatar" alt="{{contact.name}}"/>
+                    </a>
+
+                    <div class="md-list-item-text compact">
+                        <h3>{{contact.name}}</h3>
+                        <p ng-show="contact.position"> (<b>{{contact.position}}</b>)</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-content>
+
+    </div>
+</div>
+
+<style>
+    .md-contact-suggestion img {
+        /*height: 40px;*/
+        /*border-radius: 20px;*/
+        /*margin-top: -20px;*/
+    }
+
+    md-list-item.md-no-proxy, md-list-item .md-no-style {
+        position: relative;
+        /*padding: 0px 0px !important;*/
+    }
+
+    .chipsdemoContactChips md-content.autocomplete {
+        /*min-height: 250px;*/
+    }
+
+    .chipsdemoContactChips md-content.autocomplete input {
+        min-width: 400px;
+    }
+
+    .chipsdemoContactChips .md-item-text.compact {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .chipsdemoContactChips .contact-item {
+        box-sizing: border-box;
+    }
+
+    .chipsdemoContactChips .contact-item.selected {
+        opacity: 0.5;
+    }
+
+    .chipsdemoContactChips .contact-item.selected h3 {
+        opacity: 0.5;
+    }
+
+    .chipsdemoContactChips .contact-item .md-list-item-text {
+        padding: 24px 0;
+        max-width: 190px;
+    }
+
+    .chipsdemoContactChips .contact-item .md-list-item-text h3 {
+        margin: 0 !important;
+        padding: 0;
+        line-height: 1.2em !important;
+    }
+
+    .chipsdemoContactChips .contact-item .md-list-item-text h3, .chipsdemoContactChips .contact-item .md-list-item-text p {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    @media screen and (min-width: 960px) {
+        .chipsdemoContactChips .contact-item {
+            float: left;
+            width: 33%;
+        }
+    }
+
+    .chipsdemoContactChips md-contact-chips {
+        margin-bottom: 10px;
+    }
+
+    .chipsdemoContactChips .md-chips {
+        padding: 5px 0 8px;
+    }
+
+    .chipsdemoContactChips .fixedRows {
+        max-height: 250px;
+        overflow: auto;
+    }
+
+    md-list {
+        padding: 0px !important;
+    }
+
+    md-list-item.md-no-proxy, md-list-item .md-no-style {
+        padding: 0px !important;
+    }
+
+    .chipsdemoContactChips .contact-item .md-list-item-text {
+        padding: 14px 0;
+        /*max-width: 190px;*/
+    }
+
+    .md-contact-suggestion img {
+        /*height: 40px;*/
+        /*border-radius: 20px;*/
+        margin-top: -20px;
+    }
+
+    /*height: 250px;*/
+    /*overflow: hidden; }*/
+
+</style>

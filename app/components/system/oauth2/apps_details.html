@@ -1,0 +1,170 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+
+     tooltip-placement="left" tooltip="сохранить изменения"
+     tooltip-append-to-body="true"
+     ng-click="saveApp()"
+>
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    <b> {{app.name || printEmptyField()}} </b>
+                </div>
+                <div class="panel-body text-center">
+                    <div class="panel-body text-center">
+
+                        <span ng-show="::debugMode"> {{app | json}} </span>
+
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td> <span translate="APP.COMMON.OBJECT.NAME"></span></td>
+                                <td>
+                                    <div class="col-md-9">
+                                        <input data-ng-model="app.name" class="form-control">
+                                    </div>
+                                    <div class="col-md-3 nopadding">
+                                        <md-menu class="pull-right nopadding">
+
+                                            <md-button aria-label=" " class="nopadding "
+                                                       ng-click="openMenu($mdOpenMenu, $event)">
+                                                <i class="fa fa-cog" style="font-size: 120%;"
+                                                ></i>
+                                                <md-tooltip md-direction="left">
+                                                    <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                                </md-tooltip>
+                                            </md-button>
+
+                                            <md-menu-content width="4">
+                                                <md-menu-item>
+                                                    <md-button class="" data-ng-click="deleteAppConfirmation()">
+                                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> ID приложения</td>
+                                <td>{{app.id}}</td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    Секретный код приложения
+                                </td>
+
+                                <td>
+                                    <button class="btn " ng-click="getAppSecretCode()" ng-if="!appSecretCode">
+                                        <span translate="APP.COMMON.SHOW.BUTTON"></span>
+                                    </button>
+
+                                    <b ng-if="appSecretCode"> {{appSecretCode.data}} </b>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td> URL изображения</td>
+                                <td>
+                                    <input data-ng-model="app.avatarUrl" class="form-control" placeholder="http://">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> <span translate="APP.COMMON.OBJECT.DESCRIPTION"></span></td>
+                                <td>
+                                    <input data-ng-model="app.description" class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> Адрес перенаправления **</td>
+                                <td>
+                                    <input data-ng-model="app.redirect_uri" class="form-control" placeholder="http://">
+                                </td>
+                            </tr>
+
+                            <tr ng-show="debugMode">
+                                <td> Доступно публично *
+
+                                </td>
+                                <td>
+                                    <div style="padding-left: 25px;">
+                                        <label class="ui-checkbox">
+                                            <input type="checkbox" class="" data-ng-model="app.publicApp">
+                                            <span>   </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+
+                        <small>
+
+                            <small ng-show="debugMode"> * - если приложение доступно публично, то любой пользователь biqa сможет увидеть его
+                                в списке приложений. Иначе - только пользователи
+                                вашего домена.
+                            </small>
+
+                            <br>
+
+                            ** -
+                            <small> на этот адрес (вашего публичного сайта) будет перенаправлен пользователь, давший
+                                согласние на доступ приложению.
+                                При этом в GET переменной 'code' будет передан код, который необходимо переслать вашему
+                                серверу вместе с секретным кодом приложения для получения токена,
+                                который позволит выполнять запросы от имени пользователя.
+                                Например, если вы укажите адрес "http://localhost:9090", то пользователь будет
+                                перенаправлен по адресу "http://localhost:9090/?code=ehuexqrokxw6pqy",
+                                где "ehuexqrokxw6pqy" - сгенерированный код.
+                            </small>
+
+                            <br> <br>
+                            Для того, чтобы приложение получило доступ к аккаунту, пользователя необходимо перенаправить
+                            пользователя, авторизованного в системе по адресу
+
+                            <a href=" https://cloud.biqasoft.com/developers/oauth2/auth?client_id={{app.id}}"
+                               target="_blank">
+                                https://cloud.biqasoft.com/developers/oauth2/auth?client_id={{app.id}}
+                            </a>
+                        </small>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <!--<span class="glyphicon glyphicon-th"></span>-->
+                    Необходимые роли
+                </div>
+                <div class="panel-body">
+                    <span role-security-selector data-ng-model="app.roles"></span>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+

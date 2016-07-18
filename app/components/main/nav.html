@@ -1,0 +1,481 @@
+<div class="nav-wrapper">
+    <ul id="nav"
+        class="nav"
+        data-slim-scroll
+        data-collapse-nav
+        data-highlight-active>
+
+        <li class="" ng-if="hasRole('ROLE_ADMIN')">
+            <a href="/dashboard"> <i class="fa fa-dashboard"></i>
+                <span translate="NAV.DASHBOARD"></span>
+            </a>
+        </li>
+
+        <li class=""
+            ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_CUSTOMER_ROOT'])">
+            <a><i class="fa fa-cube"></i>
+                <span translate="NAV.CRM"></span>
+            </a>
+            <ul>
+
+                <li><a href="/customer/all"
+                       ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_CUSTOMER_GET_ALL'])">
+                    <i class="fa fa-angle-right"></i>
+                    <span translate="NAV.CLIENTS">
+                    </span>
+                    <span class="badge badge-square badge-info">{{globalDomainStats.allCustomersCount}}</span>
+                </a>
+                </li>
+
+                <li>
+                    <a data-ng-click="addNewTempCustomer({'customer':true})"
+                       ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_CUSTOMER_ADD'])">
+                        <i class="fa fa-angle-right"></i>
+                        <span translate="NAV.NEW_CLIENT"></span>
+                    </a>
+                </li>
+
+                <li><a href="/customer/mass/excel"
+                       ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_CUSTOMER_DOWNLOAD_EXCEL'])">
+                    <i class="fa fa-angle-right"></i>
+                    <span translate="NAV.IMPORT_EXPORT"></span>
+                </a>
+                </li>
+
+                <li><a href="/company/all"
+                       ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_COMPANY_GET_ALL'])">
+                    <i class="fa fa-angle-right"></i>
+                    <span translate="NAV.CONTRAGENTS"></span>
+                    <span class="badge badge-square badge-info">{{globalDomainStats.companiesNumber}}</span>
+                </a>
+                </li>
+
+                <li><a href="/customer_deal/all"
+                       ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_PAYMENT_GET_CUSTOMER_DEALS'])">
+                    <i class="fa fa-angle-right"></i>
+                    <span translate="NAV.DEALS"></span>
+                    <span class="badge badge-square badge-info">
+                        {{globalDomainStats.allDealsCount}}
+                    </span>
+                </a></li>
+
+                <li><a href="/company_cost/all"
+                       ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_PAYMENT_GET_COMPANY_COST'])">
+                    <i class="fa fa-angle-right"></i>
+                    <span translate="NAV.COSTS"></span>
+                </a></li>
+            </ul>
+        </li>
+
+        <li class=""
+            ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_CUSTOMER_ROOT', 'ROLE_OPPORTUNITY_ROOT'])">
+            <a><i class="fa fa-angellist"></i>
+                <span translate="NAV.LEADS_SECTION"></span>
+            </a>
+            <ul>
+                <li ng-show="hasRole(['ROLE_ADMIN' ,'ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_CUSTOMER_GET_ALL' ])">
+                    <a href="/lead/all"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.LEADS_ALL"></span>
+                        <span class="badge badge-square badge-info">
+                        {{globalDomainStats.activeLeadsNumber}}
+                    </span>
+                    </a>
+                </li>
+
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_OPPORTUNITY_GET'])">
+                    <a href="/opportunity/all">
+                        <i class="fa fa-angle-right"></i>
+                        <span translate="NAV.OPPORTUNITY"></span>
+                    </a>
+                </li>
+
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_CUSTOMER_ADD'])">
+                    <a data-ng-click="addNewTempCustomer({'lead':true})">
+                        <i class="fa fa-angle-right"></i>
+                        <span translate="NAV.NEW_LEAD"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="hasRole(['ROLE_ADMIN','ROLE_SEGMENT_ROOT','ROLE_ALLOW_ALL_DOMAIN_BASED'])">
+            <a><i class="fa fa-cart-plus"></i>
+                <span translate="NAV.SEGMENTATION"></span>
+            </a>
+            <ul>
+                <li><a href="/segment/static/all"><i class="fa fa-angle-right"></i>
+                    <span translate="NAV.SEGMENTATION.STATIC"></span>
+                    <br/>
+                    <span class="badge badge-square badge-info">{{globalDomainStats.staticSegmentsNumber}}</span>
+                </a>
+                </li>
+
+                <li><a href="/segment/dynamic/all"><i class="fa fa-angle-right"></i>
+                    <span translate="NAV.SEGMENTATION.DYNAMIC"></span>
+                    <br/>
+                    <span class="badge badge-square badge-info">{{globalDomainStats.dynamicSegmentsNumber}}</span>
+                </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED'])">
+            <a><i class="fa fa-university"></i>
+                <span translate="NAV.REPORT"></span>
+            </a>
+            <ul>
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_SELLER_MOTIVATION_DESK'])">
+                    <a href="/reports/sellers"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.SALES_RATING"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED'])">
+            <a><i class="fa fa-university"></i>
+                <span translate="NAV.CUSTOM_OBJECTS"></span>
+            </a>
+            <ul>
+                <li ng-repeat="customObject in allCustomObjectsMeta track by customObject.id">
+                    <a href="/objects/custom/data/details/{{customObject.id}}"><i class="fa fa-angle-right"></i>
+                        <span> {{ (customObject.name || customObject.id  ) | truncate: 14: '...' }} </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class=""
+            ng-show="hasRole(['ROLE_ADMIN','ROLE_DOCUMENTS_ROOT','ROLE_ALLOW_ALL_DOMAIN_BASED'])">
+            <a href="/storage">
+                <i class="fa fa-file"></i>
+                <span translate="NAV.FILES"></span>
+            </a>
+        </li>
+
+        <li class="" ng-show="hasRole(['ROLE_ADMIN','ROLE_TASK_ROOT','ROLE_ALLOW_ALL_DOMAIN_BASED' ])">
+            <a><i class="fa fa-tasks"></i>
+                <span translate="NAV.TASKS"></span>
+            </a>
+            <ul>
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_TASK_GET'])">
+                    <a href="/task"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.TASKS_ALL"></span>
+                        <span tooltip-placement="right"
+                              tooltip="{{'NAV.TASKS_ACTIVE_NUMBER' | translate}}"
+                              tooltip-append-to-body="true"
+                              class="badge badge-square badge-info">
+                              {{globalDomainStats.allActiveTasksCount}}
+                        </span>
+                    </a>
+                </li>
+
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','TASK_PROJECT_GET']) && debugMode">
+                    <a href="/task/projects/all"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.TASKS_PROJECT"></span>
+                    </a>
+                </li>
+
+                <li ng-show="debugMode"><a href="/task/planning"><i class="fa fa-angle-right"></i>
+                    <span translate="NAV.TASKS_PLANNING"></span>
+                </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class=""
+            ng-show="hasRole(['ROLE_ADMIN','ROLE_USER_ACCOUNT_ROOT','ROLE_ALLOW_ALL_DOMAIN_BASED', 'ROLE_USER_ACCOUNT_ROOT'])">
+            <a><i class="fa fa-users"></i>
+                <span translate="NAV.HR"></span>
+            </a>
+            <ul>
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_USER_ACCOUNT_ADD'])">
+                    <a href="/user_account/new"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.NEW_ACCOUNT"></span>
+                    </a>
+                </li>
+
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','USER_ACCOUNT_GET'])">
+                    <a href="/user_account/all"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.ACCOUNT_ALL"></span>
+                        <span class="badge badge-square badge-info">
+                         {{globalDomainStats.allActiveStaffCount}}
+                 </span>
+                    </a></li>
+
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_USER_GROUP_ROOT'])">
+                    <a href="/user_account/groups"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.ACCOUNT_ALL_GROUPS"></span>
+                    </a></li>
+            </ul>
+        </li>
+
+        <li class=""
+            ng-show="hasRole(['ROLE_ADMIN','ROLE_LEAD_GEN_METHOD_ROOT','ROLE_ALLOW_ALL_DOMAIN_BASED', 'ROLE_LEAD_GEN_METHOD_GET_ALL'])">
+            <a href="/marketing/lead_gen_methods">
+                <i class="fa fa-bar-chart"></i>
+                <span translate="NAV.MARKETING"></span>
+            </a>
+        </li>
+
+        <li class=""
+            ng-show="hasRole(['ROLE_ADMIN','ROLE_DATA_SOURCES_ROOT','ROLE_ALLOW_ALL_DOMAIN_BASED'])">
+            <a><i class="fa fa-pie-chart"></i>
+                <span translate="NAV.KPI"></span>
+            </a>
+            <ul>
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_DATA_SOURCES_GET'])">
+                    <a href="/data_source/all">
+                        <i class="fa fa-angle-right"></i>
+                        <span translate="NAV.KPI"></span>
+                        <span class="badge badge-square badge-info">
+                         {{globalDomainStats.dataSourcesNumber}}
+                     </span>
+                    </a>
+                </li>
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_WIDGET_ADD'])">
+                    <a href="/widgets/create/predefined"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.KPI_AND_WIDGET_CREATE"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class=""
+            ng-show="hasRole(['ROLE_ADMIN','ROLE_EXTERNAL_SERVICES_ROOT','ROLE_ALLOW_ALL_DOMAIN_BASED'])">
+            <a href="/external_services">
+                <i class="fa fa-exchange"></i>
+                <span translate="NAV.INTEGRATION"></span>
+            </a>
+        </li>
+
+        <li class=""
+            ng-show="hasRole(['ROLE_ADMIN','ROLE_CALLER','ROLE_ALLOW_ALL_DOMAIN_BASED']) && debugMode">
+            <a><i class="fa fa-trophy"></i>
+                <span translate="NAV.SELLER_MANAGER"></span>
+            </a>
+            <ul>
+                <li>
+                    <a href="/caller/projects/all"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.SELLER_MANAGER_MY_PROJECTS"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/upload/call/records"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.SELLER_MANAGER_CALL_UPLOAD"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="hasRole('ROLE_ADMIN') && debugMode">
+            <a><i class="fa fa-trophy"></i>
+                <span class="badge badge-square badge-danger">ALPHA</span>
+                <span>Звонки</span></a>
+            <ul>
+                <li><a href="/dialer"><i class="fa fa-angle-right"></i>
+                    <span>Номеронабиратель</span></a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED']) && debugMode">
+            <a><i class="fa fa-sitemap"></i><span>
+                Тестируемые функции
+            </span>
+                <span class="badge badge-square badge-danger"> ALPHA </span>
+            </a>
+            <ul>
+                <li ng-show="debugMode"><a href="/caller/all/calls">
+                    <i class="fa fa-angle-right"></i><span>
+                    Список холодных звонков
+                </span></a>
+                </li>
+                <li ng-show="debugMode"><a href="/calls/records/all"><i class="fa fa-angle-right"></i>
+                    <span>
+                        Все записи звонков
+                    </span></a>
+                </li>
+                <li ng-show="debugMode"><a href="/calls/project/new">
+                    <i class="fa fa-angle-right"></i>
+                    <span>
+                        Проекты для прозвона
+                    </span>
+                    <span class="badge badge-square badge-info">
+                    {{globalDomainStats.coldCallProjectNumber}}
+                    </span>
+                </a></li>
+            </ul>
+        </li>
+
+        <li class="caller-section " ng-show="hasRole('ROLE_ADMIN') && debugMode">
+            <a><i class="fa fa-trophy"></i>
+                <span class="badge badge-square badge-danger">ALPHA</span>
+                <span>Уведомления</span>
+            </a>
+            <ul>
+                <li><a href="/notifications/settings"><i class="fa fa-angle-right"></i>
+                    <span>Настройки</span></a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED'])">
+            <a><i class="fa fa-gear"></i>
+                <span translate="NAV.SETTINGS"></span>
+            </a>
+            <ul>
+
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_DOMAIN_COMPANY_GET_BASIC'])">
+                    <a href="/objects/custom/meta/all"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.CUSTOM_OBJECTS"></span>
+                    </a>
+                </li>
+
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_DOMAIN_COMPANY_GET_BASIC'])">
+                    <a href="/domain/my/settings"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.DOMAIN_SETTINGS"></span>
+                    </a>
+                </li>
+
+                <li ng-show="hasRole(['ROLE_ADMIN','ROLE_ALLOW_ALL_DOMAIN_BASED','ROLE_DOMAIN_COMPANY_GET_BASIC'])">
+                    <a href="/domain/my/settings/biqa_objects_custom_fields"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.CUSTOM_FIELDS"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Developer info -->
+        <li class="" ng-show=" (hasRole('ROLE_ADMIN')) || debugMode">
+            <a><i class="fa fa-wrench"></i>
+                <span translate="NAV.DEVELOPERS"></span>
+            </a>
+            <ul>
+                <li><a href="/debug"><i class="fa fa-angle-right"></i>
+                    <span translate="NAV.DEVELOPER.DEBUG"></span></a>
+                </li>
+                <li><a href="/system/overview"><i class="fa fa-angle-right"></i>
+                    <span translate="NAV.DEVELOPER.SYSTEM.OVERVIEW"></span></a>
+                </li>
+                <li>
+                    <a href="/widgets/create/custom"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.DEVELOPER.WIDGET"></span></a>
+                </li>
+                <li ng-if="::debugMode">
+                    <a href="/developers/database"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.DEVELOPER.DB"></span></a>
+                </li>
+
+                <li ng-if="::debugMode">
+                    <a href="/developers/bpmn/ide"><i class="fa fa-angle-right"></i>
+                        BPMN IDE
+                        <!--<span translate="NAV.DEVELOPER.DB"></span>-->
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/developers/database/admin/execute"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.DEVELOPER.DB_REQUEST"></span></a>
+                </li>
+                <li ng-if="::debugMode">
+                    <a href="bpmn/raw/execute"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.DEVELOPER.BPMN_RAW_EXECUTE"></span></a>
+                </li>
+
+                <li>
+                    <a href="/developers/oauth2/apps"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.DEVELOPER.APPLICATIONS"></span></a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="">
+            <a><i class="fa fa-thumb-tack"></i><span>
+                biqasoft
+            </span></a>
+            <ul>
+                <li>
+                    <a href="https://biqasoft.com" target="_blank"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.BIQA.MAIN_PAGE"></span></a>
+                </li>
+                <li>
+                    <a href="http://blog.biqasoft.com" target="_blank"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.BIQA.BLOG"></span></a>
+                </li>
+                <li>
+                    <a href="https://support.biqasoft.com" target="_blank"><i class="fa fa-angle-right"></i>
+                        <span translate="NAV.BIQA.RESET_PASSWORD"></span></a>
+                </li>
+                <li>
+                    <a href="mailto:support@biqasoft.com" target="_blank"><i class="fa fa-angle-right"></i>
+                        <span>support@biqasoft.com"></span></a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="::debugMode" style="margin-top: 25px;">
+            <a href="/ui"><i class="fa fa-magic"></i><span>UI Kit</span>
+                <span class="badge badge-square badge-info">DEV-UI</span>
+            </a>
+            <ul>
+                <li><a href="/ui-framework/ui/buttons"><i class="fa fa-angle-right"></i><span
+                >Buttons</span></a></li>
+                <li><a href="/ui-framework/ui/icons"><i class="fa fa-angle-right"></i><span
+                >Icons</span></a></li>
+                <li><a href="/ui-framework/ui/components"><i class="fa fa-angle-right"></i><span
+                >Components</span>
+                    <span class="badge badge-square badge-danger">18</span></a></li>
+                <li><a href="/ui-framework/ui/widgets"><i class="fa fa-angle-right"></i><span
+                >Widgets</span> <span
+                        class="badge badge-square badge-success">13</span></a></li>
+                <li><a href="/ui-framework/ui/timeline"><i class="fa fa-angle-right"></i><span
+                >Timeline</span></a></li>
+                <li><a href="/ui-framework/ui/pricing-tables"><i class="fa fa-angle-right"></i><span
+                >Pricing Tables</span></a></li>
+                <li><a href="/ui-framework/ui/maps"><i class="fa fa-angle-right"></i><span
+                >Maps</span> <span
+                        class="badge badge-square badge-warning">2</span></a></li>
+                <li><a href="/ui-framework/ui/grids"><i class="fa fa-angle-right"></i><span
+                >Grids</span></a></li>
+                <li><a href="/ui-framework/ui/typography"><i class="fa fa-angle-right"></i><span
+                >Typography</span></a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="::debugMode">
+            <a href="/ui-framework/table"><i class="fa fa-table"></i><span>Tables</span>
+                <span class="badge badge-square badge-info">DEV-UI</span>
+            </a>
+            <ul>
+                <li><a href="/ui-framework/tables/static"><i class="fa fa-angle-right"></i><span
+                >Static Tables</span></a></li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="::debugMode">
+            <a href="/pages"><i class="fa fa-file-text-o"></i><span>Pages</span>
+                <span class="badge badge-square badge-info">DEV-UI</span>
+            </a>
+            <ul>
+                <li><a href="/pages/profile"><i class="fa fa-angle-right"></i><span>User Profile</span></a></li>
+                <li><a href="/pages/404"><i class="fa fa-angle-right"></i>404 <span>Error</span></a></li>
+                <li><a href="/pages/500"><i class="fa fa-angle-right"></i>500 <span>Error</span></a></li>
+            </ul>
+        </li>
+
+        <li class="" ng-show="::debugMode">
+            <a href="/ui-framework/mail"><i class="fa fa-envelope-o"></i><span data-i18n="Mail"></span>
+                <span class="badge badge-square badge-info">DEV-UI</span>
+            </a>
+            <ul>
+                <li><a href="/ui-framework/mail/inbox"><i class="fa fa-angle-right"></i><span>Inbox</span></a>
+                </li>
+                <li><a href="/ui-framework/mail/compose"><i class="fa fa-angle-right"></i><span>Compose></span></a></li>
+                <li><a href="/ui-framework/mail/single"><i class="fa fa-angle-right"></i><span>Single Mail</span></a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

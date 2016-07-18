@@ -1,0 +1,38 @@
+<md-dialog aria-label="Новый сегмент" style="width: 40%;">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span translate="APP.COMMON.TEMPLATE.ADD.HEADER"></span>
+                </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style=" ">
+            <div class="panel-body text-center">
+
+                <md-input-container class="md-block">
+                    <label>
+                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                    </label>
+                    <input name="description" ng-model="newDynamicSegment.name">
+                </md-input-container>
+
+                <label class="ui-checkbox" data-ng-show="::debugMode">
+                    <input type="checkbox" class="" data-ng-model="newDynamicSegment.usePagination">
+                    <span>
+                            <span translate="APP.COMMON.TEMPLATE.ADD.USE_PAGINATION"></span>:
+                        </span>
+                </label>
+            </div>
+
+            <div class="md-actions" layout="row">
+                <md-button class="md-raised md-primary"
+                           ng-disabled="newDynamicSegment.name == 0"
+                           ng-click="addDynamicSegment();" style="margin-right:20px;">
+                    <span translate="APP.COMMON.TEMPLATE.ADD.BUTTON"></span>
+                </md-button>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

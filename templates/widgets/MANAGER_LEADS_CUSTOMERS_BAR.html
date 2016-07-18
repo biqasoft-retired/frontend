@@ -1,0 +1,78 @@
+<div ng-init="filterPanelShow = false"></div>
+<div class="col-md-12">
+    <section class="panel panel-default col-md-6" style="padding-bottom: 0px; padding: 0px; margin: 0px;" ng-if="::debugMode">
+        <div class="panel-heading">
+            Фильтры лидов и клиентов по дате создания
+            <button class="btn btn-primary2 btn-sm" ng-click="$parent.filterPanelShow=false"
+                    ng-if="filterPanelShow">
+                <span translate="APP.COMMON.HIDE.BUTTON"></span>
+            </button>
+            <button class="btn btn-primary2 btn-sm" ng-click="$parent.filterPanelShow=true; "
+                    ng-if="!filterPanelShow">
+                <span translate="APP.COMMON.SHOW.BUTTON"></span>
+            </button>
+        </div>
+        <div class="panel-body text-center" ng-show="filterPanelShow">
+            <table class="table table-bordered ">
+                <thead>
+                </thead>
+                <tbody>
+
+                <tr data-ng-class="{'info' : dataBuilder.useRelativeCreatedDateFrom }">
+                    <td>
+                        <label class="ui-checkbox">
+                            <input type="checkbox" class=""
+                                   data-ng-model="dataBuilder.useRelativeCreatedDateFrom"
+                                   data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                            >
+                            <span> </span>
+                        </label>
+                    </td>
+
+                    <td>
+                        создано с
+                    </td>
+
+                    <td ng-if="dataBuilder.useRelativeCreatedDateFrom">
+                        <date-selector ng-model="dataBuilder.relativeCreatedDateFrom"
+                                       ng-change="pageChanged(currentPage)"
+                        ></date-selector>
+                    </td>
+                </tr>
+
+                <tr data-ng-class="{'info' : dataBuilder.useRelativeCreatedDateTo }">
+                    <td>
+                        <label class="ui-checkbox">
+                            <input type="checkbox" class=""
+                                   data-ng-model="dataBuilder.useRelativeCreatedDateTo"
+                                   data-ng-change="changedUseRelativeCreatedDateTo(); "
+                            >
+                            <span> </span>
+                        </label>
+                    </td>
+
+                    <td>
+                        создано до
+                    </td>
+
+                    <td ng-if="dataBuilder.useRelativeCreatedDateTo">
+                        <date-selector ng-model="dataBuilder.relativeCreatedDateTo"
+                                       data-ng-change="pageChanged(currentPage)"></date-selector>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="btn " ng-click="allLeadsAndCustomer()" style="    margin-top: 10px;">
+                            Показать
+                        </button>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <div id="|currentWidget|-chart"></div>
+</div>

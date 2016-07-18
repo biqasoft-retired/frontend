@@ -1,0 +1,734 @@
+<header class="top-header clearfix" data-ng-controller="HeaderCtrl">
+
+    <!-- Logo -->
+    <div class="logo">
+        <a href="/">
+            <span ng-if="!domainSettings.logoText.startsWith('http://') && !domainSettings.logoText.startsWith('https://')">
+                {{domainSettings.logoText || 'biqasoft.com'}}
+            </span>
+
+            <img ng-if="domainSettings.logoText.startsWith('http://') || domainSettings.logoText.startsWith('https://')"
+                 ng-src="{{domainSettings.logoText}}" class="img-responsive"/>
+        </a>
+
+        <span class="hidden-lg hidden-md">
+                <i class="fa fa-search" style="padding-left: 15px;" ng-click="showSearchBoxClicked()"></i>
+            </span>
+    </div>
+
+    <!-- needs to be put after logo to make it working-->
+    <div class="menu-button" toggle-off-canvas>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </div>
+
+    <div class="top-nav">
+        <ul class="nav-left list-unstyled">
+            <li ng-click="goFullscreen()">
+                <a href="/" data-toggle-nav-collapsed-min
+                   class="toggle-min"><i class="fa fa-bars"></i></a>
+            </li>
+
+            <li class="visible-lg hidden-md">
+                <div style="align-content: center; padding-top: 10%; padding-left: 5px; padding-right: 5px; font-size: 70%;">
+                    {{getDatetime | date:'dd.MM.yyyy '}} <br/>
+                    <b class="pull-right">
+                        <i class="fa fa-clock-o"></i>
+                        {{getDatetime | date:'HH:mm:ss'}}</b>
+                </div>
+            </li>
+
+            <li class="search-box dropdown visible-lg hidden-md" style="" id="search-box-li">
+
+                <section class="main" style="padding-left: 10px;">
+                    <form class="search">
+                        <span class="fa fa-search"></span>
+                        <input type="text" name="q" placeholder="{{'HEADER.SEARCH_BAR_PLACEHOLDER' | translate}}" data-ng-model="lll"
+                               autocomplete="off"
+                               ng-model-options="{debounce: 200}"
+                               data-ng-change="seaechClicked()"/>
+
+                        <div ng-if="searchResult.resultNumber === 0">
+                            <ul class="results">
+                                <li style="padding: 10px;">
+                                    <md-icon md-font-icon="report_problem">report_problem</md-icon>
+                                    <span translate="HEADER.SEARCH_NO_OBJECTS"></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <ul class="results"
+                            ng-class="{'showDisplayNone' : showDisplay , 'showDisplayNoneFalse' : !showDisplay }"
+                            ng-show="searchResult.resultNumber > 0">
+
+                            <div ng-if="searchResult && searchResult.customers.length > 0">
+                                <b>
+                                    <span translate="NAV.CLIENTS"></span>
+                                </b> <br>
+                            </div>
+
+                            <li data-ng-repeat="customer in searchResult.customers track by customer.id">
+                                <a href="/customer/details/{{customer.id}}" data-ng-click="closeSearchTimeout()">
+                                    {{customer.firstName}} {{customer.lastName}}
+                                    <br/>
+                                </a>
+                            </li>
+
+                            <div ng-if="searchResult && searchResult.dataSources.length > 0">
+                                <b>
+                                    <span translate="NAV.KPI"></span>
+                                </b> <br>
+                            </div>
+
+                            <li data-ng-repeat="dataSources in searchResult.dataSources track by dataSources.id">
+                                <a href="/data_source/details/{{dataSources.id}}" data-ng-click="closeSearchTimeout()">
+                                    <br/>
+                                    <md-icon md-font-icon="keyboard_arrow_right">keyboard_arrow_right</md-icon>
+                                    {{dataSources.name}}
+                                </a>
+                            </li>
+
+                            <div ng-if="searchResult && searchResult.tasks.length > 0">
+                                <b>
+                                    <span translate="NAV.TASKS"></span>
+                                </b> <br>
+                            </div>
+
+                            <li data-ng-repeat="customer in searchResult.tasks track by customer.id">
+                                <a href="/task/details/{{customer.id}}" data-ng-click="closeSearchTimeout()">
+
+                                    <i class="fa fa-circle" style="color: red;"
+                                       ng-if="!customer.completed"
+                                       tooltip-placement="right" tooltip="активная"
+                                       tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-circle" style="color: green;" ng-if="customer.completed"
+                                       tooltip-placement="right" tooltip="завершенная"
+                                       tooltip-append-to-body="true"></i>
+                                    {{customer.name}}
+                                </a>
+                            </li>
+
+                            <div ng-if="searchResult && searchResult.userAccounts.length > 0">
+                                <b>
+                                    <span translate="NAV.HR"></span>
+                                </b> <br>
+                            </div>
+
+                            <li data-ng-repeat="customer in searchResult.userAccounts track by customer.id">
+
+                                <a href="/user_account/details/{{customer.id}}" data-ng-click="closeSearchTimeout()">
+                                    <img class="img-rounded" align="center" height="30" width="30"
+                                         style="opacity: 0.5"
+                                         ng-src="{{getAvatarUrlByUser(customer)}}"/>
+                                    {{ printUser(customer) }}
+                                </a>
+                            </li>
+
+                            <div ng-if="searchResult && searchResult.documents.length > 0">
+                                <b>
+                                    <span translate="NAV.FILES"></span>
+                                </b> <br>
+                            </div>
+
+
+                            <div ng-repeat="(k,v ) in searchResult.customObjectSearchResult.customObjects"
+                                 ng-show="searchResult.customObjectSearchResult.objectNumber > 0">
+
+                                <a href="/objects/custom/data/details/{{v.customObjectTemplate.id}}">
+                                    <b> {{v.customObjectTemplate.name || printEmptyField()}}: </b>
+                                    <small> ({{v.customObjectDataList.length}})</small>
+                                </a>
+
+                                <li data-ng-repeat="object in v.customObjectDataList track by object.id">
+                                    <td class="mini-col-md">
+                                        <a href="/objects/custom/data/object/details/id/{{object.id}}/collectionId/{{object.collectionId}}">
+                                            {{object.name || printEmptyField()}}
+                                        </a>
+                                    </td>
+                                </li>
+
+                            </div>
+
+                            <li data-ng-repeat="customer in searchResult.documents track by customer.id">
+                                <button class="btn"
+                                        ng-click="downloadFile(customer)">
+                                    <i class="fa fa-download"></i>
+                                    {{ customer.name | truncate: 25: '...' }}
+                                </button>
+                            </li>
+
+                        </ul>
+                        <span ng-if="searchResult && searchResult.resultNumber > 0" class=""
+                              tooltip-placement="right" tooltip="{{'HEADER.SEARCH_CLEAR_RESULTS' | translate}}"
+                              tooltip-append-to-body="true">
+                       <small ng-click="clear()"> ( {{searchResult.resultNumber}} )</small>
+                    </span>
+                    </form>
+                </section>
+            </li>
+
+            <li class="dropdown hidden-xs" ng-show="isCacheMode()"
+                tooltip-placement="bottom"
+                tooltip="Request cachaing is on. It makes page loading faster, but data can be older"
+                tooltip-append-to-body="true">
+                <a href="javascript:;" class="dropdown-toggle" id="step4" data-toggle="dropdown">
+                    <i class="fa fa-tint" style="color: rgba(0, 122, 255, 0.53);"></i>
+                </a>
+                <ul class="dropdown-menu pull-right color-switch" data-ui-color-switch>
+                    <li>
+                        <a href="">
+                            <i class="fa fa-sign-out"></i>
+                            <span>Caching is on</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="">
+                            <i class="fa fa-sign-out"></i>
+                            <span> In cache: {{cachedNumber()}} requests</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown hidden-xs"
+                tooltip-placement="left" tooltip="{{'HEADER.FAST_CREATE.TOOLTIP' | translate}}"
+                tooltip-append-to-body="true">
+                <a href="javascript:;" class="dropdown-toggle" id="step45" data-toggle="dropdown">
+                    <i class="fa fa-magic" style="color: rgb(165, 165, 165);"></i>
+                </a>
+                <ul class="dropdown-menu pull-right color-switch" style="width: 290px;">
+
+                    <li>
+                        <a data-ng-click="addNewTempCustomer({'customer':true})">
+                            <md-icon md-font-icon="keyboard_arrow_right">keyboard_arrow_right</md-icon>
+                            <span translate="HEADER.FAST_CREATE.NEW_CUSTOMER"></span>
+                            <span class="pull-right">SHIFT+C</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a data-ng-click="addNewTempCustomer({'lead':true})">
+                            <md-icon md-font-icon="keyboard_arrow_right">keyboard_arrow_right</md-icon>
+                            <span translate="HEADER.FAST_CREATE.NEW_LEAD"></span>
+                            <span class="pull-right">SHIFT+L</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a data-ng-click="addNewTempCompany({'lead':true})">
+                            <md-icon md-font-icon="keyboard_arrow_right">keyboard_arrow_right</md-icon>
+                            <span translate="HEADER.FAST_CREATE.NEW_COMPANY"></span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/storage">
+                            <md-icon md-font-icon="keyboard_arrow_right">keyboard_arrow_right</md-icon>
+                            <span translate="HEADER.FAST_CREATE.UPLOAD_FILE"></span>
+                            <span class="pull-right">SHIFT+E</span>
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <a ng-click="showNewTaskFoo()">
+                            <md-icon md-font-icon="keyboard_arrow_right">keyboard_arrow_right</md-icon>
+                            <span translate="HEADER.FAST_CREATE.CREATE_TASK"></span>
+                            <span class="pull-right">SHIFT+T</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a ng-click="showHistoryDialog()">
+                            <md-icon md-font-icon="keyboard_arrow_right">keyboard_arrow_right</md-icon>
+                            <span translate="HEADER.FAST_CREATE.PAGE_HISTORY"></span>
+                            <span class="pull-right">ALT</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown text-normal  hidden-xs" ng-show="serversConnectionsActive > 0 && debugMode">
+                <a href="javascript:;" class="dropdown-toggle" id="step4" data-toggle="dropdown">
+                    <div>
+                        <div id="serversConnectionsActiveID">
+                            loading <span class="badge">
+                               {{serversConnectionsActive}}
+                               </span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li class="dropdown text-normal   " ng-if="applicationSettings.audioPlayFiles > 0"
+                ng-click="applicationSettings.showMediaPlayer = !applicationSettings.showMediaPlayer">
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                    <div tooltip-placement="left" tooltip="{{'HEADER.MENU.PLAYING_AUDIO' | translate}}"
+                         tooltip-append-to-body="true">
+                        <div>
+                            <div>
+                                <!--<md-icon class="material-icons md-light md-48">library_music</md-icon>-->
+                                <md-icon class="material-icons md-light md-48">volume_up</md-icon>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li style="padding-left: 3px; padding-top: 0.8%;">
+                <span class="label label-danger" ng-if="!configuration.connectedToApiServer"
+                      style="align-content: center; padding-top: 25%; padding-bottom: 5%; background-color: red;">
+                    <span translate="HEADER.MENU.OFFLINE"></span>
+                </span>
+            </li>
+
+            <!--<li class="dropdown hidden-xs">-->
+            <!--<a href="javascript:;" class="dropdown-toggle" id="step4" data-toggle="dropdown">-->
+            <!--<i class="fa fa-tint"></i>-->
+            <!--</a>-->
+            <!--<ul class="dropdown-menu pull-right color-switch" data-ui-color-switch>-->
+            <!--<li><a href="javascript:;" class="color-option color-some_color" data-style="some_color"></a></li>-->
+            <!--</ul>-->
+            <!--</li>-->
+
+
+            <!--<li class="dropdown">-->
+            <!--<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">-->
+            <!--<i class="fa fa-envelope-o"></i>-->
+            <!--<span class="badge badge-danger">3</span>-->
+            <!--</a>-->
+            <!--<div class="dropdown-menu with-arrow panel panel-dark">-->
+            <!--<div class="panel-heading">-->
+            <!--You have 3 mails.-->
+            <!--</div>-->
+            <!--<ul class="list-group">-->
+            <!--<li class="list-group-item">-->
+            <!--<a href="javascript:;" class="media">-->
+            <!--<span class="pull-left media-icon">-->
+            <!--<span class="btn-icon-lined btn-icon-round btn-warning"><i class="fa fa-envelope-o"></i></span>-->
+            <!--</span>-->
+            <!--<div class="media-body">-->
+            <!--<span class="block">Lisa sent you a mail</span>-->
+            <!--<span class="text-muted block">2min ago</span>-->
+            <!--</div>-->
+            <!--</a>-->
+            <!--</li>-->
+
+
+            <!--<li class="list-group-item">-->
+            <!--<a href="javascript:;" class="media">-->
+            <!--<span class="pull-left media-icon">-->
+            <!--<span class="btn-icon-lined btn-icon-round btn-info"><i class="fa fa-envelope-o"></i></span>-->
+            <!--</span>-->
+            <!--<div class="media-body">-->
+            <!--<span class="block">Jane sent you a mail</span>-->
+            <!--<span class="text-muted">3 hours ago</span>-->
+            <!--</div>-->
+            <!--</a>-->
+            <!--</li>-->
+            <!--<li class="list-group-item">-->
+            <!--<a href="javascript:;" class="media">-->
+            <!--<span class="pull-left media-icon">-->
+            <!--<span class="btn-icon-lined btn-icon-round btn-success"><i class="fa fa-envelope-o"></i></span>-->
+            <!--</span>-->
+            <!--<div class="media-body">-->
+            <!--<span class="block">Lynda sent you a mail</span>-->
+            <!--<span class="text-muted">9 hours ago</span>-->
+            <!--</div>-->
+            <!--</a>-->
+            <!--</li>-->
+            <!--</ul>-->
+            <!--<div class="panel-footer">-->
+            <!--<a href="/mail/inbox">Show all mails.</a>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</li>-->
+
+            <li class="dropdown hidden-xs" ng-if="::debugMode">
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+
+                    <i class="fa fa-bell-o" ng-if="!configuration.connectedToAsyncServer" style="color: red"></i>
+                    <i class="fa fa-bell-o" ng-if="configuration.connectedToAsyncServer"></i>
+
+                    <span class="badge badge-info"
+                          ng-if="allAsyncMessages.length > 0">{{allAsyncMessages.length}}</span>
+                </a>
+                <div class="dropdown-menu with-arrow panel panel-dark" style="position: absolute; width: 700%;">
+
+                    <div style="
+                    overflow-y: auto;
+                    height: 100% !important;
+                    position: fixed;
+                    width: 39.5%;">
+
+                        <div class="panel-heading" style="background-color: black; color: white;">
+                            You have {{allAsyncMessages.length}} notifications.
+                        </div>
+                        <ul class="list-group">
+
+                            <!--<li class="list-group-item">-->
+                            <!--<a href="javascript:;" class="media">-->
+                            <!--<span class="pull-left media-icon">-->
+                            <!--<span class="btn-icon-lined btn-icon-round btn-success"><i class="fa fa-bell-o"></i></span>-->
+                            <!--</span>-->
+                            <!--<div class="media-body">-->
+                            <!--<span class="block">New tasks needs to be done</span>-->
+                            <!--<span class="text-muted block">2min ago</span>-->
+                            <!--</div>-->
+                            <!--</a>-->
+                            <!--</li>-->
+
+                            <li class="list-group-item" ng-repeat="data in allAsyncMessages">
+                                <a href="javascript:;" class="media">
+                                <span class="pull-left media-icon">
+                                    <span class="btn-icon-lined btn-icon-round btn-success"><i class="fa fa-bell-o"></i></span>
+                                </span>
+                                    <div class="media-body">
+                                        <span class="block">{{data.data}}</span>
+                                        <span class="text-muted block">{{data.date | timeAgo}}</span>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <!--<li class="list-group-item">-->
+                            <!--<a href="javascript:;" class="media">-->
+                            <!--<span class="pull-left media-icon">-->
+                            <!--<span class="btn-icon-lined btn-icon-round btn-info"><i class="fa fa-bell-o"></i></span>-->
+                            <!--</span>-->
+                            <!--<div class="media-body">-->
+                            <!--<span class="block">Change your password</span>-->
+                            <!--<span class="text-muted">3 hours ago</span>-->
+                            <!--</div>-->
+                            <!--</a>-->
+                            <!--</li>-->
+                            <!--<li class="list-group-item">-->
+                            <!--<a href="javascript:;" class="media">-->
+                            <!--<span class="pull-left media-icon">-->
+                            <!--<span class="btn-icon-lined btn-icon-round btn-danger"><i class="fa fa-bell-o"></i></span>-->
+                            <!--</span>-->
+                            <!--<div class="media-body">-->
+                            <!--<span class="block">New feature added</span>-->
+                            <!--<span class="text-muted">9 hours ago</span>-->
+                            <!--</div>-->
+                            <!--</a>-->
+                            <!--</li>-->
+                        </ul>
+                    </div>
+
+                    <div class="panel-footer">
+                        <a href="/mail/inbox">Show all notifications.</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <ul class="nav-right pull-right list-unstyled hidden-sm hidden-xs">
+
+            <li class="dropdown text-normal nav-profile" ng-if="::debugMode">
+                <a href="javascript:;" class="dropdown-toggle co-border-header-li" data-toggle="dropdown">
+                    <i class="material-icons" style="font-size: 200%;">apps</i>
+                </a>
+                <ul class="dropdown-menu with-arrow pull-right bookmark-box">
+
+                    <div class="row nopadding">
+                        <div class="col-md-4 text-center" ng-repeat="bookmark in allBookmarks" style="padding: 15px;">
+                            <a href="{{bookmark.link}}">
+
+                                <span ng-if="::bookmark.image">
+                                    <img src="{{::bookmark.image}}">
+                                </span>
+
+                                <span ng-if="::!bookmark.image && bookmark.iconClass">
+                                    <i class="::bookmark.iconClass" style="font-size: 200%;">{{::bookmark.iconName}}</i>
+                                </span>
+
+                                <span ng-if="::!bookmark.image && !bookmark.iconClass">
+                                   <i class="material-icons" style="font-size: 200%;">account_balance</i>
+                                </span>
+
+                                <br>
+                                {{bookmark.name | truncate: 14: '.' }}
+                            </a>
+                        </div>
+
+                    </div>
+                </ul>
+            </li>
+
+            <li class="dropdown text-normal nav-profile">
+                <a href="javascript:;" class="dropdown-toggle co-border-header-li" data-toggle="dropdown">
+                    <span>
+                        <span> <img class="img-rounded" align="center" height="30" width="30"
+                                    ng-src="{{getAvatarUrlByUser(currentUser)}}"/> <u> {{printUser(currentUser)}} </u>   </span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu with-arrow pull-right">
+
+                    <li>
+                        <a href="/login/login">
+                            <i class="fa fa-cubes"></i>
+                            <span translate="HEADER.MENU.CHANGE_ACCOUNT"></span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/myaccount">
+                            <i class="fa fa-user-secret"></i>
+                            <span translate="HEADER.MENU.MY_ACCOUNT"></span>
+                        </a>
+                    </li>
+
+                    <li ng-show="hasRole('ROLE_ADMIN') && !debugMode">
+                        <a href="" data-ng-click="debugModeOn()">
+                            <i class="fa fa-circle" style="color: red;"></i>
+                            <span translate="HEADER.MENU.DEVELOPER_MODE"></span>
+                        </a>
+                    </li>
+
+                    <li ng-show="hasRole('ROLE_ADMIN') && debugMode">
+                        <a href="" data-ng-click="debugModeOff()">
+                            <i class="fa fa-circle" style="color: green;"></i>
+                            <span translate="HEADER.MENU.DEVELOPER_MODE"></span>
+                        </a>
+                    </li>
+
+                    <li ng-show="!cacheMode && debugMode">
+                        <a href="" data-ng-click="forceCacheOn()">
+                            <i class="fa fa-circle" style="color: red;"></i>
+                            <span translate="HEADER.MENU.CACHING"></span>
+                        </a>
+                    </li>
+
+                    <li ng-show="cacheMode && debugMode">
+                        <a href="" data-ng-click="forceCacheOff()">
+                            <i class="fa fa-circle" style="color: green;"></i>
+                            <span translate="HEADER.MENU.CACHING"></span>
+                        </a>
+                    </li>
+
+                    <li ng-show="cacheMode">
+                        <a href="" data-ng-click="clearCache()">
+                            <i class="fa fa-history" style="color: green;"></i>
+                            <span translate="HEADER.MENU.CACHING_CLEAR"></span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="">
+                            <i class="fa fa-database"></i>
+                            <span>
+                                 <span translate="APP.COMMON.DOMAIN"></span>
+                                : <b>{{domainSettings.id}}</b> </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="" data-ng-click="logout()">
+                            <i class="fa fa-power-off"></i>
+                            <span translate="HEADER.MENU.EXIT"></span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown langs text-normal" data-ng-controller="LangCtrl">
+                <a href="javascript:;" class="dropdown-toggle active-flag" id="step2" data-toggle="dropdown">
+                    <div class="flag {{ getFlag() }}"></div>
+                </a>
+                <ul class="dropdown-menu with-arrow  pull-right list-langs" role="menu">
+                    <li>
+                        <a href="javascript:;" data-ng-click="switchLanguage('en')">
+                            <div class="flag flags-american"></div>
+                            English
+                        </a>
+                    </li>
+                    <!--<li data-ng-show="lang !== 'Español'">-->
+                    <!--<a href="javascript:;" data-ng-click="setLang('Español')"><div class="flag flags-spain"></div> Español</a></li>-->
+                    <!--<li data-ng-show="lang !== '日本語'">-->
+                    <!--<a href="javascript:;" data-ng-click="setLang('日本語')"><div class="flag flags-japan"></div> 日本語</a></li>-->
+                    <!--<li data-ng-show="lang !== '中文'">-->
+                    <!--<a href="javascript:;" data-ng-click="setLang('中文')"><div class="flag flags-china"></div> 中文</a></li>-->
+                    <!--<li data-ng-show="lang !== 'Deutsch'">-->
+                    <!--<a href="javascript:;" data-ng-click="setLang('Deutsch')"><div class="flag flags-germany"></div> Deutsch</a></li>-->
+                    <!--<li data-ng-show="lang !== 'français'">-->
+                    <!--<a href="javascript:;" data-ng-click="setLang('français')"><div class="flag flags-france"></div> français</a></li>-->
+                    <!--<li data-ng-show="lang !== 'Italiano'">-->
+                    <!--<a href="javascript:;" data-ng-click="setLang('Italiano')"><div class="flag flags-italy"></div> Italiano</a></li>-->
+                    <!--<li data-ng-show="lang !== 'Portugal'">-->
+                    <!--<a href="javascript:;" data-ng-click="setLang('Portugal')"><div class="flag flags-portugal"></div> Portugal</a></li>-->
+                    <!--<li data-ng-show="lang !== '한국어'">-->
+                    <!--<a href="javascript:;" data-ng-click="setLang('한국어')"><div class="flag flags-korea"></div> 한국어</a></li>-->
+                    <li>
+                        <a href="javascript:;" data-ng-click="switchLanguage('ru')">
+                            <div class="flag flags-russia"></div>
+                            Русский язык
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+</header>
+
+
+<style>
+    .search {
+        position: relative;
+        margin: 0 auto;
+        width: 300px;
+    }
+
+    .search input {
+        height: 34px;
+        width: 80%;
+        padding: 0 12px 0 25px;
+        border: 1px solid rgba(168, 172, 188, 0.34);
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        -o-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-box-shadow: inset 0 1px #e5e7ed, 0 1px 0 #fcfcfc;
+        -moz-box-shadow: inset 0 1px #e5e7ed, 0 1px 0 #fcfcfc;
+        -ms-box-shadow: inset 0 1px #e5e7ed, 0 1px 0 #fcfcfc;
+        -o-box-shadow: inset 0 1px #e5e7ed, 0 1px 0 #fcfcfc;
+        box-shadow: inset 0 1px #e5e7ed, 0 1px 0 #fcfcfc;
+    }
+
+    .search input:focus {
+        outline: none;
+        border-color: #66b1ee;
+        -webkit-box-shadow: 0 0 2px rgba(85, 168, 236, 0.9);
+        -moz-box-shadow: 0 0 2px rgba(85, 168, 236, 0.9);
+        -ms-box-shadow: 0 0 2px rgba(85, 168, 236, 0.9);
+        -o-box-shadow: 0 0 2px rgba(85, 168, 236, 0.9);
+        box-shadow: 0 0 2px rgba(85, 168, 236, 0.9);
+    }
+
+    .search-box {
+        max-width: 290px !important;
+    }
+
+    .search input:focus + .results {
+        display: table
+    }
+
+    .search .results {
+        width: 220%;
+        position: absolute;
+        top: 35px;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        padding: 0;
+        margin: 0;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #cbcfe2 #c8cee7 #c4c7d7;
+        background-color: white;
+    }
+
+    .search .results li {
+        display: block;
+        line-height: 15px !important;
+    }
+
+    .search .results li:first-child {
+        margin-top: -1px
+    }
+
+    .search .results li:first-child:before, .search .results li:first-child:after {
+        display: block;
+        content: '';
+        width: 0;
+        height: 0;
+        position: absolute;
+        left: 50%;
+        margin-left: -5px;
+        border: 5px outset transparent;
+    }
+
+    .search .results li:first-child:before {
+        border-bottom: 5px solid #c4c7d7;
+        top: -11px;
+    }
+
+    .search .results li:first-child:after {
+        border-bottom: 5px solid #fdfdfd;
+        top: -10px;
+    }
+
+    .search .results li:first-child:hover:before, .search .results li:first-child:hover:after {
+        display: none
+    }
+
+    .search .results li:last-child {
+        margin-bottom: -1px
+    }
+
+    .search .results a {
+        display: block;
+        position: relative;
+        margin: 0 -1px;
+        padding: 6px 40px 6px 10px;
+        color: #808394;
+        font-weight: 500;
+        text-shadow: 0 1px #fff;
+    }
+
+    .search .results a span {
+        font-weight: 200
+    }
+
+    .search .results a:hover {
+        text-decoration: none;
+        color: #fff !important;
+        text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
+        border-color: #2380dd #2179d5 #1a60aa;
+        background-color: #2196F3;
+        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+        -moz-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+        -ms-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+        -o-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+    }
+
+    :-moz-placeholder {
+        color: #a7aabc;
+        font-weight: 200;
+    }
+
+    ::-webkit-input-placeholder {
+        color: #a7aabc;
+        font-weight: 200;
+    }
+
+    .lt-ie9 .search input {
+        line-height: 26px
+    }
+
+    .showDisplayNone {
+        display: none;
+    }
+
+    .showDisplayNoneFalse {
+        padding: 10px !important;
+    }
+
+    .search input {
+        text-indent: 32px;
+    }
+
+    .search .fa-search {
+        position: absolute;
+        top: 9px;
+        left: 10px;
+        color: #aaa;
+        opacity: 0.4;
+
+    }
+</style>

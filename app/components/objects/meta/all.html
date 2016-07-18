@@ -1,0 +1,337 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="Создать новый объект"
+     tooltip-append-to-body="true"
+     ng-click="addCompany()">
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+
+    <section class="panel panel-primary2" style="  margin-bottom: 3px;"   >
+        <div class="panel-heading">
+        </div>
+        <div class="panel-body text-center2"  >
+            Данная страница включает спецификации всех пользовательских объектов <br>
+            Пользовательские объекты - это объекты доменной области, созданные пользователем и спецефичные для каждой компании
+            <br>
+
+            Создав объект на данной странице и определив структуру, вы сможете создавать объекты,
+            которые будут храниться в одном централизованном месте с возможностью выборки
+            по заданыым полям, работу через API и через интерфейс
+            </div>
+        </section>
+
+    <section class="panel panel-primary" style="  margin-bottom: 3px;"  ng-show="filterPanelShow">
+        <div class="panel-heading"><span class="fa fa-filter"></span> Фильтры
+            <button class="btn btn-primary btn-sm" ng-click="filterPanelShow=false">
+                <span translate="APP.COMMON.HIDE.BUTTON"></span>
+            </button>
+        </div>
+        <div class="panel-body text-center"  >
+
+            <div class="row">
+                <div class="col-lg-5 col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Фильтры по дате создания</b></td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom }">
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                создано с
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom">
+                                <div>
+                                    <date-selector
+                                            ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateFrom"></date-selector>
+                                </div>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo"
+                                           data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                создано до
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo">
+                                <date-selector
+                                        ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateTo"></date-selector>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate"
+                                           data-ng-change="pageChanged(currentPage)">
+                                    <span> </span>
+                                </label>
+                            </td>
+
+
+                            <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Данные будут отсортированы так, что последние добавленные лиды или клиенты окажутся вверху"
+                                          tooltip-append-to-body="true">
+                                           Последние добавленные вверху
+                                     </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <thead>
+
+                        <tr>
+                            <td colspan="3"><b> Общее </b></td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.usePagination }">
+                            <td>
+                                Постраничный вывод <br/>
+                            </td>
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.usePagination"
+                                           data-ng-change="pageChanged(1)"
+
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.showArchived }">
+                            <td>
+                                Показывать из архива <br/>
+                            </td>
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.showArchived"
+                                           data-ng-change="pageChanged(1)"
+
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Клиентов на страницу <br/>
+                            </td>
+                            <td>
+                                <input type="number" min="1" id="clientPerPage" class="form-control"
+                                       ng-model="itemsPerPage">
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <button class="btn btn-primary" data-ng-click=" pageChanged(currentPage)">Поиск
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel panel-primary">
+        <div class="panel-heading">
+
+            <div class="row">
+                <div class="col-md-8">
+                    <span class="badge">{{allCustomersCount}}</span>
+                    Пользовательские объекты (Custom object)
+                    <button class="btn btn-primary btn-sm" ng-click="filterPanelShow=true;" ng-show="!filterPanelShow"
+                    >фильтры
+                    </button>
+                </div>
+
+                <div class="col-md-4">
+                    <input ng-model="customerAndLeadGetRequestCriteriaDao.fullTextSearchRequest"
+                           ng-model-options="{ debounce: 600 }"
+                           data-ng-change="pageChanged(currentPage)"
+                           id="searchCustomer" class="form-control background-input-color"
+                           placeholder="поиск"
+                          >
+                </div>
+            </div>
+        </div>
+        <div class="panel-body text-center">
+            <table class="{{$root.tableClasses}}">
+                <thead>
+                <tr>
+                    <th class="mini-col-md info">№</th>
+                    <th ng-if="showObjectIDs()">ID</th>
+                    <th class=""><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                    <th class="">Объекты</th>
+                    <th class="">Полей</th>
+                    <th class=""><span translate="APP.COMMON.CREATED_DATE.SECTION"></span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr dir-paginate="project in projects | itemsPerPage: itemsPerPage"
+                    current-page="currentPage"
+                    data-ng-click="clickedCustomerLine(project.customer)"
+                    total-items="allCustomersCount">
+
+                    <td class="mini-col-md">
+                        <a href="/objects/custom/meta/details/{{project.id}}">
+                        {{ (currentPage-1)*itemsPerPage + $index+1}}
+                    </a>
+                    </td>
+
+                    <td ng-if="showObjectIDs()">{{project.id}}</td>
+
+                    <td data-ng-class="{'warning': !project.name}">
+                        <a href="/objects/custom/meta/details/{{project.id}}">
+                            {{project.name || printEmptyField()}}
+                        </a>
+                    </td>
+
+                    <td  >
+                        <a href="/objects/custom/data/details/{{project.collectionId}}">
+                            перейти
+                        </a>
+                    </td>
+                    <td data-ng-class="{'warning': !project.customFields}">
+                        {{project.customFields.length}}
+                    </td>
+
+                    <td class="" class="col-md-4">
+                        <a ng-href="/user_account/details/{{project.createdInfo.createdById}}">
+                            {{ printUser ( resolveUser ( project.createdInfo.createdById ) ) }}
+                        </a>
+
+                        <b> {{ project.createdInfo.createdDate | timeAgo }} </b> <br/>
+                        <small class="pull-right"> {{:: printDate(project.createdInfo.createdDate) }}</small>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <dir-pagination-controls
+                    template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                    boundary-links="true">
+            </dir-pagination-controls>
+
+            <div style="position: fixed;  bottom: 4px;  right: 93px;" ng-show="pagesNumbers > 1">
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading" data-ng-click="showPaginationPanel = !showPaginationPanel">
+                        <span class="fa fa-th-list"></span> Страницы
+                    </div>
+
+                    <div class="panel-body text-center" data-ng-show="showPaginationPanel">
+                        <dir-pagination-controls
+                                template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                                boundary-links="true" on-page-change="pageChanged(newPageNumber)">
+                        </dir-pagination-controls>
+
+                        <br/>
+                                <span>Вы можете использовать <br/> Ctrl+ <i class="fa fa-arrow-left"></i>
+                            и Ctrl+ <i class="fa fa-arrow-right"> </i>
+                            </span>
+                    </div>
+                </section>
+            </div>
+
+            <div ng-if="projects.length ===  0">
+                <div class="callout callout-warning">
+                    <h4>Объектов нет!</h4>
+                    <p>Добавьте объект вручную или через API, или измените фильтры.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="visible-sm visible-xs">
+
+        <div ng-repeat="project in allCompaigns track by project.id">
+
+            <div class="panel panel-success" ng-if="!project.completed">
+                <div class="panel-leftheading">
+                    <h3 class="panel-lefttitle"></h3>
+                </div>
+                <div class="panel-rightbody">
+
+                    <table class="{{$root.tableClasses}} cf">
+                        <thead>
+                        <tr>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td colspan="3">
+                                <h3><a href="/company/details/{{project.id}}"> {{project.name}} </a></h3>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td ng-if="project.partner" class="success"> партнер</td>
+                            <td ng-if="!project.partner" class="danger"> не партнер</td>
+                        </tr>
+
+                        <tr>
+                            <td ng-if="project.client" class="success"> клиент</td>
+                            <td ng-if="!project.client" class="danger"> не клиент</td>
+                        </tr>
+
+                        <tr>
+                            <td> {{project.email}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

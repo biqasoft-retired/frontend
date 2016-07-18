@@ -1,0 +1,317 @@
+<script type="text/ng-template" id="dialog1.tmpl.html">
+    <md-dialog aria-label="Скачивание методов продаж" class="md-small-dialog"
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Скачивание методов продаж</h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="max-width:800px;max-height:810px;">
+            <div style="padding: 10px;">
+
+                <div class="">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        Проекты продаж каждого метода помещать на отдельный лист Excel
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <md-checkbox type="checkbox" ng-model="leadenExcelBuilder.devideProjectsPerSheets">
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <div class="md-actions" layout="row">
+            <md-button ng-click="downloadFileExcel2()" style="margin-right:20px;">
+                Скачать
+            </md-button>
+        </div>
+    </form>
+    </md-dialog>
+</script>
+
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="Создать метод продаж"
+     tooltip-append-to-body="true"
+     ng-click="addNewProject()">
+
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <span class="badge">{{allLeadGenMethods.length}}</span>
+                                Методы продаж
+                                <md-menu>
+                                    <button class="btn btn-primary btn-sm"
+                                            ng-click="openMenu($mdOpenMenu, $event)">
+                                        <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                    </button>
+                                    <md-menu-content width="4">
+                                        <md-menu-item>
+                                            <md-button class=""
+                                                       ng-click="downloadFileExcel($event)">
+                                                <md-icon md-font-icon="file_download">file_download</md-icon>
+                                                <span translate="CUSTOMER_SAVE_EXCEL"></span>
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                            </div>
+
+                            <div class="col-md-3">
+                                <select ng-model="viewType" class="form-control"
+                                        ng-options="field as field.name for field in viewTypes">
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <input type="text" data-ng-model="textFilter"
+                                       class="form-control background-input-color"  >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-body text-center" ng-if="allLeadGenMethods.length ===  0">
+                        <div class="panel-body text-center">
+                            <div>
+                                <div class="callout callout-warning">
+                                    <h4>Проекты отсутствуют</h4>
+                                    <p>Создайте один или более проектов</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="panel-body text-center" ng-if="viewType.value === 'table'">
+
+                    <section class="panel panel-primary">
+                        <div class="panel-heading" style="  visibility: hidden; margin-top: -20px;"></div>
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                                <th class="mini-col-md">№</th>
+                                <th class="mini-col-md"></th>
+                                <th class="col-md-1"> <span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                                <th class="mini-col-md"> Клиентов</th>
+                                <th class="mini-col-md"> Лидов</th>
+                                <th class="mini-col-md"> CV, %</th>
+                                <th class="mini-col-md"> Сумма сделок</th>
+                                <th class="mini-col-md"> ROI, %</th>
+                                <th class="mini-col-md"> Средний чек</th>
+                                <th class="mini-col-md"> CPL</th>
+                                <th class="mini-col-md"> LTV</th>
+                                <th class="mini-col-md"> Затраты</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr data-ng-repeat="project in allLeadGenMethods | filter:textFilter track by project.id">
+
+                                <td class="mini-col-md">
+                                    <a href="/marketing/lead_gen_methods/id/{{project.id}}">
+                                        {{$index+1}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="pull-right" ng-if="project.startDate">
+                                        <small> {{ printDate(project.startDate) }}</small>
+                                    </div>
+
+                                    <div ng-if="project.startDate && project.finalDate">
+                                        <br/>
+                                    </div>
+
+                                    <div class="pull-right" ng-if="project.finalDate">
+                                        <small><u> {{ printDate(project.finalDate) }} </u></small>
+                                    </div>
+                                </td>
+
+                                <td data-ng-class="{'warning' : !project.name }">
+                                    <i class="fa fa-circle" style="color: red;" ng-if="!project.active"></i>
+                                    <i class="fa fa-circle" style="color: green;" ng-if="project.active"></i>
+
+                                    <a href="/marketing/lead_gen_methods/id/{{project.id}}">
+                                        <b> {{project.name || printEmptyField() }} </b>
+                                    </a>
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).customersNumber }">
+                                    {{getKPIByLeadGenMethodId(project.id).customersNumber }}
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).leadsNumber }">
+                                    {{getKPIByLeadGenMethodId(project.id).leadsNumber }}
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).conversionFromLeadToCustomer }">
+                                    {{getKPIByLeadGenMethodId(project.id).conversionFromLeadToCustomer * 100 | number :  1 }}
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).dealsAmounts }">
+                                    {{getKPIByLeadGenMethodId(project.id).dealsAmounts }}
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).roi }">
+                                    {{getKPIByLeadGenMethodId(project.id).roi * 100 | number : 3 }}
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).averagePayment }">
+                                    {{getKPIByLeadGenMethodId(project.id).averagePayment | number : 1 }}
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).leadCost }">
+                                    {{getKPIByLeadGenMethodId(project.id).leadCost | number:2 }}
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).ltv || getKPIByLeadGenMethodId(project.id).ltv ===  'NaN' }">
+                                    {{getKPIByLeadGenMethodId(project.id).ltv | number:2 }}
+                                </td>
+
+                                <td data-ng-class="{'warning' : !getKPIByLeadGenMethodId(project.id).costsAmount }">
+                                    {{getKPIByLeadGenMethodId(project.id).costsAmount }}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+
+                <div class="row modify_parent" ng-if="viewType.value ===  'cards'">
+
+                    <div class="col-lg-2 col-md-4 col-sm-6 modify_child"
+                         data-ng-repeat="project in allLeadGenMethods | filter:textFilter track by project.id "
+                         style="margin-top: 20px;"
+                         hover-class="methodHovered">
+                        <div class="card">
+                            <div class="card-image" style="height: 174px;">
+                                <span class="card-img-label">ROI  {{getKPIByLeadGenMethodId(project.id).roi *100 | number:4}} %</span>
+
+                                <span class="pull-right badge" style="
+                                        position: absolute;
+                                        right: 3px;
+                                        bottom: 3px;;
+                                   "> {{$index+1}} </span>
+
+                                <a href="/marketing/lead_gen_methods/id/{{project.id}}">
+                                    <img ng-if="project.avatarUrl" src="{{project.avatarUrl}}" alt=""
+                                         style="  max-height: 174px;"
+                                         class="img-responsive">
+                                    <img ng-if="!project.avatarUrl" src="assets/img/thumb11.jpg" alt=""
+                                         class="img-responsive"
+                                         style="  max-height: 174px; width: 100%;" class="img-responsive">
+                                </a>
+                            </div>
+
+                            <section class="panel panel-box" style="padding: 5px;">
+                                <p>
+                                    <i class="fa fa-circle" tooltip-placement="right" tooltip="не активен"
+                                       tooltip-append-to-body="true" style="color: red;" ng-if="!project.active">
+                                    </i>
+                                    <i class="fa fa-circle" tooltip-placement="right" tooltip="активен"
+                                       tooltip-append-to-body="true" style="color: green;" ng-if="project.active">
+                                    </i>
+
+                                    <a class="" href="/marketing/lead_gen_methods/id/{{project.id}}">
+                                        <b> {{project.name || printEmptyField() }} </b> </a>
+                                </p>
+
+                                <div class="pull-left" ng-if="project.startDate">
+                                    <small> {{ printDate(project.startDate) }}</small>
+                                </div>
+
+                                <div class="pull-right" ng-if="project.finalDate">
+                                    <small><u> {{ printDate(project.finalDate) }} </u></small>
+                                </div>
+
+                                <br><br>
+
+                                <table class="table table-responsive">
+                                    <thead>
+
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            Сделок:
+                                        </td>
+                                        <td style="padding: 4px">
+                                            <b> {{
+                                                printCurrencyPrintable(getKPIByLeadGenMethodId(project.id).dealsAmounts)[0]
+                                                |number:2 }} </b>
+                                            <small> {{
+                                                printCurrencyPrintable(getKPIByLeadGenMethodId(project.id).dealsAmounts)[1]
+                                                }}
+                                            </small>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            Затрат:
+                                        </td>
+                                        <td style="padding: 4px">
+                                            <b> {{
+                                                printCurrencyPrintable(getKPIByLeadGenMethodId(project.id).costsAmount)[0]
+                                                |number:2 }} </b>
+                                            <small> {{
+                                                printCurrencyPrintable(getKPIByLeadGenMethodId(project.id).costsAmount)[1]
+                                                }}
+                                            </small>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            Лидов:
+                                        </td>
+                                        <td style="padding: 4px">
+                                            {{getKPIByLeadGenMethodId(project.id).leadsNumber }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            Клиентов:
+                                        </td>
+                                        <td style="padding: 4px">
+                                            {{getKPIByLeadGenMethodId(project.id).customersNumber }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 4px">
+                                            ROI:
+                                        </td>
+                                        <td style="padding: 4px">
+                                            {{getKPIByLeadGenMethodId(project.id).roi *100 |number:3 }} %
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                                <div ng-if="$parent.showId ===  project.id"
+                                     style="position: absolute; left: 30%; top: 50%;;">
+                                    <br/>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br><br><br><br>
+        </div>
+    </div>
+</section>

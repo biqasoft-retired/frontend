@@ -1,0 +1,463 @@
+<section class="page-form-ele page">
+    <div class="panel-body">
+        <section class="panel panel-primary" ng-show="filterPanelShow">
+            <div class="panel-heading"><span class="fa fa-filter"></span> Фильтры возможностей
+                <button class="btn btn-primary btn-sm" ng-click="filterPanelShow=false">
+                    <span translate="APP.COMMON.HIDE.BUTTON"></span>
+                </button>
+
+            </div>
+            <div class="panel-body text-center"  >
+
+                <div class="row">
+                    <div class="col-lg-5 col-md-12">
+                        <table class="table table-bordered">
+                            <thead>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.sortByAmount"
+                                               data-ng-change="sortFilterChanged('sortByAmount')">
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                            <span class="" tooltip-placement="right"
+                                  tooltip="Сортировка по сумме"
+                                  tooltip-append-to-body="true">
+                           Сортировка по сумме
+                            </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate"
+                                               data-ng-change="sortFilterChanged('sortDESCbyCreatedDate')">
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Сортировка по сумме"
+                                          tooltip-append-to-body="true">
+                                   Сортировка по дате создания
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.usePriorityMoreThan"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    приоритет <b>больше</b> чем
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.usePriorityMoreThan">
+                                    <input type="number"
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.priorityMoreThan"
+                                           class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.usePriorityLessThan"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    приоритет <b>меньше</b> чем
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.usePriorityLessThan">
+                                    <input type="number"
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.priorityLessThan"
+                                           class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.useAmountMoreThan"
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    Сумма <b>больше</b> чем
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useAmountMoreThan">
+                                    <input type="number"
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.amountMoreThan"
+                                           class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.useAmountLessThan"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    Сумма <b>меньше</b> чем
+                                </td>
+
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useAmountLessThan">
+                                    <input type="number"
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.amountLessThan"
+                                           class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                <span class="" tooltip-placement="right"
+                                      tooltip="Способ / канал продаж; способ ведения клиента по определенной воронке"
+                                      tooltip-append-to-body="true">
+                                        Метод продаж
+                                      </span>
+                                </td>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class="">
+                                        <select data-ng-model="customerAndLeadGetRequestCriteriaDao.leadGenMethodId"
+                                                class="form-control"
+                                                data-ng-change="pageChanged(currentPage)">
+                                            <option value="ANY">Любой</option>
+                                            <option data-ng-repeat="method in allLeadGenMethodsArray track by method.id "
+                                                    value="{{method.id}}">{{method.name}}
+                                            </option>
+
+                                        </select>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+
+                                <span class="" tooltip-placement="right"
+                                      tooltip="проект продаж в определенном методе"
+                                      tooltip-append-to-body="true">
+                                       Проект продаж
+                                      </span>
+                                </td>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class="">
+                                        <select data-ng-model="customerAndLeadGetRequestCriteriaDao.leadGenProjectId"
+                                                class="form-control"
+                                                data-ng-change="pageChanged(currentPage)">
+                                            <option value="ANY">Любой</option>
+                                            <option data-ng-repeat="method in allLeadGenProjects track by method.id "
+                                                    value="{{method.id}}">{{method.name}}
+                                            </option>
+
+                                        </select>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.useCustomerIDs"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    ID клиентов
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useCustomerIDs">
+                                    <div class="form-group ">
+                                        <div fs-multiselect="" items="" freetext="" class="col-md-12"
+                                             ng-disabled="disabled"
+                                             ng-model="customerAndLeadGetRequestCriteriaDao.customerIDs"></div>
+                                        </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-lg-5 col-md-12">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td colspan="3"><b> Фильтры по дате создания</b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom }">
+
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom"
+                                               data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    создано с
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom">
+                                    <div>
+                                        <date-selector ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateFrom" ></date-selector>
+                                    </div>
+                                    <br/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo"
+                                               data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    создано до
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo">
+                                    <date-selector ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateTo" ></date-selector>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td colspan="3" class="info"><b> Общее </b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.usePagination }">
+                                <td>
+                                    Постраничный вывод <br/>
+                                </td>
+
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.usePagination"
+                                               data-ng-change="pageChanged(1)"
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.showArchived }">
+                                <td>
+                                    Показывать из архива <br/>
+                                </td>
+
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.showArchived"
+                                               data-ng-change="pageChanged(1)"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    Возможностей на страницу <br/>
+                                </td>
+                                <td>
+                                    <input type="number" min="1" id="clientPerPage" class="form-control"
+                                           ng-model="itemsPerPage">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary" data-ng-click=" pageChanged(currentPage)">Поиск
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <span class="badge">  {{allCustomersCount}}  </span>
+                        {{declOfNum (allCustomersCount, ['возможность', 'возможности', 'возможностей'] ) }}
+                        <md-button class="btn-sm" ng-click="$parent.filterPanelShow=true"
+                                ng-if="!filterPanelShow">фильтры
+                        </md-button>
+                    </div>
+
+                    <div class="col-md-4">
+                        <input ng-model="customerAndLeadGetRequestCriteriaDao.fullTextSearchRequest"
+                               ng-model-options="{ debounce: 600 }"
+                               data-ng-change="pageChanged(currentPage)"
+                               id="searchCustomer" class="form-control background-input-color"
+                               placeholder="поиск" >
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body text-center">
+
+                <div class="visible-lg visible-md">
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                            <th class="">№</th>
+                            <th class="" ng-if="showObjectIDs()">ID</th>
+                            <th class=""><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                            <th class="">Сумма</th>
+                            <th class="">Приоритет</th>
+                            <th class="">Клиент</th>
+                            <th class="">Дата создания</th>
+                            <th class="">Создатель</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr dir-paginate="project in projects | itemsPerPage: itemsPerPage"
+                            current-page="currentPage"
+                            total-items="allCustomersCount">
+
+                            <td>
+                                <a href="/customer_deals/details/{{project.id}}">
+                                    {{ (currentPage-1)*itemsPerPage + $index+1}} </a>
+                            </td>
+
+                            <td ng-if="showObjectIDs()">{{project.customer.id}}</td>
+
+                            <td data-ng-class="{'warning' : !project.name }">
+                                <a href="/customer_deals/details/{{project.id}}">{{project.name}} </a>
+                            </td>
+
+                            <td data-ng-class="{'warning' : !project.amount }">
+                                <b> {{ printCurrencyPrintable(project.amount)[0] }} </b>
+                                <small> {{ printCurrencyPrintable(project.amount)[1] }}</small>
+                            </td>
+
+                            <td>
+                                <div ng-if="project.priority==6">
+                                    <span class="label label-danger"> 6 / 6</span>
+                                </div>
+
+                                <div ng-if="project.priority==5">
+                                    <span class="label label-warning"> 5 / 6 </span>
+                                </div>
+
+                                <div ng-if="project.priority==4">
+                                    <span class="label label-info"> 4 / 6 </span>
+                                </div>
+
+                                <div ng-if="project.priority==3">
+                                    <span class="label label-success"> 3 / 6 </span>
+                                </div>
+
+                                <div ng-if="project.priority==2">
+                                    <span class="label label-primary"> 2 / 6 </span>
+                                </div>
+
+                                <div ng-if="project.priority==1">
+                                    <span class="label label-default"> 1 / 6 </span>
+                                </div>
+
+                                <div ng-if="!project.priority">
+                                    <span class="label label-default"> 0 / 6 </span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <a href="/customer/details/{{project.connectedInfo.connectedCustomerId}}">
+                                    перейти
+                                </a>
+                            </td>
+
+                            <td>
+                                <b> {{ project.createdInfo.createdDate | timeAgo }} </b> <br/>
+                                <small class="pull-right"> {{ ::printDate(project.createdInfo.createdDate) }}</small>
+                            </td>
+
+                            <td>
+                                <a href="/user_account/details/{{::project.createdInfo.createdById}}"> {{ printUser (
+                                    resolveUser(project.createdInfo.createdById )) }} </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <dir-pagination-controls
+                            template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                            boundary-links="true" on-page-change="pageChanged(newPageNumber)">
+                    </dir-pagination-controls>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

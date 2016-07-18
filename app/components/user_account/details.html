@@ -1,0 +1,270 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;"
+     ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="{{'USERACCOUNT.DETAILS.EDIT.UPDATE_PROFILE' | translate}}"
+               tooltip-append-to-body="true"
+               data-ng-click="updateProfile()"
+               aria-label="">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+
+</div>
+<section class="page-form-ele page">
+
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-md-4 col-lg-2">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span translate="APP.COMMON.ACTION"></span>
+                    </div>
+                    <div class="panel-body">
+
+                        <img class="img-rounded  " width="250" height="250"
+                             ng-src="{{getAvatarUrlByUser(account)}}"/>
+                        <br/><br/>
+                        <span translate="USERACCOUNT.DETAILS.AVATAR_URL"></span> <br/>
+                        <input type="text" ng-model="account.avatarUrl" size="10" class="form-control"
+                               placeholder="http://example.com/img.jpg"
+                               style="width: 100%">
+
+                        <br>
+
+                        <md-icon md-font-icon="keyboard_arrow_right">keyboard_arrow_right</md-icon>
+                        <md-button type="button" ng-click="showProfileOverview()">
+                             <span translate="USERACCOUNT.DETAILS.EDIT.CHANGE_PASSWORD"></span>
+                        </md-button>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="col-md-8 col-lg-6 " style="padding-left: 0 !important;">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        {{account.firstname}} {{account.lastname}}
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr data-ng-show="account.lastOnline">
+                                <td>
+                                    <span translate="USERACCOUNT.WAS_ONLINE"></span>
+                                </td>
+                                <td>
+                                    {{printDate(account.lastOnline)}} <br/>
+                                    <b> {{account.lastOnline | timeAgo }} </b>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.FIRSTNAME"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{account.firstname}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="account.firstname" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.LASTNAME"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{account.lastname}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="account.lastname" class="form-control">
+                                    </div>
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.PATRONYMIC"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{account.patronymic}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="account.patronymic" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.POSITION"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{account.position}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="account.position" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.USERNAME"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{account.username}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="account.username" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.EMAIL"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{account.email}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="account.email" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.IS_ACTIVE"></span>
+                                 <span ng-if="account.id == currentUser.id">
+                                        <br>
+                                        <b>
+                                           <span translate="USERACCOUNT.DETAILS.IS_ACTIVE.EDIT_OWN"></span>
+                                        </b>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <md-checkbox type="checkbox" data-ng-model="account.enabled" class="md-primary">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.IP_LIMIT"></span>
+                                <span tooltip-placement="right"
+                                      tooltip="{{'USERACCOUNT.DETAILS.IP_LIMIT.TOOLTIP' | translate}}"
+                                      tooltip-append-to-body="true">
+                                     <md-icon md-font-icon="info_outline">info_outline</md-icon>
+                                </span>
+
+                                    <span ng-if="account.id == currentUser.id">
+                                        <br>
+                                        <b>
+                                            <span translate="USERACCOUNT.DETAILS.IP_LIMIT.EDIT_OWN"></span>
+                                        </b>
+                                    </span>
+
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{account.ipPattern}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="account.ipPattern" class="form-control"
+                                               placeholder="{{'USERACCOUNT.DETAILS.IP_LIMIT.NO_RESTRICTIONS' | translate}}">
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <custom-fields-shower ng-model="account.customFields"></custom-fields-shower>
+                    </div>
+                </section>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12" id="objecthistory">
+
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span class="badge">  {{objectHistoryResultHolder.length}} </span>
+                                        <span translate="APP.COMMON.CHANGE_HISTORY.SECTION"></span>
+                                    </div>
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+                                    <div class="col-md-6">
+                                        <input type="text"
+                                               ng-model="historyChangesFilter"
+                                               class="form-control background-input-color">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center">
+                                <div ng-if="account && account.id">
+                                    <objects-history-shower-biqa object-id="account.id"
+                                                                 result="objectHistoryResultHolder"
+                                                                 fields-name-filter="historyChangesFilter"
+                                                                 object-type="'USERACCOUNT'">
+                                    </objects-history-shower-biqa>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-12 col-lg-4" style="padding-left: 0 !important;">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span ng-click="showEffectiveRoles = !showEffectiveRoles">
+                        <span translate="USERACCOUNT.DETAILS.ROLES.HEADER"></span>
+                        </span>
+                    </div>
+                    <div class="panel-body" ng-show="!showEffectiveRoles">
+                        <span style="padding: 10px;">
+                            <span translate="USERACCOUNT.DETAILS.ROLES.EXCLUDE_FROM_GROUPS"></span>
+                         </span>
+                        <span role-security-selector data-ng-model="account.roles"></span>
+                    </div>
+
+                    <div class="panel-body" ng-show="showEffectiveRoles">
+                      <span style="padding: 10px;">
+                          <span translate="USERACCOUNT.DETAILS.ROLES.INCLUDE_FROM_GROUPS"></span>
+                      </span>
+                        <span role-security-selector data-ng-model="account.effectiveRoles"></span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

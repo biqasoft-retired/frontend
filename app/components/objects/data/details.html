@@ -1,0 +1,319 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+    <div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+         ng-click="defaultOptions.editableFields = !defaultOptions.editableFields"
+    >
+        <md-tooltip md-direction="left">
+            режим редактирования
+        </md-tooltip>
+
+        <md-button class="md-fab md-primary" aria-label="">
+            <md-icon md-svg-src="assets/ic_mode_edit_white_36px.svg"></md-icon>
+        </md-button>
+    </div>
+
+    <div style="position: fixed;  bottom: 4px;  right: 85px; z-index: 999999999999999;"
+         ng-if="defaultOptions.editableFields"
+         tooltip-placement="up" tooltip="сохранить"
+         tooltip-append-to-body="true"
+         ng-click="updateCompany()"
+    >
+        <md-button class="md-fab md-primary " ng-class="{'animation-hiding-1-5' : $window.changedTimes > 1}">
+            <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+        </md-button>
+    </div>
+</div>
+
+<style>
+    .my-input {
+        transition: all linear 0.5s;
+        background: transparent;
+    }
+
+    .my-input.ng-invalid {
+        color: white;
+        background: red;
+    }
+</style>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+        <div class="row nopadding">
+            <div class="col-md-12 col-lg-3 nopadding" ng-class="{'col-lg-12' : showJson}">
+
+                <div class="row nopadding">
+
+                    <div class="panel-body col-md-6 col-lg-12 nopadding">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+                                <a href="/objects/custom/data/details/{{customObjectMeta.collectionId}}"
+                                   style="color: white">
+                                    <b> {{currentCompany.name || currentCompany.id}} </b>
+                                </a>
+
+                                <span> - </span>
+
+                                <a href="/objects/custom/meta/details/{{customObjectMeta.id}}" style="color: white">
+                                    <b> {{customObjectMeta.name || printEmptyField()}} </b>
+                                </a>
+                            </div>
+
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr>
+                                    <td> <span translate="APP.COMMON.OBJECT.NAME"></span></td>
+                                    <td>
+                                        <div class="row nopadding">
+                                            <div class="col-md-9 nopadding">
+                                                <md-input-container flex class="nopadding">
+                                                    <input ng-model="currentCompany.name"
+                                                           ng-disabled="!defaultOptions.editableFields"
+                                                           ng-model-options="{ debounce: 100 }"
+                                                    >
+                                                </md-input-container>
+                                            </div>
+
+                                            <div class="col-md-3 nopadding">
+                                                <md-menu class="pull-right nopadding">
+
+                                                    <md-button aria-label=" " class="nopadding "
+                                                               ng-click="openMenu($mdOpenMenu, $event)">
+                                                        <i class="fa fa-cog" style="font-size: 120%;"
+                                                        ></i>
+                                                        <md-tooltip md-direction="left">
+                                                            <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                                        </md-tooltip>
+                                                    </md-button>
+
+                                                    <md-menu-content width="4">
+                                                        <md-menu-item>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    в архиве
+                                                                </div>
+                                                                <div class="col-md-6 nopadding">
+                                                                    <md-checkbox class="nopadding md-primary"
+                                                                                 data-ng-disabled="!defaultOptions.editableFields"
+                                                                                 type="checkbox"
+                                                                                 ng-model="currentCompany.archived"
+                                                                    >
+                                                                    </md-checkbox>
+                                                                </div>
+                                                            </div>
+                                                        </md-menu-item>
+
+                                                        <md-menu-item>
+                                                            <md-button class="" data-ng-click="deleteConfirmation()">
+                                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td> <span translate="APP.COMMON.OBJECT.DESCRIPTION"></span></td>
+                                    <td>
+                                        <md-input-container flex class="nopadding">
+                                            <input ng-model="currentCompany.description"
+                                                   ng-disabled="!defaultOptions.editableFields"
+                                                   ng-model-options="{ debounce: 100 }"
+                                            >
+                                        </md-input-container>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span translate="APP.COMMON.CREATED_DATE.SECTION"></span></td>
+                                    <td>
+                                        <div tooltip-placement="right"
+                                             tooltip="{{currentCompany.createdInfo.createdDate | timeAgo}}"
+                                             tooltip-append-to-body="true" class="pull-right">
+
+                                            <a ng-href="/user_account/details/{{currentCompany.createdInfo.createdById}}">
+                                                <small> {{ printUser ( resolveUser (   currentCompany.createdInfo.createdById ) ) }}
+                                                </small>
+                                            </a>
+
+                                            <br>
+
+                                            <small class="pull-right">
+                                                {{ printDate(currentCompany.createdInfo.createdDate) }}
+                                            </small>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr ng-if="::debugMode">
+                                    <td>
+                                        JSON
+                                    </td>
+                                    <td>
+                                        <button class="btn" ng-click="showJson = !showJson">
+                                            <span translate="APP.COMMON.SHOW.BUTTON"></span>
+                                        </button>
+
+                                        <div ng-if="showJson">
+                                            <br><br>
+                                            {{ currentCompany | json}} <br><br>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
+
+                    <div class="col-md-6 col-lg-12   paddingHack">
+                        <section class="panel panel-primary nopadding">
+                            <div class="panel-heading ">
+                                Представления для скачивания
+                            </div>
+                            <div class="panel-body">
+
+                                <table class="{{$root.tableClasses}}">
+                                    <thead>
+                                    <tr>
+                                        <th class="mini-col-md">№</th>
+                                        <th><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                                        <th ng-if="::debugMode">Print type</th>
+                                        <th ng-if="::debugMode">Mime type</th>
+                                        <th><span translate="APP.COMMON.OBJECT.DESCRIPTION"></span></th>
+                                        <th ng-if="::debugMode">data</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr ng-repeat="template in customObjectMeta.printableTemplates">
+
+                                        <td class="col-md-3" ng-if="::debugMode">
+                                            {{template | json}}
+                                        </td>
+
+                                        <td class="mini-col-md">
+                                            {{$index+1}}
+                                        </td>
+
+                                        <td>
+                                            {{template.name}}
+                                        </td>
+
+                                        <td ng-if="::debugMode">
+                                            {{template.type}}
+                                        </td>
+
+                                        <td ng-if="::debugMode">
+                                            {{template.mimeType}}
+                                        </td>
+
+                                        <td>
+                                            {{template.description}}
+                                        </td>
+
+                                        <td class="col-md-5" style="width: 100%" ng-if="::debugMode">
+                                            {{template.data}}
+                                        </td>
+
+                                        <td class="col-md-3" style="padding-right: 0px !important; padding-left: 0px;">
+                                            <div class="btn-group" dropdown>
+                                                <button class="btn" ng-click="downloadByView(template)">
+                                                    скачать
+                                                </button>
+
+                                                <md-menu>
+                                                    <button aria-label=" "
+                                                            class="btn dropdown-toggle grouped-button"
+                                                            style=" border-radius: 0px; !important; "
+                                                            ng-click="openMenu($mdOpenMenu, $event)">
+                                                        <span class="caret"></span>
+                                                        <md-tooltip md-direction="left">
+                                                            еще форматы для скачивания
+                                                        </md-tooltip>
+                                                    </button>
+
+                                                    <md-menu-content width="4">
+                                                        <md-menu-item
+                                                                data-ng-repeat="exportFormat in allExportFormats">
+                                                            <md-button
+                                                                    ng-click="downloadByRequestedMimeType(template, exportFormat)">
+                                                                {{exportFormat.name}}
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-lg-9 nopadding" style="padding-left: 5px !important;">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-7">
+                                Атрибуты документа
+                            </div>
+
+                            <div class="col-md-5">
+                                <input type="text"
+                                       ng-model="fieldsNameFilter" class="form-control background-input-color">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body nopadding">
+                        <custom-fields-shower ng-model="currentCompany.customFields"
+                                              fields-name-filter="fieldsNameFilter"
+                                              fields-option="defaultOptions"></custom-fields-shower>
+                    </div>
+                </section>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12" id="objecthistory">
+
+                    <section class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span class="badge">  {{objectHistoryResultHolder.length}} </span>
+                                    <span translate="APP.COMMON.CHANGE_HISTORY.SECTION"></span>
+                                </div>
+                                <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+                                <div class="col-md-6">
+                                    <input type="text"
+                                           ng-model="historyChangesFilter"
+                                           class="form-control background-input-color">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body text-center">
+                            <div ng-if="currentCompany && currentCompany.id">
+                                <objects-history-shower-biqa object-id="currentCompany.id"
+                                                             result="objectHistoryResultHolder"
+                                                             fields-name-filter="historyChangesFilter"
+                                                             object-type="'CUSTOM_OBJECT'">
+                                </objects-history-shower-biqa>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>

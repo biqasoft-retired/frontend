@@ -1,0 +1,54 @@
+<md-dialog aria-label="" style="">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span class="badge">{{allLocations.length}}</span>
+                    <span translate="APP.HISTORY.HEADER"></span>
+                </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="max-width:800px;max-height:810px;">
+
+            <table class="table table-responsive table-striped"
+                   data-ng-show="allLocations.length > 0">
+                <thead>
+                <tr>
+                    <th>№</th>
+                    <th>
+                        <span translate="APP.HISTORY.PAGE_TITLE"></span>
+                    </th>
+                    <th>
+                        <span translate="APP.HISTORY.ADDRESS"></span>
+                    </th>
+                    <th>
+                        <span translate="APP.HISTORY.DATE"></span>
+                    </th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="loc in allLocations | reverse:true">
+                    <td>
+                        {{$index +1}}
+                    </td>
+
+                    <td>
+                        <a href="{{ loc.location }}"> {{loc.title}} </a>
+                    </td>
+
+                    <td>
+                        <a href="{{ loc.location }}"> {{loc.location}} </a>
+                    </td>
+
+                    <td>
+                        {{loc.date | timeAgo}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </md-dialog-content>
+    </form>
+</md-dialog>

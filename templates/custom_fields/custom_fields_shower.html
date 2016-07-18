@@ -1,0 +1,291 @@
+<div>
+    <div class="panel-body text-center"
+         ng-if="currentCompany.customFields.length == 0 && showNoCustomFieldsSc">
+        <div class="callout callout-warning" style="margin: 0px;">
+            <h4>
+                <span translate="CUSTOM_FIELDS.SHOWER.NO_FIELDS.P1"></span>
+            </h4>
+            <p>
+                <span translate="CUSTOM_FIELDS.SHOWER.NO_FIELDS.P2"></span>
+            </p>
+        </div>
+    </div>
+
+    <table class="{{$root.customFieldsTableClasses}} "
+           ng-if="currentCompany.customFields.length > 0">
+        <tbody>
+
+        <tr ng-repeat="addFiels in currentCompany.customFields | filter:filteredHidden | filter:fieldsNameFilter track by addFiels.fieldId"
+            ng-class="{'warning' : !addFiels.value}"
+            ng-show="addFiels.type">
+
+            <td style="width: 35%"
+                tooltip-placement="right" tooltip="{{::addFiels.description}}" tooltip-append-to-body="true">
+                <b> {{ addFiels.name}} </b>
+            </td>
+
+            <td style="width: 65%">
+                <div ng-if="::debugMode">
+                    {{addFiels | json}}
+                </div>
+
+                <div ng-if=" addFiels.type == 'INTEGER'">
+                    <input ng-if="defaultOptions.editableFields"
+                           ng-model="addFiels.value.intVal"
+                           type="number"
+                           class="form-control">
+
+                    <span ng-if="!defaultOptions.editableFields">
+                    {{addFiels.value.intVal || '-'}}
+                </span>
+
+                </div>
+
+                <div ng-if=" addFiels.type == 'DICTIONARY'">
+                    <select ng-model="addFiels.value.dictVal.value" class="form-control"
+                            ng-if="defaultOptions.editableFields"
+                            ng-options="field as field.name for field in addFiels.value.dictVal.values track by field.id">
+                    </select>
+
+                    <span ng-if="!defaultOptions.editableFields">
+                    {{addFiels.value.dictVal.value.name  || '-'}}
+                </span>
+                </div>
+
+                <div ng-if=" addFiels.type == 'BOOLEAN'">
+                    <md-checkbox name="checkbox1"
+                                 type="checkbox"
+                                 data-ng-disabled="!defaultOptions.editableFields"
+                                 ng-model="addFiels.value.boolVal"
+                    ></md-checkbox>
+                </div>
+
+                <div ng-if=" addFiels.type == 'DOUBLE'">
+                    <input ng-if="defaultOptions.editableFields"
+                           type="number"
+                           ng-model="addFiels.value.doubleVal"
+                           class="form-control">
+
+                    <span ng-if="!defaultOptions.editableFields">
+                    {{addFiels.value.doubleVal || '-'}}
+                </span>
+                </div>
+
+                <div ng-if=" addFiels.type == 'MAP'">
+                    <!--<ui-gmap-google-map center='{ latitude: 45, longitude: -73 }' zoom='8'></ui-gmap-google-map>-->
+
+                    <!--<ui-gmap-search-box options="searchbox.options" template="searchbox.template"-->
+                    <!--events="searchbox.events" position="searchbox.position"></ui-gmap-search-box>-->
+
+                    <!--<ui-gmap-google-map center="addFiels.value.mapVal.center" zoom="addFiels.value.mapVal.zoom" draggable="true" events="addFiels.value.mapVal.events">-->
+                    <ui-gmap-google-map center="{ latitude: 45, longitude: -73 }" zoom="addFiels.value.mapVal.zoom" draggable="true"
+                                        events="map.events">
+                        <ui-gmap-marker ng-repeat="m in addFiels.value.mapVal.markers" coords="addFiels.value.mapVal.coords" icon="addFiels.value.mapVal.icon"
+                                        idkey="addFiels.fieldId">
+                        </ui-gmap-marker>
+                    </ui-gmap-google-map>
+                </div>
+
+                <div ng-if=" addFiels.type == 'STRING'">
+                    <div ng-if="(!addFiels.style || addFiels.style == 'STRING_CONFIRM') && defaultOptions.editableFields">
+                        <a href="#" editable-text="addFiels.value.stringVal">
+                            {{ addFiels.value.stringVal || printEmptyField() }}
+                        </a>
+                    </div>
+
+                    <div ng-if="addFiels.style == 'STRING_AUTO' && defaultOptions.editableFields">
+                        <md-input-container flex class="nopadding">
+                            <input ng-model="addFiels.value.stringVal"
+                                   ng-model-options="{ debounce: 300 }"
+                            >
+                        </md-input-container>
+                    </div>
+
+                    <div ng-if="addFiels.style == 'TEXTAREA' && defaultOptions.editableFields">
+                     <textarea class="textarea-fill-all-parent ng-pristine ng-untouched ng-valid"
+                               style="  margin-bottom: -5px;  height: 100px;"
+                               ng-model="addFiels.value.stringVal"
+                               ng-model-options="{ debounce: 600 }">
+                     </textarea>
+                    </div>
+
+                    <div ng-if="addFiels.style == 'STRING_RICH_TEXT' && defaultOptions.editableFields">
+                        <div ng-model="addFiels.value.stringVal" text-angular></div>
+                    </div>
+
+                    <div ng-if="!defaultOptions.editableFields && addFiels.style != 'STRING_RICH_TEXT'">
+                        {{addFiels.value.stringVal || '-'}}
+                    </div>
+
+                    <div ng-if="!defaultOptions.editableFields && addFiels.style === 'STRING_RICH_TEXT'">
+
+                        <!-- do not use bind html due to XSS -->
+                        <!--<div ng-bind-html-unsafe="addFiels.value.stringVal"></div>-->
+                        <div ng-model="addFiels.value.stringVal" text-angular ta-disabled="true" ta-toolbar="false"></div>
+                    </div>
+
+                </div>
+
+                <div ng-if="addFiels.type == 'DOCUMENT_FILE' ">
+                    <upload-file-biqa ng-model="addFiels.value.stringList"
+                                      files-uploaded-objects-array="allObjects"
+                                      show-upload-box="defaultOptions.editableFields"
+                                      documents-name-filter="documentsNameFilter"></upload-file-biqa>
+                </div>
+
+                <div ng-if="addFiels.type == 'USER_ACCOUNTS' ">
+                    <user-accounts-selector ng-model="addFiels.value.stringList"
+                                            account-options="{addCurrentUser: false, editMode:defaultOptions.editableFields}"></user-accounts-selector>
+                </div>
+
+                <div ng-if="addFiels.type == 'STRING_LIST' ">
+                    <table class="{{$root.tableClasses}} "
+                           ng-if="addFiels.value.stringList.length > 0">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="strinInList in addFiels.value.stringList track by $index" style="background-color: white;">
+                            <td> {{$index+1}}</td>
+
+                            <td>
+                                <md-input-container flex class="nopadding">
+                                    <input ng-model="addFiels.value.stringList[$index]"
+                                           ng-disabled="!defaultOptions.editableFields"
+                                           ng-model-options="{ debounce: 300 }">
+                                </md-input-container>
+                            </td>
+                            <td ng-show=" defaultOptions.editableFields">
+                                <md-button class="" data-ng-click="deleteAdditionalStringInStrings($index, addFiels)">
+                                    <md-icon md-font-icon="delete">delete</md-icon>
+                                    <md-tooltip>
+                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                    </md-tooltip>
+                                </md-button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div ng-show="defaultOptions.editableFields">
+                        <br/>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input type="text"
+                                       ng-model="defaultOptions.newAdditionalFileInList"
+                                       placeholder="{{'CUSTOM_FIELDS.SHOWER.NEW_STRING_IN_LIST.PLACEHOLDER' | translate}}"
+                                       class="form-control">
+                            </div>
+                            <div class="col-md-2">
+                                <md-button data-ng-click="addNewStringToList(addFiels)" class="nopadding"
+                                           data-nodrag>
+                                    <md-icon md-font-icon="add">add</md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 nopadding" ng-if=" addFiels.type == 'DATE'">
+
+                    <div ng-if="!addFiels.style || addFiels.style === 'DATE_WITH_TIME'">
+                        <div class="dropdown" ng-if="defaultOptions.editableFields">
+                            <a class="dropdown-toggle{{addFiels.fieldId}}" id="{{addFiels.fieldId}}"
+                               role="button"
+                               data-toggle="dropdown"
+                               ng-hide="editMode"
+                               data-target="#" href="">
+                                <span ng-if="addFiels.value.dateVal">
+                                    {{ ( printDate(addFiels.value.dateVal) )}}
+                                </span>
+
+                                <span ng-if="!addFiels.value.dateVal">
+                                    {{printEmptyField()}}
+                                </span>
+
+                            </a>
+                            <ul class="dropdown-menu" style=""
+                                role="menu"
+                                aria-labelledby="{{addFiels.fieldId}}">
+                                <datetimepicker
+                                        ng-model="addFiels.value.dateVal"
+                                        data-datetimepicker-config=""></datetimepicker>
+                            </ul>
+                        </div>
+
+                        <div ng-if="!defaultOptions.editableFields">
+                            {{ ( printDate(addFiels.value.dateVal) ) || '-' }}
+                        </div>
+                    </div>
+
+                    <div ng-if="addFiels.style === 'DATE_ONLY_DATE'">
+
+                        <div class="dropdown" ng-if="defaultOptions.editableFields">
+                            <a class="dropdown-toggle{{addFiels.fieldId}}" id="{{addFiels.fieldId}}"
+                               role="button"
+                               data-toggle="dropdown"
+                               ng-hide="editMode"
+                               data-target="#" href="">
+
+                                {{ (addFiels.value.dateVal | date:'yyyy-MM-dd' ) || printEmptyField() }}
+                            </a>
+                            <ul class="dropdown-menu" style=""
+                                role="menu"
+                                aria-labelledby="{{addFiels.fieldId}}">
+                                <datetimepicker
+                                        ng-model="addFiels.value.dateVal"
+                                        data-datetimepicker-config="{ startView:'day', minView:'day' , dropdownSelector: '.dropdown-toggle{{addFiels.fieldId}}' }"></datetimepicker>
+                            </ul>
+                        </div>
+
+                        <div ng-if="!defaultOptions.editableFields">
+                            {{ (addFiels.value.dateVal | date:'yyyy-MM-dd' ) || '-' }}
+                        </div>
+                    </div>
+
+
+                    <br/>
+                </div>
+            </td>
+
+            <td class="mini-col-md" ng-show="showDeleteButtonSc">
+                <div class="btn-group" dropdown>
+                    <button type="button"
+                            class="btn btn-danger2 dropdown-toggle roundedButton"
+                            dropdown-toggle>
+                        <span class="caret"></span>
+                        <span class="sr-only"></span>
+                    </button>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <button class="btn btn-danger btn-sm"
+                                    style="width: 96%"
+                                    data-ng-click="deleteAdditionalField($index)">
+                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!--<style>-->
+<!--.angular-google-map-container { height: 400px; }-->
+<!--</style>-->
+
+<style>
+    .ta-editor.ta-html, .ta-scroll-window.form-control {
+        min-height: 80px !important;
+    }
+
+    .ta-scroll-window > .ta-bind {
+        min-height: 80px !important;
+    }
+</style>

@@ -1,0 +1,89 @@
+<div class="panel-body">
+
+    Минимум кликок <input data-ng-model="minClicksValue" class="form-control">
+
+    <br> Объявлений: {{results.length}}
+
+    <div ng-repeat="banner in allBanners | filter:clicksRangeFilter as results">
+        <section class="panel panel-default" style="padding-left: 25px;">
+            <div class="row">
+                <div class="col-md-4">
+                    <p> {{banner.BannerID}}</p>
+
+                    <h2>{{banner.Title}}</h2>
+
+                    <h3>{{banner.Text}} </h3>
+
+                    <button class="btn" tooltip-placement="right" tooltip="{{banner.Href }}"
+                            tooltip-append-to-body="true">{{banner.Domain}}
+                    </button>
+
+                    <div class="row">
+                        <div ng-repeat="link in banner.Sitelinks">
+                            <div class="col-md-4">
+                                <a href="{{link.Href}}">{{link.Title}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div ng-repeat="phrase in banner.Phrases " style=" border: 4px double black;">
+
+                        {{ phrase.Phrase }}
+
+                        <br> Цена: {{phrase.Price}}
+                        <br> Цена РСЯ: {{phrase.ContextPrice}}
+                        <br><br>
+                        <br> AutoBroker: {{phrase.AutoBroker}}
+                        <br> StatusPhraseModerate: {{phrase.StatusPhraseModerate}}
+                        <br> Приоритет фразы при использовании автоматических стратегий : {{phrase.AutoBudgetPriority}}
+                        <br><br>
+                        <br> Кликов: {{phrase.Clicks}}
+                        <br> Показов: {{phrase.Shows}}
+                        <br> CTR клика: {{phrase.Clicks / phrase.Shows *100}} %
+
+
+                        <br><br>
+                        <br> Цена показа в нижнем блоке.: {{phrase.Min}}
+                        <br> Цена показа на первом месте в нижнем блоке.: {{phrase.Max}}
+                        <br> Цена показа в спецразмещении.: {{phrase.PremiumMin}}
+                        <br> Цена показа на первом месте в спецразмещении. : {{phrase.PremiumMax}}
+                        <br>
+
+                        <h4> конкурирующие Ставки </h4>
+                        {{ phrase.Prices }}
+
+                        <br>Конечная цена клика при использовании автоброкера.: {{phrase.CurrentOnSearch}}<br>
+                        <br> Минимальная цена, назначаемая индивидуально для каждого рекламодателя.: {{phrase.MinPrice}}<br>
+
+                        <!--<h4> Охват </h4>-->
+
+                        <!--<div ng-repeat="price in phrase.CoverageInfo">-->
+                        <!--Частота показа: {{price.Probability}}<br>-->
+                        <!--Ставка: {{price.Price}}<br>-->
+                        <!--</div>-->
+                        <!--<br> {{banner.Geo}}<br>-->
+                        <!--<br> {{banner.ContactInfo}}<br>-->
+                        <!--<br> {{banner.Phrases}}<br>-->
+                        <!--<br> {{banner.StatusActivating}}<br>-->
+                        <!--<br> {{banner.StatusArchive}}<br>-->
+                        <!--<br> {{banner.StatusBannerModerate}}<br>-->
+                        <!--<br> {{banner.StatusPhrasesModerate}} <br>-->
+                        <!--<br> {{banner.StatusPhoneModerate}} <br>-->
+                        <!--<br> {{banner.StatusShow}} <br>-->
+                        <!--<br> {{banner.IsActive}} <br>-->
+                        <!--<br> {{banner.StatusSitelinksModerate}} <br>-->
+                        <!--<br>  <br>-->
+                        <!--<br> {{banner.AdWarnings}} <br>-->
+                        <!--<br> {{banner.FixedOnModeration}} <br>-->
+                        <!--<br> {{banner.ModerateRejectionReasons}} <br>-->
+                        <br><br><br><br>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+</div>

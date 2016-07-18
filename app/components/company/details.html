@@ -1,0 +1,164 @@
+<section class="page-form-ele page">
+
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-md-12 col-lg-6">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <b>
+                            {{currentCompany.name}} </b>
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                </td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.name">{{ currentCompany.name|| printEmptyField() }}</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="COMPANY.SITE"></span>
+                                </td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.site">{{ currentCompany.site|| printEmptyField() }}</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="COMPANY.TELEPHONE"></span>
+                                </td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.telephone">{{ currentCompany.telephone|| printEmptyField() }}</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="COMPANY.EMAIL"></span>
+                                </td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.email">{{ currentCompany.email|| printEmptyField() }}</a>
+                                </td>
+                            </tr>
+
+                            <tr ng-show="hasRole('ROLE_COMPANY_MANAGER')">
+                                <td>
+                                    <span translate="COMPANY.IS_CUSTOMER"></span>
+                                </td>
+                                <td>
+                                    <a href="#" editable-checkbox="currentCompany.client">{{ currentCompany.client ? 'ДА' : 'Нет' }}</a>
+                                </td>
+                            </tr>
+
+                            <tr ng-show="hasRole('ROLE_COMPANY_MANAGER')">
+                                <td>
+                                    <span translate="COMPANY.IS_PARTNER"></span>
+                                </td>
+                                <td>
+                                    <a href="#" editable-checkbox="currentCompany.partner">{{ currentCompany.partner ? 'ДА' : 'Нет' }}</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="COMPANY.RESPONSIBLE"></span>
+                                </td>
+                                <td>
+                                    <div fs-Select="" items="allUserAccounts" freetext="" class="col-xs-8" data-ng-change="updateCompany()"
+                                         ng-disabled="disabled" ng-model="responsibleManager">
+                                        <span ng-show="item"><span
+                                                class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>
+                                            &nbsp;{{item.firstname}} {{item.lastname}} {{item.username}}</span>
+                                        <span ng-hide="item">
+                                                <span translate="COMPANY.RESPONSIBLE.NO_MANAGERS"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr ng-show="hasRole('ROLE_COMPANY_MANAGER')">
+                                <td>
+                                    <span translate="COMPANY.DESCRIPTION"></span>
+                                </td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.description">{{ currentCompany.description|| printEmptyField() }}</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <custom-fields-shower ng-model="currentCompany.customFields"></custom-fields-shower>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-md-12 col-lg-6">
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span translate="COMPANY.REQUISITES"></span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td> ОГРН</td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.requisites.ogrn">{{ currentCompany.requisites.ogrn || printEmptyField() }}</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> ИНН</td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.requisites.inn">{{ currentCompany.requisites.inn || printEmptyField() }}</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> КПП</td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.requisites.kpp">{{ currentCompany.requisites.kpp || printEmptyField() }}</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> ОКПО</td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.requisites.okpo">{{ currentCompany.requisites.okpo || printEmptyField() }}</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> БИК</td>
+                                <td>
+                                    <a href="#" editable-text="currentCompany.requisites.bik">{{ currentCompany.requisites.bik || printEmptyField() }}</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

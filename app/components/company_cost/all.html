@@ -1,0 +1,282 @@
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary" data-ng-show="filterPanelShow ">
+            <div class="panel-heading"><span class="fa fa-filter"></span>
+                <span translate="APP.FILTER.HEADER"></span>
+                <button class="btn btn-primary btn-sm" ng-click="filterPanelShow=false">
+                    <span translate="APP.FILTER.HIDE"></span>
+                </button>
+            </div>
+            <div class="panel-body text-center">
+
+                <div class="row">
+                    <div class="col-lg-5 col-md-12">
+                        <table class="table table-bordered">
+                            <thead>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.sortByAmount"
+                                               data-ng-change="sortFilterChanged('sortByAmount')">
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                            <span>
+                               <span translate="COSTS.SORT_BY_AMOUNT"></span>
+                            </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate"
+                                               data-ng-change="sortFilterChanged('sortDESCbyCreatedDate')">
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <span translate="APP.SORT_BY_CREATED_DATE"></span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="COSTS.AMOUNT"></span>
+                                </td>
+                                <td>
+
+                                    <from-to-selector object="customerAndLeadGetRequestCriteriaDao"
+                                                      from-value="'amountMoreThan'"
+                                                      from-use="'useAmountMoreThan'"
+                                                      to-value="'amountLessThan'"
+                                                      to-use="'useAmountLessThan'"
+                                    ></from-to-selector>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                <span class="" tooltip-placement="right"
+                                      tooltip="{{'CUSTOMER.LEAD_GEN_METHOD.DESCRIPTION' | translate}}"
+                                      tooltip-append-to-body="true">
+                                        <span translate="CUSTOMER.LEAD_GEN_METHOD"></span>
+                                      </span>
+                                </td>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class="">
+                                        <select data-ng-model="customerAndLeadGetRequestCriteriaDao.leadGenMethodId"
+                                                class="form-control"
+                                                data-ng-change="pageChanged(currentPage)">
+                                            <option value="ANY">
+                                                <span translate="CUSTOMER.LEAD_GEN_METHOD.ANY"></span>
+                                            </option>
+                                            <option data-ng-repeat="method in allLeadGenMethodsArray  track by method.id"
+                                                    value="{{method.id}}">{{method.name}}
+                                            </option>
+                                        </select>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+
+                                <span class="" tooltip-placement="right"
+                                      tooltip="{{'CUSTOMER.LEAD_GEN_PROJECT.DESCRIPTION' | translate}}"
+                                      tooltip-append-to-body="true">
+                                    <span translate="CUSTOMER.LEAD_GEN_PROJECT"></span>
+                                      </span>
+                                </td>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class="">
+                                        <select data-ng-model="customerAndLeadGetRequestCriteriaDao.leadGenProjectId"
+                                                class="form-control"
+                                                data-ng-change="pageChanged(currentPage)">
+                                            <option value="ANY">
+                                                <span translate="CUSTOMER.LEAD_GEN_METHOD.ANY"></span>
+                                            </option>
+                                            <option data-ng-repeat="method in allLeadGenProjects  track by method.id"
+                                                    value="{{method.id}}">{{method.name}}
+                                            </option>
+
+                                        </select>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="customerAndLeadGetRequestCriteriaDao.useCustomerIDs"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <span translate="CUSTOMER.CUSTOMER.IDS"></span>
+                                </td>
+
+                                <td ng-if="customerAndLeadGetRequestCriteriaDao.useCustomerIDs">
+                                    <div class="form-group ">
+
+                                        <div fs-multiselect="" items="" freetext="" class="col-md-12"
+                                             ng-disabled="disabled"
+                                             ng-model="customerAndLeadGetRequestCriteriaDao.customerIDs"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-lg-5 col-md-12">
+
+                        <filter-class-abstract ng-model="customerAndLeadGetRequestCriteriaDao"></filter-class-abstract>
+
+                        <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    на страницу <br/>
+                                </td>
+                                <td>
+                                    <input type="number" min="1" id="clientPerPage" class="form-control"
+                                           ng-model="itemsPerPage">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary" data-ng-click=" pageChanged(currentPage)">Поиск
+                                    </button>
+                                </td>
+
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <span class="badge">  {{allCustomersCount}}  </span>
+                        {{declOfNum (allCustomersCount, ['затрата', 'затраты', 'затрат'] ) }}
+
+                        <md-button class="btn-sm"
+                                   ng-click="$parent.filterPanelShow=true; "
+                                   ng-if="!filterPanelShow">
+                            <span translate="APP.FILTER.HEADER"></span>
+                        </md-button>
+                    </div>
+
+                    <div class="col-md-4">
+                        <input ng-model="customerAndLeadGetRequestCriteriaDao.fullTextSearchRequest"
+                               ng-model-options="{ debounce: 600 }"
+                               data-ng-change="pageChanged(currentPage)"
+                               id="searchCustomer" class="form-control background-input-color"
+                               placeholder="поиск">
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body text-center">
+                <br>
+
+                <div class="visible-lg visible-md">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                            <th class="">№</th>
+                            <th class="" ng-if="showObjectIDs()">ID</th>
+                            <th class="">
+                                <span translate="COSTS.TABLE.NAME"></span>
+                            </th>
+                            <th class="">
+                                <span translate="COSTS.TABLE.AMOUNT"></span>
+                            </th>
+                            <th class="">
+
+                            </th>
+                            <th class="">
+                                <span translate="COSTS.TABLE.CREATED_DATE"></span>
+                            </th>
+                            <th class="">
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr dir-paginate="project in projects | itemsPerPage: itemsPerPage"
+                            current-page="currentPage"
+                            total-items="allCustomersCount">
+
+                            <td>
+                                <a href="/customer_deals/details/{{project.id}}"> {{ (currentPage-1)*itemsPerPage + $index+1}} </a>
+                            </td>
+
+                            <td ng-if="showObjectIDs()">{{project.customer.id}}</td>
+
+                            <td data-ng-class="{'warning' : !project.name }">
+                                <a href="/customer_deals/details/{{project.id}}">{{project.name}} </a>
+                            </td>
+
+                            <td data-ng-class="{'warning' : !project.amount }">
+                                <b> {{ printCurrencyPrintable(project.amount)[0] }} </b>
+                                <small> {{ printCurrencyPrintable(project.amount)[1] }}</small>
+
+                            </td>
+
+                            <td>
+                                <span ng-if="project.dynamicControlled" class="label label-success ng-scope">
+                                     <span translate="COSTS.TABLE.DYNAMIC_CONTROLLED"></span>
+                                </span>
+                            </td>
+
+                            <td>
+                                <b> {{ project.createdInfo.createdDate | timeAgo }} </b> <br/>
+                                <small class="pull-right"> {{:: printDate(project.createdInfo.createdDate ) }}</small>
+                            </td>
+
+                            <td>
+                                <a href="/user_account/details/{{project.createdInfo.createdById}}"> {{ printUser (
+                                    resolveUser(project.createdInfo.createdById )) }} </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <dir-pagination-controls
+                            template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                            boundary-links="true">
+                    </dir-pagination-controls>
+
+                    <floating-pagination-panel pages-numbers="pagesNumbers" current-page="currentPage"
+                                               pages-numbers="pagesNumbers" page-changed="pageChanged">
+                    </floating-pagination-panel>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

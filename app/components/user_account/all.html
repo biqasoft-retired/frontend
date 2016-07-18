@@ -1,0 +1,198 @@
+<section class="page-form-ele page">
+    <div class="panel-body" style="    margin: 10px;">
+        <div class="row">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="badge">  {{allUserAccounts.length}}  </span>
+                            <span translate="APP.USERACCOUNT.USER_ACCOUNTS_SELECTOR.ALL"></span>
+                        </div>
+
+                        <div class="col-md-2">
+                            <select ng-model="viewType" class="form-control"
+                                    ng-options="field as field.name for field in viewTypes">
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <input ng-model="filterModel"
+                                   id="searchCustomer" class="form-control background-input-color"
+                                   placeholder="{{'APP.FILTER.HEADER' | translate}}">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div ng-if="viewType.value ===  'cards'">
+
+                <div class="col-lg-4 col-md-12" data-ng-repeat="staff in allUserAccounts | filter:filterModel track by staff.id" hover-class="methodHovered">
+                    <section class="panel "
+                             data-ng-class="{'panel-danger': !staff.enabled ,  'panel-success': staff.enabled }">
+                        <div class="panel-heading">
+
+                            <b> <span class="badge badge-info">  {{$index+1}} </span> </b>
+
+                            <a class="" href="/user_account/details/{{staff.id}}">
+                                {{staff.firstname}} {{staff.lastname}}
+                        <span ng-if="!staff.firstname && staff.lastname">
+                            {{staff.username}}
+                        </span>
+                        <span ng-if="staff.position">
+                            - <b> {{staff.position}} </b>
+                        </span>
+                            </a>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-md-4 col-lg-4">
+                                    <a class="" href="/user_account/details/{{staff.id}}">
+                                        <img class="img-rounded" width="150" height="150"
+                                             ng-src="{{getAvatarUrlByUser(staff)}}"/>
+                                    </a>
+                                    <br/>
+
+                                    <div class="text-center" data-ng-if="staff.lastOnline"
+                                         tooltip-placement="bottom"
+                                         tooltip="{{ printDate(staff.lastOnline) }}"
+                                         tooltip-append-to-body="true">
+                                        <br/>
+                                        <span translate="USERACCOUNT.WAS_ONLINE"></span> <br/>
+
+                                        <b> {{staff.lastOnline | timeAgo }} </b>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-8 col-lg-8">
+                                    <table class="{{$root.tableClasses}}">
+                                        <thead>
+                                        <tr>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <tr>
+                                            <td>
+                                                <span translate="USERACCOUNT.DETAILS.FIRSTNAME"></span>
+                                            </td>
+                                            <td>
+                                                {{staff.firstname}}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <span translate="USERACCOUNT.DETAILS.LASTNAME"></span>
+                                            </td>
+                                            <td>
+                                                {{staff.lastname}}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <span translate="USERACCOUNT.DETAILS.PATRONYMIC"></span>
+                                            </td>
+                                            <td>
+                                                {{staff.patronymic}}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <span translate="USERACCOUNT.DETAILS.USERNAME"></span>
+                                            </td>
+                                            <td>
+                                                {{staff.username}}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <span translate="USERACCOUNT.DETAILS.EMAIL"></span>
+                                            </td>
+                                            <td>
+                                                {{staff.email}}
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div ng-if="viewType.value ===  'table'">
+                <table class="{{$root.tableClasses}}">
+                    <tr>
+                        <td class="mini-col-md">
+                            №
+                        </td>
+
+                        <td class="col-md-1">
+                        </td>
+
+                        <td>
+                            <span translate="USERACCOUNT.DETAILS.FIRSTNAME"></span>
+                        </td>
+
+                        <td>
+                            <span translate="USERACCOUNT.DETAILS.LASTNAME"></span>
+                        </td>
+
+                        <td>
+                            <span translate="USERACCOUNT.DETAILS.PATRONYMIC"></span>
+                        </td>
+
+                        <td>
+                            <span translate="USERACCOUNT.DETAILS.USERNAME"></span>
+                        </td>
+
+                        <td>
+                            <span translate="USERACCOUNT.DETAILS.EMAIL"></span>
+                        </td>
+                    </tr>
+
+                    <tr data-ng-repeat="staff in allUserAccounts | filter:filterModel track by staff.id "
+                        data-ng-class="{'danger': !staff.enabled ,  'success': staff.enabled }">
+
+                        <td class="mini-col-md">
+                            {{$index +1}}
+                        </td>
+
+                        <td class="col-md-1">
+                            <img class="img-rounded  " width="50" height="50"
+                                 ng-src="{{getAvatarUrlByUser(staff)}}"/>
+                        </td>
+
+                        <td>
+                            {{staff.firstname}}
+                        </td>
+
+                        <td>
+                            {{staff.lastname}}
+                        </td>
+
+                        <td>
+                            {{staff.patronymic}}
+                        </td>
+
+                        <td>
+                            <a class="" href="/user_account/details/{{staff.id}}">
+                                {{staff.username}}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{staff.email}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

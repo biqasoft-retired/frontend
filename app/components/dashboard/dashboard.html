@@ -1,0 +1,185 @@
+<div style="padding-left: 15px; padding-right: 15px; padding-top: 5px;">
+    <div>
+        <div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+             tooltip-placement="up" tooltip="{{'APP.COMMON.EDIT_MODE' | translate}}"
+             tooltip-append-to-body="true"
+             ng-click="settingsShowSelected()">
+            <md-button class="md-fab md-primary" aria-label="">
+                <md-icon md-svg-src="assets/ic_mode_edit_white_36px.svg"></md-icon>
+            </md-button>
+        </div>
+
+        <div style="position: fixed;  bottom: 4px;  right: 85px; z-index: 999999999999999;"
+             ng-if="state.editMode"
+             tooltip-placement="up" tooltip="{{'DASHBOARD.ADD.TOOLTIP' | translate}}"
+             tooltip-append-to-body="true"
+             ng-click="addNewDashboard()">
+
+            <md-button class="md-fab md-primary" aria-label="">
+                <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+            </md-button>
+        </div>
+
+        <div style="position: fixed;  bottom: 4px;  right: 165px; z-index: 999999999999999;" ng-if="state.editMode"
+             tooltip-placement="up" tooltip="{{'APP.COMMON.SAVE_ALL_CHANGES' | translate}}"
+             tooltip-append-to-body="true"
+             ng-click="updateAllDashBoards()">
+            <md-button class="md-fab md-primary animation-hiding-1-5" aria-label="">
+                <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+            </md-button>
+        </div>
+
+        <section class="panel panel-default " data-ng-show="state.editMode" style="margin: 0px;">
+            <div class="panel-heading red-heading"><span class="fa   fa-dashboard"></span>
+                <span translate="DASHBOARD.HEADER"></span>
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-5">
+
+                        <div class="ui-bullet-content">
+                            <div class="col-md-6">
+                                <span translate="DASHBOARD.SEARCH_BY_DASHBOARD"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" data-ng-model="textFilterDashboard" class="form-control">
+                            </div>
+
+                            <div class="col-md-12"></div>
+
+                            <div class="col-md-6">
+                                <span translate="DASHBOARD.SEARCH_BY_WIDGET"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" data-ng-model="textFilterWidget" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="ui-bullet-content">
+                            <div ng-if="::debugMode">
+                                <div class="col-md-12"></div>
+
+                                <div class="col-md-6">
+                                    <button class="btn btn-warning btn-sm"
+                                            data-ng-click="resolveAllWidgetsFunction()">
+                                        Resolve all
+                                    </button>
+                                </div>
+
+                                <div class="col-md-12"></div>
+
+                                <div class="col-md-6" ng-if="::debugMode">
+                                    <input type="button" class="btn btn-warning btn-sm"
+                                           ng-click="gridsterOpts.draggable.enabled = !gridsterOpts.draggable.enabled"
+                                           value="{{gridsterOpts.draggable.enabled ? 'Disable' : 'Enable' }} draggable"/>
+                                </div>
+
+                                <div class="col-md-6" ng-if="::debugMode">
+                                    <input type="button" class="btn btn-warning btn-sm"
+                                           ng-click="gridsterOpts.resizable.enabled = !gridsterOpts.resizable.enabled"
+                                           value="{{gridsterOpts.resizable.enabled ? 'Disable' : 'Enable' }} resizable"/>
+                                </div>
+
+                                <div ng-show="::debugMode">
+                                    <input type="button" class="btn btn-warning btn-sm"
+                                           ng-click="gridsterOpts.floating = !gridsterOpts.floating"
+                                           value="{{gridsterOpts.floating ? 'Disable' : 'Enable' }} Floating"/>
+                                    <input type="button" class="btn btn-warning btn-sm"
+                                           ng-click="gridsterOpts.pushing = !gridsterOpts.pushing"
+                                           value="{{gridsterOpts.pushing ? 'Disable' : 'Enable' }} Pushing"/>
+                                    <input type="button" class="btn btn-warning btn-sm"
+                                           ng-click="gridsterOpts.swapping = !gridsterOpts.swapping"
+                                           value="{{gridsterOpts.swapping ? 'Disable' : 'Enable' }} swapping"/>
+                                </div>
+
+                                <div class="col-md-12"></div>
+                                <div class="col-md-6" ng-if="::debugMode">
+                                    Redraw on select
+                                </div>
+
+                                <div class="col-md-6" ng-if="::debugMode">
+                                    <md-checkbox name="checkbox1" type="checkbox" data-ng-model="rerenderDashboardOnSelect"></md-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div ng-show="resolvedWidgets" class="resolvedWidgetClass">
+            <tabset justified="true" class="ui-tab">
+
+                <tab data-ng-repeat="dashboard in allDashboards |filter:textFilterDashboard track by dashboard.id "
+                     select="widgetTabSelected(dashboard)">
+                    <tab-heading>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <md-input-container flex class="nopadding" ng-if="state.editMode">
+                                    <input ng-model="dashboard.name">
+                                </md-input-container>
+
+                                <span ng-if="!state.editMode">
+                                     {{dashboard.name}}
+                                    <span class="badge" style="background-color: rgba(153, 153, 153, 0.36);">
+                                        {{dashboard.widgets.length}}
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col-md-3">
+                                <md-button class="nopadding" data-ng-show="state.editMode"
+                                           data-ng-click="deleteDashboardById(dashboard, allDashboards, $index)">
+                                    <md-icon md-font-icon="delete">delete</md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                    </tab-heading>
+
+                    <div gridster="gridsterOpts">
+                        <div class="row" style="">
+
+                            <ul style="padding: 1px; !important">
+                                <li gridster-item="widget"
+                                    ng-repeat="widget in dashboard.widgets | filter:textFilterWidget track by widget.id "
+                                    style="margin: 3px; !important;">
+
+                                    <div data-ng-show="state.editMode">
+                                        <div class="row">
+
+                                            <md-menu>
+                                                <md-button aria-label="" class="" ng-click="openMenu($mdOpenMenu, $event)">
+                                                    <span translate="DASHBOARD.WIDGET.SETTINGS"></span>
+                                                </md-button>
+                                                <md-menu-content width="4">
+                                                    <md-menu-item>
+                                                        <md-button ng-click="editWidgetAction(widget,$event)">
+                                                            <span translate="DASHBOARD.WIDGET.SETTINGS"></span>
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                    <md-menu-item>
+                                                        <md-button data-ng-show="state.editMode"
+                                                                   data-ng-click="deleteWidgetById(widget.id, dashboard.widgets, $index)">
+                                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                                            <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                </md-menu-content>
+                                            </md-menu>
+                                        </div>
+                                    </div>
+
+                                    <div data-ng-include="widget.id" id="{{widget.id}}"
+                                         ng-if="$parent.$parent.$parent.currentDashboard.id ===  $parent.$parent.$parent.dashboard.id && haveCachedTemplate(widget.id)">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<md-dialog aria-label="" style="">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span translate="STORAGE.CREATE_FOLDER"></span>
+                </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="">
+            <div class="panel-body text-center">
+
+                <md-input-container class="md-block">
+                    <label>
+                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                    </label>
+                    <input name="description" ng-model="newFolderName">
+                    <div>
+                    </div>
+                </md-input-container>
+
+                <md-dialog-actions layout="row">
+                    <md-button class="md-raised md-primary"
+                               ng-disabled="newFolderName == 0"
+                               ng-click="createNewFolder(newFolderName);" style="margin-right:20px;"
+                    >
+                        <span translate="STORAGE.CREATE_FOLDER.BUTTON"></span>
+                    </md-button>
+                </md-dialog-actions>
+
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

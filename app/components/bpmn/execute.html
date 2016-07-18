@@ -1,0 +1,39 @@
+<div class="row">
+
+    <div class="col-md-6">
+        <b>
+            <span translate="BPMN.EXECUTE_CODE.HEADER"></span>
+        </b>
+        <div ui-codemirror ui-codemirror-opts="editorOptions" data-ng-model="executeRequest.code"
+             data-ng-change="">
+        </div>
+
+        <button ng-click="execute()" class="btn">
+            <span translate="BPMN.EXECUTE_CODE.EXECUTE.BUTTON"></span>
+        </button>
+    </div>
+
+    <div class="col-md-6">
+        <div ng-show="result && result.result">
+            <b>
+                <span translate="BPMN.EXECUTE_CODE.EXECUTE.RESULT.HEADER"></span>
+            </b> <br> <br>
+
+            <span ng-click="prettyShowResult = false" ng-show="prettyShowResult">
+                        <u>
+                            Pretty view
+                        </u>
+                    </span>
+            <span ng-click="prettyShowResult = true" ng-show="!prettyShowResult">
+                        <u>
+                            Source
+                        </u>
+                    </span>
+            <br> <br>
+            <div ng-if="!prettyShowResult">
+                <b> {{result | json}} </b>
+            </div>
+            <json-formatter open="1" json="result" ng-if="prettyShowResult"></json-formatter>
+        </div>
+    </div>
+</div>

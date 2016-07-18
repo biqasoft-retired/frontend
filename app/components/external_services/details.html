@@ -1,0 +1,207 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+    <div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+         ng-click="defaultOptions.editableFields = !defaultOptions.editableFields"
+    >
+        <md-tooltip md-direction="left">
+            режим редактирования
+        </md-tooltip>
+
+        <md-button class="md-fab md-primary" aria-label="">
+            <md-icon md-svg-src="assets/ic_mode_edit_white_36px.svg"></md-icon>
+        </md-button>
+    </div>
+
+    <div style="position: fixed;  bottom: 4px;  right: 85px; z-index: 999999999999999;"
+         ng-if="defaultOptions.editableFields"
+         tooltip-placement="up" tooltip="сохранить"
+         tooltip-append-to-body="true"
+         ng-click="updateToken()"
+    >
+        <md-button class="md-fab md-primary " ng-class="{'animation-hiding-1-5' : $window.changedTimes > 1}">
+            <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+        </md-button>
+    </div>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+        <div class="row nopadding">
+            <div class="col-md-12 col-lg-3 nopadding" ng-class="{'col-lg-12' : showJson}">
+
+                <div class="row nopadding">
+
+                    <div class="panel-body col-md-6 col-lg-12 nopadding">
+                        <section class="panel panel-primary">
+
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img src="assets/img//{{::currentToken.type}}.png" alt="" class="" width="50" height="50">
+                                    </div>
+                                    <div class="col-md-6">
+                                        Внешний сервис {{currentToken.type}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr>
+                                    <td>
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span></td>
+                                    <td>
+                                        <div class="row nopadding">
+                                            <div class="col-md-9 nopadding">
+                                                <md-input-container flex class="nopadding">
+                                                    <input ng-model="currentToken.name"
+                                                           ng-disabled="!defaultOptions.editableFields"
+                                                           ng-model-options="{ debounce: 100 }"
+                                                    >
+                                                </md-input-container>
+                                            </div>
+
+                                            <div class="col-md-3 nopadding">
+                                                <md-menu class="pull-right nopadding">
+
+                                                    <md-button aria-label=" " class="nopadding "
+                                                               ng-click="openMenu($mdOpenMenu, $event)">
+                                                        <i class="fa fa-cog" style="font-size: 120%;"
+                                                        ></i>
+                                                        <md-tooltip md-direction="left">
+                                                            <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                                        </md-tooltip>
+                                                    </md-button>
+
+                                                    <md-menu-content width="4">
+                                                        <!--<md-menu-item>-->
+                                                        <!--<div class="row">-->
+                                                        <!--<div class="col-md-6">-->
+                                                        <!--в архиве-->
+                                                        <!--</div>-->
+                                                        <!--<div class="col-md-6 nopadding">-->
+                                                        <!--<md-checkbox class="nopadding md-primary"-->
+                                                        <!--data-ng-disabled="!defaultOptions.editableFields"-->
+                                                        <!--type="checkbox"-->
+                                                        <!--ng-model="currentCompany.archived"-->
+                                                        <!--&gt;-->
+                                                        <!--</md-checkbox>-->
+                                                        <!--</div>-->
+                                                        <!--</div>-->
+                                                        <!--</md-menu-item>-->
+
+                                                        <md-menu-item>
+                                                            <md-button class="" data-ng-click="deleteToken()">
+                                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        ID
+                                    </td>
+                                    <td>
+                                        <md-input-container flex class="nopadding">
+                                            <input ng-model="currentToken.id"
+                                                   ng-disabled="true"
+                                                   ng-model-options="{ debounce: 100 }"
+                                            >
+                                        </md-input-container>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span translate="APP.COMMON.OBJECT.DESCRIPTION"></span></td>
+                                    <td>
+                                        <md-input-container flex class="nopadding">
+                                            <input ng-model="currentToken.description"
+                                                   ng-disabled="!defaultOptions.editableFields"
+                                                   ng-model-options="{ debounce: 100 }"
+                                            >
+                                        </md-input-container>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        Логин
+                                        <!--<span translate="APP.COMMON.OBJECT.NAME"></span>-->
+                                    </td>
+                                    <td>
+                                        <md-input-container flex class="nopadding">
+                                            <input ng-model="currentToken.login"
+                                                   ng-disabled="!defaultOptions.editableFields"
+                                                   ng-model-options="{ debounce: 100 }"
+                                            >
+                                        </md-input-container>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        Server
+                                        <!--<span translate="APP.COMMON.OBJECT.NAME"></span>-->
+                                    </td>
+                                    <td>
+                                        <md-input-container flex class="nopadding">
+                                            <input ng-model="currentToken.server"
+                                                   ng-disabled="!defaultOptions.editableFields"
+                                                   ng-model-options="{ debounce: 100 }"
+                                            >
+                                        </md-input-container>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span translate="APP.COMMON.CREATED_DATE.SECTION"></span></td>
+                                    <td>
+                                        <div tooltip-placement="right"
+                                             tooltip="{{currentToken.createdInfo.createdDate | timeAgo}}"
+                                             tooltip-append-to-body="true" class="pull-right">
+
+                                            <a ng-href="/user_account/details/{{currentToken.createdInfo.createdById}}">
+                                                <small> {{ printUser ( resolveUser ( currentToken.createdInfo.createdById ) ) }}
+                                                </small>
+                                            </a>
+                                            <br>
+                                            <small class="pull-right"> {{ printDate(currentToken.createdInfo.createdDate) }}
+                                            </small>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                            <div class="col-md-6" ng-if="currentToken.type =='YANDEX_DIRECT'">
+
+                                <section class="panel panel-default">
+                                    <div class="panel-heading">
+                                        Подробности
+                                    </div>
+                                    <div class="panel-body text-center">
+
+                                        <br>
+                                        <a class="btn btn-success" href="/yandex/direct/allCompaigns/token/{{currentToken.id}}">
+                                            Перейти в рекламную компанию </a>
+                                    </div>
+                                </section>
+                            </div>
+
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,112 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;"
+     ng-show="hasRole('ROLE_USER_GROUP_EDIT') || hasRole('ROLE_ADMIN') || hasRole('ROLE_ALLOW_ALL_DOMAIN_BASED')">
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="{{'USERACCOUNT.GROUP.DETAILS.UPDATE' | translate}}"
+               tooltip-append-to-body="true"
+               data-ng-click="updateGroup()">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <div class="col-md-12 col-lg-8 " style="padding-left: 0 !important;">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    {{currentGroups.name}}
+                </div>
+                <div class="panel-body">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                <span translate="APP.COMMON.OBJECT.NAME"></span>
+                            </td>
+                            <td>
+                                <div>
+                                    <input data-ng-model="currentGroups.name" class="form-control">
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span translate="USERACCOUNT.GROUP.DETAILS.IS_ACTIVE"></span>
+                                <span tooltip-placement="right"
+                                               tooltip="{{'USERACCOUNT.GROUP.DETAILS.IS_ACTIVE.TOOLTIP' | translate}}"
+                                               tooltip-append-to-body="true">
+                                    <md-icon md-font-icon="info_outline">info_outline</md-icon>
+                                </span>
+                            </td>
+                            <td>
+                                <div>
+                                    <md-checkbox data-ng-model="currentGroups.enabled">
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span translate="USERACCOUNT.DETAILS.AVATAR_URL"></span>
+                            </td>
+                            <td>
+                                <div>
+                                    <input data-ng-model="currentGroups.avatarUrl" class="form-control">
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+                            </td>
+                            <td>
+                                {{ printDate (currentGroups.createdInfo.createdDate) }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <span translate="USERACCOUNT.GROUP.DETAILS.USER_LIST"></span>
+                                <br>
+                                <user-accounts-selector ng-model="currentGroups.userAccountsIDs"
+                                                        account-options="{addCurrentUser: false, editMode:true}"></user-accounts-selector>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <button type="button" class="btn" ng-click="deleteUserGroupModal()">
+                                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                </button>
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <custom-fields-shower ng-model="currentGroups.customFields"></custom-fields-shower>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-12 col-lg-4" style="padding-left: 0 !important;">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <span translate="USERACCOUNT.DETAILS.ROLES.HEADER"></span>
+                </div>
+                <div class="panel-body">
+                    <span role-security-selector data-ng-model="currentGroups.grantedRoles"></span>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>

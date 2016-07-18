@@ -1,0 +1,207 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+    <md-button class="md-fab md-primary"
+               ng-if="widgetUpdateMode"
+               tooltip-placement="left" tooltip="{{'WIDGETS.CREATE.CUSTOM.FLOATING_BUTTON_TOOLTIP.UPDATE' | translate}}"
+               tooltip-append-to-body="true"
+               data-ng-click="updateWidgetToServer()"
+               aria-label="">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+
+    <md-button class="md-fab md-primary"
+               ng-if="!widgetUpdateMode"
+               tooltip-placement="left" tooltip="{{'WIDGETS.CREATE.CUSTOM.FLOATING_BUTTON_TOOLTIP.ADD' | translate}}"
+               tooltip-append-to-body="true"
+               data-ng-click="addWidget()"
+               aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <section class="panel panel-default">
+        <div class="panel-heading">
+            1. <span translate="WIDGETS.CREATE.CUSTOM.PARAM.HEADER"></span>
+        </div>
+        <div class="panel-body text-center">
+            <table class="table table-bordered">
+                <tbody>
+
+                <tr ng-if="newWidget.location ===  'DASHBOARD'">
+                    <td>
+                        <span translate="WIDGETS.CREATE.CUSTOM.LOCATION.DASHBOARD"></span>
+                    </td>
+                    <td>
+                        <div>
+                            <div fs-Select="" items="allDashboards" freetext="" class="col-xs-8" ng-disabled="disabled"
+
+                                 ng-model="currentDashboard">
+                                <span ng-show="item"><span class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>&nbsp; {{item.name}} </span>
+                                <span ng-hide="item">
+                                    <span translate="WIDGETS.CREATE.CUSTOM.LOCATION.DASHBOARD.NOT_SELECTED"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                    </td>
+
+                    <td>
+                        <a href="#" editable-text="newWidget.name">{{ newWidget.name || printEmptyField() }}</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span translate="WIDGETS.CREATE.CUSTOM.ACTIVE.HEADER"></span>
+                    </td>
+                    <td>
+                            <md-switch type="checkbox"
+                                   data-ng-disabled="editMode"
+                                   ng-model="newWidget.enabled"><i></i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="row" ng-show="newWidget.location !=  'BACKGROUND'">
+        <div class="col-md-12">
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    2. <span translate="WIDGETS.CREATE.CUSTOM.VIEW.HEADER"></span>
+                </div>
+                </section>
+            <div ng-if="compiledWidget &&  newWidget.location != 'BACKGROUND'">
+                <div data-ng-include="newTestTemplateForWidgetWithVer"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-form-ele page">
+    <section class="panel panel-default">
+        <div class="panel-heading">
+            3. <span translate="WIDGETS.CREATE.CUSTOM.CREATE.HEADER"></span>
+        </div>
+        <div class="panel-body text-center">
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <accordion close-others="oneAtATime" class="ui-accordion ui-accordion-warning">
+                    <accordion-group heading="{{'WIDGETS.CREATE.CUSTOM.DATA_SOURCE_PLACEHOLDER.TABLE.HEADER' | translate}}" is-open="status.isFirstOpen1">
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                                <td>
+                                    <span translate="WIDGETS.CREATE.CUSTOM.DATA_SOURCE_NAME.TABLE.HEADER"></span>
+                                </td>
+                                <td>
+                                    <span translate="APP.COMMON.ACTION"></span>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="dataSource in allDataSources" class="table-striped">
+                                <td> {{dataSource.name || printEmptyField()}}</td>
+
+                                <td>
+                                    <button class="btn btn-success" data-ng-click="dataSourceWidgetNew(dataSource.id)">
+                                        <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </accordion-group>
+
+                    <accordion-group heading="{{'WIDGETS.CREATE.CUSTOM.EXAMPLES.FOR_DEVELOPERS.HEADER' | translate}}" is-open="status.isFirstOpen2">
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                                <td>
+                                    <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                </td>
+                                <td>
+                                    <span translate="APP.COMMON.ACTION"></span>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="table-striped">
+                                <td>
+                                    <span translate="WIDGETS.CREATE.CUSTOM.EXAMPLES.REAL_TIME.HEADER"></span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-success" data-ng-click="simpleRealTimeWidget()">
+                                        <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr class="table-striped">
+                                <td>
+                                    <span translate="WIDGETS.CREATE.CUSTOM.EXAMPLES.FORECAST.HEADER"></span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-success" data-ng-click="addWeatherForecastWidget()">
+                                        <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr class="table-striped">
+                                <td>
+                                    <span translate="WIDGETS.CREATE.CUSTOM.EXAMPLES.EXCHANGE_RATE_RUB.HEADER"></span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-success" data-ng-click="addCurrencyEurAndDollar()">
+                                        <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </accordion-group>
+                </accordion>
+
+            </div>
+
+            <div class="col-md-4" ng-if="newWidget.location != 'BACKGROUND'">
+                <h2>HTML</h2>
+                <div ui-codemirror ui-codemirror-opts="editorOptions" data-ng-model="newWidget.htmlTemplate"
+                     data-ng-change="updateWidget()">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2>JavaScript</h2>
+                    </div>
+                    <div class="col-md-3" style="margin-top: 10px; margin-bottom: 10px;">
+                        <md-button class="" data-ng-click="dataSourceTestJS()">
+                            <span translate="WIDGETS.CREATE.CUSTOM.EXECUTE_CODE.BUTTON"></span>
+                        </md-button>
+                    </div>
+                    <div class="col-md-3" style="margin-top: 20px; margin-bottom: 10px;">
+                        <label class="ui-checkbox"
+                               tooltip-placement="bottom" tooltip="{{'WIDGETS.CREATE.CUSTOM.EXECUTE_CODE_TOOLTIP.BUTTON' | translate}}"
+                               tooltip-append-to-body="true">
+                            <input name="checkbox1" type="checkbox" ng-model="updateJsInstant"><span> </span>
+                        </label>
+                    </div>
+
+                </div>
+                <div ui-codemirror ui-codemirror-opts="editorOptions" data-ng-model="newWidget.jsExec"
+                     data-ng-change="updateJSCodeOnChange()"></div>
+            </div>
+        </div>
+    </section>
+</section>

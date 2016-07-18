@@ -1,0 +1,187 @@
+<section class="page-form-ele page">
+    <div class="panel-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-10 col-lg-offset-2" ng-show="!useEnterprise">
+                    <h1 class="text-center login-title">
+                        <span translate="APP.LOGIN.ENTER_HEADER"></span>
+                        biqasoft.com
+                    </h1>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="account-wall">
+                                <img class="profile-img"
+                                     src="assets/img/avatar_2x.png"
+                                     alt="">
+
+                                <form class="form-signin">
+                                    <input type="text" class="form-control" ng-model="userName"
+                                           placeholder="{{'APP.LOGIN.USERNAME_PLACEHOLDER' | translate}}" required
+                                           autofocus>
+                                    <input type="password" class="form-control" ng-model="userPassword"
+                                           placeholder="{{'APP.LOGIN.PASSWORD_PLACEHOLDER' | translate}}"
+                                           required>
+
+                                    <button ng-click="update()" class="btn btn-lg btn-primary btn-block">
+                                        <span translate="APP.LOGIN.ENTER"></span>
+                                    </button>
+
+                                    <br><br>
+                                    <button ng-click="EnterpriseClicked()"
+                                            class="btn btn-sm pull-right btn-warning2 btn-block2">
+                                        <span translate="APP.LOGIN.ENTERPRISE"></span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" ng-show="allUserAccounts.length > 0">
+                            <div class="column margintop20">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li data-ng-repeat="account in allUserAccounts"
+                                        data-ng-class="{active : isCurrentUserActive(account) ===  true }">
+                                        <a data-ng-click="selectAccount(account)"><span
+                                                class="glyphicon glyphicon-chevron-right"></span>
+                                            {{account.email || account.username}} ( {{printUser(account)}} ),
+                                            <span translate="APP.COMMON.DOMAIN"></span>
+                                            <b> {{account.domain}} </b>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <br>
+                            <button class="btn btn-primary3" data-ng-click="chooseAnotherAccount()">
+                                <span translate="APP.LOGIN.CHANGE_PROFILE"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-10 col-md-5  col-lg-offset-2" ng-show="useEnterprise">
+                    <h1 class="text-center login-title">
+                        <span translate="APP.LOGIN.ENTERPRISE_ENTER_HEADER"></span>
+                    </h1>
+
+                    <div class="account-wall">
+                        <img class="profile-img"
+                             src="assets/img/avatar_2x.png"
+                             alt="">
+
+                        <form class="form-signin">
+                            <input type="text" class="form-control" data-ng-model="EnterpriseApiURL"
+                                   placeholder="{{'APP.LOGIN.ENTERPRISE.URL' | translate}}">
+
+                            <input type="text" class="form-control" ng-model="userName" placeholder="{{'APP.LOGIN.USERNAME_PLACEHOLDER' | translate}}" required
+                                   autofocus>
+                            <input type="password" class="form-control" ng-model="userPassword" placeholder="{{'APP.LOGIN.PASSWORD_PLACEHOLDER' | translate}}"
+                                   required>
+
+                            <button ng-click="update()" class="btn btn-lg btn-primary btn-block">
+                                <span translate="APP.LOGIN.ENTER"></span>
+                            </button>
+
+                            <br><br>
+                            <button ng-click="CloudClicked()" class="btn btn-lg btn-btn-warning btn-block">
+                                <span translate="APP.LOGIN.ENTERPRISE.TO_CLOUD"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+        color: #fff;
+        background-color: #428bca;
+    }
+
+    .margintop20 {
+        margin-top: 20px;
+    }
+
+    .nav-pills > li > a {
+        border-radius: 0px;
+    }
+
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #000;
+        text-decoration: none;
+    }
+
+    .nav-stacked > li + li {
+        margin-top: 0px;
+        margin-left: 0;
+        border-bottom: 1px solid #dadada;
+        border-left: 1px solid #dadada;
+        border-right: 1px solid #dadada;
+    }
+
+    .form-signin {
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+
+    .form-signin .form-control {
+        position: relative;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .form-signin .form-control:focus {
+        z-index: 2;
+    }
+
+    .form-signin input[type="text"] {
+        margin-bottom: -1px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    .account-wall {
+        margin-top: 20px;
+        padding: 40px 0px 20px 0px;
+        background-color: #f7f7f7;
+        -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-title {
+        color: #555;
+        font-size: 18px;
+        font-weight: 400;
+        display: block;
+    }
+
+    .profile-img {
+        width: 96px;
+        height: 96px;
+        margin: 0 auto 10px;
+        display: block;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+    }
+
+</style>

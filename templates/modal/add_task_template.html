@@ -1,0 +1,20 @@
+<div>
+    <h3>
+        <span translate="APP.COMMON.TEMPLATE.ADD.HEADER"></span>
+    </h3>
+    <br/>
+    <span translate="APP.COMMON.OBJECT.NAME"></span>:
+    <input data-ng-model="$parent.newDynamicSegment.name" class="form-control">
+
+    <label class="ui-checkbox" data-ng-show="::debugMode">
+        <input type="checkbox" class="" data-ng-model="$parent.newDynamicSegment.usePagination">
+        <span>
+        <span translate="APP.COMMON.TEMPLATE.ADD.USE_PAGINATION"></span>:
+    </span>
+    </label>
+
+    <br/>
+    <button class="btn btn-success" data-ng-click="$parent.addDynamicSegment ()">
+        <span translate="APP.COMMON.TEMPLATE.ADD.BUTTON"></span>
+    </button>
+</div>

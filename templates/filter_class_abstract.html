@@ -1,0 +1,124 @@
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td colspan="3" class="info"><b>
+                <span translate="APP.DIRECTIVE.FILTER_ABSTRACT.FILTER.CREATED_DATE"></span>
+            </b></td>
+        </tr>
+
+        </thead>
+        <tbody>
+
+        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom }">
+            <td>
+                <md-checkbox type="checkbox" class=""
+                             data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom"
+                             data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                ></md-checkbox>
+            </td>
+
+            <td>
+                <span translate="APP.DIRECTIVE.FILTER_ABSTRACT.FILTER.CREATED_DATE.FROM"></span>
+            </td>
+
+            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom">
+                <date-selector
+                        ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateFrom"
+                        ng-change="pageChanged(currentPage)"
+                ></date-selector>
+            </td>
+        </tr>
+
+        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo }">
+
+            <td>
+                <md-checkbox type="checkbox" class=""
+                             data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo"
+                             data-ng-change="changedUseRelativeCreatedDateTo(); "
+                ></md-checkbox>
+            </td>
+
+            <td>
+                <span translate="APP.DIRECTIVE.FILTER_ABSTRACT.FILTER.CREATED_DATE.TO"></span>
+            </td>
+
+            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo">
+                <date-selector ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateTo"
+                               data-ng-change="pageChanged(currentPage)"></date-selector>
+            </td>
+        </tr>
+
+        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate }">
+            <td>
+                <md-checkbox type="checkbox" class=""
+                             data-ng-model="customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate"
+                             data-ng-change="pageChanged(currentPage)">
+                </md-checkbox>
+            </td>
+
+            <td>
+                <span class="" tooltip-placement="right"
+                      tooltip="{{'APP.DIRECTIVE.FILTER_ABSTRACT.FILTER.CREATED_DATE.LAST_TOP.TOOLTIP' | translate}}"
+                      tooltip-append-to-body="true">
+                    <span translate="APP.DIRECTIVE.FILTER_ABSTRACT.FILTER.CREATED_DATE.LAST_TOP"></span>
+                </span>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td colspan="3" class="info"><b>
+                <span translate="APP.DIRECTIVE.FILTER_ABSTRACT.COMMON"></span>
+            </b></td>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.usePagination }">
+            <td>
+                <span translate="APP.DIRECTIVE.FILTER_ABSTRACT.PAGINATION"></span>
+                <br/>
+            </td>
+
+            <td>
+                <md-checkbox type="checkbox" class=""
+                             data-ng-model="customerAndLeadGetRequestCriteriaDao.usePagination"
+                             data-ng-change="pageChanged(1)"
+                ></md-checkbox>
+            </td>
+        </tr>
+
+        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.showArchived }">
+            <td>
+                <span translate="APP.DIRECTIVE.FILTER_ABSTRACT.FROM_ARCHIVE"></span>
+                <br/>
+            </td>
+
+            <td>
+                <md-checkbox type="checkbox" class=""
+                             data-ng-model="customerAndLeadGetRequestCriteriaDao.showArchived"
+                             data-ng-change="pageChanged(1)"
+                ></md-checkbox>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <span translate="APP.DIRECTIVE.FILTER_ABSTRACT.OBJECTS_PER_PAGE"></span>
+                <br/>
+            </td>
+            <td>
+                <input type="number" min="1" id="clientPerPage" class="form-control"
+                       ng-model="itemsPerPage">
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>

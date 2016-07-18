@@ -1,0 +1,1003 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="сохранить изменения"
+               tooltip-append-to-body="true"
+               data-ng-click="updateProject()"
+               aria-label="">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <br>
+    <div class="row">
+        <div class="col-lg-4 col-md-12">
+
+            <section class="panel"
+                     ng-class="{'panel-success' : currentLeadGenProject.active, 'panel-danger' : !currentLeadGenProject.active  }">
+                <div class="panel-heading">
+                    Проект <b>
+                    {{currentLeadGenProject.name}} </b></div>
+                <div class="panel-body text-center padding10">
+
+                    <div class="hidden-sm hidden-xs">
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    <small> ID</small>
+                                </td>
+                                <td>
+                                    <small> {{currentLeadGenProject.id}}</small>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span translate="APP.COMMON.OBJECT.NAME"></span></td>
+                                <td>
+                                    <a href="#" editable-text="currentLeadGenProject.name">
+                                        {{ currentLeadGenProject.name || printEmptyField() }}
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td> Активен</td>
+                                <td>
+                                    <md-switch type="checkbox"
+                                               data-ng-disabled="editMode"
+                                               ng-model="currentLeadGenMethod.active" style="padding-left: 45%;">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> Дата начала</td>
+                                <td>
+
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown"
+                                           data-target="#" href="">
+                                            {{ ( printDate(currentLeadGenProject.startDate)) || 'Выбрать дату начала ' }}
+                                        </a>
+                                        <ul class="dropdown-menu" style="" role="menu"
+                                            aria-labelledby="dLabel">
+                                            <datetimepicker data-ng-model="currentLeadGenProject.startDate"
+                                                            data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> Дата конца</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" id="dLabel2" role="button" data-toggle="dropdown"
+                                           data-target="#" href="">
+                                            {{ ( printDate(currentLeadGenProject.finalDate)) || '
+                                            Выбрать дату конца ' }}
+                                            <!--Выбрать дату конца-->
+                                        </a>
+                                        <ul class="dropdown-menu" style="" role="menu"
+                                            aria-labelledby="dLabel2">
+                                            <datetimepicker data-ng-model="currentLeadGenProject.finalDate"
+                                                            data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span translate="APP.COMMON.OBJECT.DESCRIPTION"></span></td>
+                                <td>
+                                    <a href="#" editable-text="currentLeadGenProject.description">{{currentLeadGenProject.description
+                                        || printEmptyField() }}</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- START: FOR MOBILE-->
+                    <div class="visible-sm visible-xs">
+                        <div class="row">
+                            <div class="col-md-6"><span translate="APP.COMMON.OBJECT.NAME"></span></div>
+                            <div class="col-md-6">
+                                <input type="text" ng-model="currentLeadGenProject.name"
+                                       placeholder="введите сюда название метода лидгена" class="form-control">
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6"> Активен</div>
+                            <div class="col-md-6">
+                                <md-switch type="checkbox" ng-model="currentLeadGenProject.active" style="padding-left: 45%;">
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6"> Дата начала</div>
+                            <div class="col-md-6">
+
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown"
+                                       data-target="#" href="">
+                                        Выбрать дату начала
+                                    </a>
+                                    <ul class="dropdown-menu" style="" role="menu"
+                                        aria-labelledby="dLabel">
+                                        <datetimepicker data-ng-model="currentLeadGenProject.startDate"
+                                                        data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                                    </ul>
+                                </div>
+                                <p> ( {{ printDate(currentLeadGenProject.startDate) }} )</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6"> Дата конца</div>
+                            <div class="col-md-6">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" id="dLabel2" role="button" data-toggle="dropdown"
+                                       data-target="#" href="">
+                                        Выбрать дату конца
+                                    </a>
+                                    <ul class="dropdown-menu" style="" role="menu"
+                                        aria-labelledby="dLabel2">
+                                        <datetimepicker data-ng-model="currentLeadGenProject.finalDate"
+                                                        data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                                    </ul>
+                                </div>
+                                <p> ( {{ printDate(currentLeadGenProject.finalDate) }} ) </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6"></div>
+
+                            <div class="col-md-6">
+                                <button type="submit" ng-click="updateProject()" class="btn btn-primary">
+                                    Обновить информацию о проекте
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/////////////// END: For mobile                   -->
+                </div>
+            </section>
+
+
+            <div class="">
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        Факт-план продаж
+                    </div>
+                    <div class="panel-body text-center">
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                                <td></td>
+                                <td>План</td>
+                                <td>Факт</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td> затраты</td>
+                                <td>
+
+                                    <div class="form-group">
+                                        <div class="col-xs-10">
+                                            <label for="ex1"> </label>
+                                            <a href="#" editable-text="currentLeadGenProject.plannedCosts">{{currentLeadGenProject.plannedCosts}}</a>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <p style="font-size: 2em;" class="ng-binding"> {{kpiLeadGenMethod.costsAmount |number:3}} </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>продажи</td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-xs-10">
+                                            <label for="ex2"> </label>
+                                            <a href="#" editable-text="currentLeadGenProject.plannedDeals">{{currentLeadGenProject.plannedDeals}}</a>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p style="font-size: 2em;" class="ng-binding"> {{kpiLeadGenMethod.dealsAmounts |number:3}} </p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+
+
+        <div class="col-md-12 col-lg-8">
+
+
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    KPIs
+                </div>
+                <div class="panel-body text-center">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                            <td></td>
+                            <td>в проекте</td>
+                            <td>в методе продаж</td>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr style="padding: 0px !important;">
+                            <td> LTV</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding"> {{kpiLeadGenMethod.ltv |number:3}} </p>
+
+                            </td>
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding"> {{kpiLeadGenMethodFromProject.ltv |number:3}} </p>
+                            </td>
+                        </tr>
+
+                        <tr style="padding: 0px !important;">
+                            <td>лидов</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding"> {{kpiLeadGenMethod.leadsNumber}} </p>
+
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding">
+                                    {{kpiLeadGenMethodFromProject.leadsNumber}} </p>
+                            </td>
+                        </tr>
+
+                        <tr style="padding: 0px !important;">
+                            <td>клиентов</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding">
+                                    {{kpiLeadGenMethod.customersNumber}} </p>
+
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding">
+                                    {{kpiLeadGenMethodFromProject.customersNumber}} </p>
+                            </td>
+                        </tr>
+
+
+                        <tr style="padding: 0px !important;">
+                            <td>ROI</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding"> {{kpiLeadGenMethod.roi * 100 | number :
+                                    3}} % </p>
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding"> {{kpiLeadGenMethodFromProject.roi * 100
+                                    | number : 3}} % </p>
+                            </td>
+                        </tr>
+
+                        <tr style="padding: 0px !important;">
+                            <td>конверсия из лида в клиента</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding">
+                                    {{kpiLeadGenMethod.conversionFromLeadToCustomer * 100 | number : 1}} % </p>
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding">
+                                    {{kpiLeadGenMethodFromProject.conversionFromLeadToCustomer * 100 | number : 1}}
+                                    % </p>
+                            </td>
+                        </tr>
+
+                        <tr style="padding: 0px !important;">
+                            <td>стоимость лида</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding"> {{kpiLeadGenMethod.leadCost | number :
+                                    3}} р. </p>
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding"> {{kpiLeadGenMethodFromProject.leadCost
+                                    | number : 3}} р. </p>
+                            </td>
+                        </tr>
+
+
+                        <tr style="padding: 0px !important;">
+                            <td>средний чек</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding"> {{kpiLeadGenMethod.averagePayment |
+                                    number : 1}} р. </p>
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding">
+                                    {{kpiLeadGenMethodFromProject.averagePayment | number : 1}} р. </p>
+                            </td>
+                        </tr>
+
+                        <tr style="padding: 0px !important;">
+                            <td>сумма продаж</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding"> {{kpiLeadGenMethod.dealsAmounts }}
+                                    р. </p>
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding">
+                                    {{kpiLeadGenMethodFromProject.dealsAmounts }} р. </p>
+                            </td>
+                        </tr>
+
+                        <tr style="padding: 0px !important;">
+                            <td>сумма затрат</td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding"> {{kpiLeadGenMethod.costsNumber }}
+                                    р. </p>
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding">
+                                    {{kpiLeadGenMethodFromProject.costsNumber }} р. </p>
+                            </td>
+                        </tr>
+
+                        <tr style="padding: 0px !important;">
+                            <td>
+                                <span translate="CUSTOMER.DETAILS.DEALS_CYCLE"></span>
+                            </td>
+                            <td>
+                                <p style="font-size: 1.4em;" class="ng-binding"> {{kpiLeadGenMethod.dealsCycle | amDurationFormat : 'seconds' }} </p>
+                            </td>
+
+                            <td>
+                                <p style="font-size: 1.2em;" class="ng-binding">
+                                    {{kpiLeadGenMethodFromProject.dealsCycle | amDurationFormat : 'seconds' }} </p>
+                            </td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <!--<span class="glyphicon glyphicon-th"></span>-->
+                    Определение по UTM меткам
+                </div>
+                <div class="panel-body text-center padding10">
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            utm_source
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" ng-model="newUTM.utm_source" placeholder="utm_source"
+                                   class="form-control">
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            utm_medium
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" ng-model="newUTM.utm_medium" placeholder="utm_medium"
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            utm_campaign
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" ng-model="newUTM.utm_campaign" placeholder="utm_campaign"
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8" tooltip-placement="right" tooltip=" Добавить в UTM метки"
+                             tooltip-append-to-body="true"
+                        >
+                            <br/>
+
+                            <md-button data-ng-click="addNewUTM()">
+                                <md-icon md-font-icon="add">add</md-icon>
+                            </md-button>
+
+                            <br/>
+                        </div>
+
+                        <div class="col-md-4">
+                            <br/>
+                            <button class="btn btn-warning" data-ng-click="generateRandomUTM(); addNewUTM()">
+                                сгенерировать произвольные
+                            </button>
+                            <br/>
+                        </div>
+
+                        <div ng-if="currentLeadGenProject.utm_metrics.length ===  0" class="min-padding">
+                            <br/><br/>
+                            <div class="callout callout-warning">
+                                <h4> Автоопределение метода по UTM меткам не настроено </h4>
+                                <p> Добавьте параметры UTM меток для автоматического добавления метода лидгена при
+                                    создании лида</p>
+                            </div>
+                        </div>
+
+                        <div class="visible-lg visible-md">
+
+                            <div class="panel-body text-center padding10">
+                                <table class="{{$root.tableClasses}} table-striped table-responsive"
+                                       ng-if="currentLeadGenProject.utm_metrics.length > 0">
+                                    <thead>
+                                    <tr>
+                                        <th> utm_source</th>
+                                        <th>utm_medium</th>
+                                        <th>utm_campaign</th>
+                                        <th>Ссылка</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    <tr data-ng-repeat="manager in currentLeadGenProject.utm_metrics">
+                                        <td> {{manager.utm_source}}</td>
+                                        <td> {{manager.utm_medium}}</td>
+                                        <td> {{manager.utm_campaign}}</td>
+                                        <td tooltip-placement="right" tooltip="Ссылка" tooltip-append-to-body="true">
+                                            <button type="button" class="btn btn-warning roundedButton"
+                                                    ng-click="showUtm($event, manager)">
+                                                <i class="fa fa-external-link"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <md-button class="nopadding" data-ng-click="deleteUTMByIndex($index)">
+                                                <md-icon md-font-icon="delete">delete</md-icon>
+                                                <md-tooltip>
+                                                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                </md-tooltip>
+                                            </md-button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <div class="visible-sm visible-xs">
+
+                            <section class="panel panel-primary"
+                                     data-ng-repeat="manager in currentLeadGenProject.utm_metrics">
+                                <div class="panel-heading">
+                                    <!--<span class="glyphicon glyphicon-th"></span>-->
+                                    Определение по
+                                    UTM меткам
+                                </div>
+                                <div class="panel-body text-center padding10">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            utm_source
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            {{manager.utm_source}}
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            utm_medium
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            {{manager.utm_medium}}
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            utm_campaign
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            {{manager.utm_campaign}}
+                                        </div>
+
+
+                                        <div class="col-md-12">
+                                            <md-button class="nopadding" data-ng-click="deleteUTMByIndex($index)">
+                                                <md-icon md-font-icon="delete">delete</md-icon>
+                                                <md-tooltip>
+                                                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                </md-tooltip>
+                                            </md-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!--  Telephones -->
+
+        <div class="col-lg-6 col-md-12 " ng-show="::debugMode">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <!--<span class="glyphicon glyphicon-th"></span>-->
+                    Определение по телефону
+                </div>
+                <div class="panel-body text-center padding10">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            Телефон
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" ng-model="newTelephone" placeholder="79159556666" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-success" data-ng-click="addNewTelephone()"> Добавить телефон</button>
+                        </div>
+
+
+                        <div ng-if="currentLeadGenProject.telephones.length ===  0" class="min-padding">
+                            <div class="callout callout-warning">
+                                <h4> Автоопределение метода по IP телефонии не настроено </h4>
+                                <p> Добавьте телефоны с которых в IP-телефонию будут пиходить звонки </p>
+                            </div>
+                        </div>
+
+                        <div class="panel-body text-center">
+                            <table class="{{$root.tableClasses}} table-striped table-responsive"
+                                   ng-if="currentLeadGenProject.telephones.length > 0">
+                                <thead>
+                                <tr>
+                                    <th> Телефон</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="manager in currentLeadGenProject.telephones">
+                                    <td> {{manager}}</td>
+                                    <td>
+                                        <md-button class="nopadding" data-ng-click="deleteTelephoneByIndex($index)">
+                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                            <md-tooltip>
+                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                            </md-tooltip>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-12"></div>
+
+        <div class="col-lg-6 col-md-12">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    Определение по промо-коду
+                </div>
+                <div class="panel-body text-center padding10">
+                    <div class="row">
+
+                        <div ng-if="currentLeadGenProject.promoCodes.length ===  0" class="min-padding">
+                            <div class="callout callout-warning">
+                                <h4> Автоопределение метода по промокоду не настроено </h4>
+                                <p>Просто добавьте код, спросив который Вы узнаете метод лидгена </p>
+                            </div>
+                        </div>
+
+                        <div class="panel-body text-center">
+                            <table class="{{$root.tableClasses}} table-striped table-responsive"
+                                   ng-if="currentLeadGenProject.promoCodes.length > 0">
+                                <thead>
+                                <tr>
+                                    <th> Код</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr data-ng-repeat="manager in currentLeadGenProject.promoCodes">
+                                    <td> {{manager}}</td>
+                                    <td>
+                                        <md-button class="nopadding" data-ng-click="deletePromoCodesByIndex($index)">
+                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                            <md-tooltip>
+                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                            </md-tooltip>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" ng-model="newPromoCodes" placeholder="новый промо-код" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <md-button data-ng-click="addNewPromoCodes()" ng-show="newPromoCodes.length > 0">
+                                <md-icon md-font-icon="add">add</md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-12"></div>
+
+        <div class="col-lg-6 col-md-12">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <!--<span class="glyphicon glyphicon-th"></span>-->
+                    Затраты по проекту
+                    <br/>
+                    <small>Необходимо для автоматического рассчета эффективности компании, учета и вычисления различных
+                        KPI
+                    </small>
+
+                </div>
+                <div class="panel-body text-center">
+
+                    <div class="row">
+
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" ng-model="newCost.name" placeholder="abcd" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <span translate="APP.COMMON.MONEY.AMOUNT"></span>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" ng-model="newCost.amount" placeholder="0"
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4" tooltip-placement="right" tooltip=" Добавить расход"
+                             tooltip-append-to-body="true">
+
+                            <br/>
+
+                            <md-button data-ng-click="newCostFunction()" ng-show="newCost.name.length > 0">
+                                <md-icon md-font-icon="add">add</md-icon>
+                            </md-button>
+
+                            <br/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div ng-if="currentLeadGenProject.costs.length ===  0" class="min-padding">
+                            <div class="callout callout-warning">
+                                <h4> Автоопределение метода по промокоду не настроено </h4>
+
+                                <p>Просто добавьте код, спросив который Вы узнаете метод лидгена </p>
+                            </div>
+
+                        </div>
+
+                        <div class="panel-body text-center padding10">
+                            <!--<tr data-ng-repeat="manager in currentLeadGenProject.costs">-->
+                            <table class="{{$root.tableClasses}} table-striped table-responsive"
+                                   ng-if="currentLeadGenProject.costs.length > 0">
+                                <thead>
+                                <tr>
+                                    <th> <span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                                    <th>
+                                        <span translate="APP.COMMON.MONEY.AMOUNT"></span>
+                                    </th>
+                                    <th>
+                                        <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr data-ng-repeat="manager in currentLeadGenProject.costs">
+                                    <td> {{manager.name}}</td>
+                                    <td> {{manager.amount}}</td>
+                                    <td>
+                                        <div>
+                                            <span ng-if="manager.dynamicControlled" class="label label-success"> [ Динамиески изменяемый ] </span>
+                                            <br/> <br/>
+                                            <span ng-if="manager.yandexDirectCampaignId" class="label label-success"> [ Компания в Я.Директ {{manager.yandexDirectCampaignId}} ] </span>
+
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <md-button class="nopadding" data-ng-click="deleteCompanyCostsIndex($index)">
+                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                            <md-tooltip>
+                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                            </md-tooltip>
+                                        </md-button>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <b> Всего затрат: {{allCosts() |number:3}} </b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-12"></div>
+
+        <div class="col-lg-6 col-md-12" ng-if="::debugMode">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <!--<span class="glyphicon glyphicon-th"></span> -->
+                    Рекламные компании Яндекс.Директ
+                </div>
+                <div class="panel-body text-center padding10">
+                    <div class="row">
+                        <div ng-if="currentLeadGenProject.yandexDirectCompaignsIds.length ===  0" class="min-padding">
+                            <div class="callout callout-warning">
+                                <h4> рекламных комапний нет </h4>
+                                <p>Добавьте рекламные компании Я.Директ</p>
+                            </div>
+                        </div>
+                        <div class="panel-body text-center">
+                            <!--<tr data-ng-repeat="manager in currentLeadGenProject.costs">-->
+                            <table class="{{$root.tableClasses}} table-striped table-responsive"
+                                   ng-if="currentLeadGenProject.yandexDirectCompaignsIds.length > 0">
+                                <thead>
+                                <tr>
+                                    <th> ID</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr data-ng-repeat="manager in currentLeadGenProject.yandexDirectCompaignsIds">
+                                    <td> {{manager}}</td>
+                                    <td tooltip-placement="right" tooltip="{{'APP.COMMON.DELETE.BUTTON' | translate}}" tooltip-append-to-body="true"
+                                    >
+                                        <md-button class="nopadding" data-ng-click="deleteYandxeDirectCampaign($index)">
+                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                            <md-tooltip>
+                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                            </md-tooltip>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <md-button  data-ng-click="showYandexAddSettings = true; getYandexTokens();">
+                                <md-icon md-font-icon="add">add</md-icon>
+                            </md-button>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-lg-12 col-md-12 " ng-show="showYandexAddSettings">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <!--<span class="glyphicon glyphicon-th"></span>-->
+                    Яндекс Директ
+                </div>
+                <div class="panel-body text-center padding10">
+
+                    <table class="{{$root.tableClasses}} table-striped table-responsive"
+                           ng-if="yandexStep ==0">
+                        <thead>
+                        <tr>
+                            <th> Логин</th>
+                            <th> Дата создания</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="token in yandexTokens">
+                            <td>
+                                <button class="btn btn-success" data-ng-click="selectYandexDirectToken(token)">
+                                    {{token.login}}
+                                </button>
+                            </td>
+                            <td> {{printDate(token.createdInfo.createdDate)}}</td>
+                            <!--<td> {{token | json}} </td>-->
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--<tr data-ng-repeat="token in allYandexCompaigns">-->
+                    <!--&lt;!&ndash;<td> <button class="btn btn-success" data-ng-click="selectYandexDirectToken(token)" >  {{token.login}}  </button>  </td>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<td> {{token.createdInfo.createdDate | date:'medium'}} </td>&ndash;&gt;-->
+                    <!--<td> {{token | json}} </td>-->
+                    <!--</tr>-->
+
+                    <div class="table-responsive" ng-if="yandexStep ==1">
+                        <table class="{{$root.tableClasses}} cf">
+                            <thead>
+                            <tr>
+                                <th> ID</th>
+                                <th> Добавить</th>
+                                <th><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                                <th>Баланс</th>
+                                <th>Сумма</th>
+                                <th>Статус</th>
+                                <th>В архиве</th>
+                                <th>Активна</th>
+                                <!--<th>Логин</th>-->
+                                <th>Показывается</th>
+                                <th>Начало показа</th>
+                                <th>Промодерировано</th>
+                                <th>Кликов</th>
+                                <th>Показов</th>
+                                <th>CTR</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="compaign in allYandexCompaigns">
+
+                                <td>
+                                    <a href="/yandex/direct/banners/compaigns/{{compaign.CampaignID}}/token/{{tokenId}}">
+                                        {{compaign.CampaignID}} </a></td>
+
+                                <td ng-if="isCampaignAlreadyUsed(compaign.CampaignID)">
+                                    Данная компания уже находится в этом проекте
+                                </td>
+
+                                <td ng-if="!isCampaignAlreadyUsed(compaign.CampaignID)">
+                                    <button class="btn btn-success"
+                                            data-ng-click="selectYandexDirectCampaign(compaign)"> Добавить
+                                    </button>
+                                </td>
+
+                                <td>
+                                    <a href="/yandex/direct/banners/compaigns/{{compaign.CampaignID}}/token/{{tokenId}}">{{compaign.Name}} </a>
+                                </td>
+
+                                <td> {{compaign.Rest}}</td>
+                                <td> {{compaign.Sum}}</td>
+
+
+                                <td> {{compaign.Status}}</td>
+
+                                <!--В архиве или нет или нет-->
+                                <td ng-if="compaign.StatusArchive ===  'Yes'">
+                                    <i tooltip-animation="false" tooltip="В архиве" tooltip-append-to-body="true"
+                                       class="fa fa-archive" style="color: red;"></i>
+                                </td>
+
+                                <td ng-if="compaign.StatusArchive ===  'No'">
+                                    <i tooltip-animation="false" tooltip="Не в архиве" tooltip-append-to-body="true"
+                                       class="fa fa-archive" style="color: green;"></i>
+                                </td>
+                                <!--В архиве или нет или нет-->
+
+                                <!--Активна или нет-->
+                                <td ng-if="compaign.IsActive ===  'Yes'">
+                                    <i tooltip-animation="false" tooltip="Активна" tooltip-append-to-body="true"
+                                       class="fa fa-toggle-on" style="color: green;"></i>
+                                </td>
+                                <td ng-if="compaign.IsActive ===  'No'">
+                                    <i tooltip-animation="false" tooltip="Не активна" tooltip-append-to-body="true"
+                                       class="fa fa-toggle-off" style="color: red;"></i>
+                                </td>
+                                <!--Активна или нет-->
+
+                                <!--<td> {{compaign.Login}}</td>-->
+
+                                <td ng-if="compaign.StatusShow ===  'Yes'">
+                                    <i tooltip-animation="false" tooltip="Показывается" tooltip-append-to-body="true"
+                                       class="fa fa-check-square-o" style="color: green;"></i>
+                                </td>
+                                <td ng-if="compaign.StatusShow ===  'No'">
+                                    <i tooltip-animation="false" tooltip="Не показывется" tooltip-append-to-body="true"
+                                       class="fa fa fa-times" style="color: red;"></i>
+                                </td>
+
+                                <td> {{compaign.StartDate}}</td>
+
+                                <td ng-if="compaign.StatusModerate ===  'Yes'">
+                                    <i tooltip-animation="false" tooltip="Промодерировно" tooltip-append-to-body="true"
+                                       class="fa fa-check-square-o" style="color: green;"></i>
+                                </td>
+                                <td ng-if="compaign.StatusModerate ===  'No'">
+                                    <i tooltip-animation="false" tooltip="Не Промодерировно"
+                                       tooltip-append-to-body="true" class="fa fa fa-times" style="color: red;"></i>
+                                </td>
+
+                                <td> {{compaign.Clicks}}</td>
+                                <td> {{compaign.Shows}}</td>
+                                <td> {{compaign.Clicks / compaign.Shows * 100 | number:3}} %</td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </div>
+</section>

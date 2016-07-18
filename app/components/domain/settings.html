@@ -1,0 +1,354 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="сохранить изменения"
+               tooltip-append-to-body="true"
+               data-ng-click="updateDomainSettings()">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+        <div class="row">
+
+            <div ng-if="::debugMode">
+                {{domainSettings}}
+            </div>
+            <div class="col-lg-6 col-md-12">
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading"><span class="fa fa-database"></span>
+                        Настройки домена <b>{{domainSettings.id}}</b>
+                    </div>
+                    <div class="panel-body text-center">
+                        <div class="row">
+                            <div class="col-md-6">
+                                Основной email для домена
+                            </div>
+
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" ng-model="domainSettings.defaultEmail">
+                            </div>
+
+                            <div class="col-md-6">
+                                Brand name
+                                <span
+                                        tooltip-placement="right"
+                                        tooltip="можно использовать адреса изображений, начинающиеся с http:// или https://"
+                                        tooltip-append-to-body="true">
+                                    <md-icon md-font-icon="info_outline">info_outline</md-icon>
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" ng-model="domainSettings.logoText"
+                                       data-ng-change="changeDomainTextLogo()">
+                            </div>
+
+                            <div class="col-md-12"></div>
+
+                            <div class="col-md-6" ng-if="::debugMode">
+                                Часовой пояс
+                            </div>
+
+                            <div class="col-md-6" ng-if="::debugMode">
+                                <select ng-model="domainSettings.timeZoneOffset" class="form-control"
+                                        ng-options="field.value as field.name for field in timeZoneOffset">
+                                </select>
+                            </div>
+
+                            <div ng-if="::debugMode">
+
+                                <div class="col-md-12">
+                                    <br/><br/><br/>
+                                </div>
+
+                                <div class="col-md-6">
+                                    ID воронки LG по умолчанию
+                                </div>
+
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control"
+                                           ng-model="domainSettings.defaultIDSalesFunnelLG" disabled>
+                                </div>
+
+                                <div class="col-md-6">
+                                    ID воронки LC по умолчанию
+                                </div>
+
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control"
+                                           ng-model="domainSettings.defaultIDSalesFunnelLC" disabled>
+                                </div>
+
+                                <div class="col-md-6">
+                                    ID воронки AM по умолчанию
+                                </div>
+
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control"
+                                           ng-model="domainSettings.defaultIDSalesFunnelAM" disabled>
+                                </div>
+
+                                <div class="col-md-6">
+                                    ID метода продаж по умолчанию
+                                </div>
+
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control"
+                                           ng-model="domainSettings.defaultLeadGenMethodID" disabled>
+                                </div>
+
+                                <div class="col-md-6">
+                                    ID проекта продаж по умолчанию
+                                </div>
+
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control"
+                                           ng-model="domainSettings.defaultLeadGenProjectID" disabled>
+                                </div>
+
+                                <div class="col-md-12"><br/><br/></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                Валюта
+                            </div>
+
+                            <div class="col-md-6">
+                                <select ng-model="domainSettings.currency" class="form-control"
+                                        ng-options="field.value as field.name for field in allCurrency">
+                                </select>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+                <section class="panel panel-primary">
+                    <div class="panel-heading"><span class="fa fa-cubes"></span>
+                        Информация по аккаунту в cloud.biqasoft.com
+                    </div>
+                    <div class="panel-body text-center">
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                Баланс
+                            </div>
+
+                            <div class="col-md-6">
+                                <input type="number" class="form-control" ng-model="domainInfo.balance" DISABLED>
+                            </div>
+
+                            <div class="col-md-6">
+                                Бонусный счет
+                            </div>
+
+                            <div class="col-md-6">
+                                <input type="number" class="form-control" ng-model="domainInfo.bonusBalance" disabled>
+                            </div>
+
+                            <div class="col-md-6">
+                                Валюта баланса
+                            </div>
+
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" ng-model="domainInfo.balanceCurrency" disabled>
+                            </div>
+
+                            <div class="col-md-6" ng-if="domainInfo.partnerID">
+                                Партнер ID
+                            </div>
+
+                            <div class="col-md-6" ng-if="domainInfo.partnerID">
+                                {{domainInfo.partnerID}}
+                            </div>
+
+                            <div class="col-md-6" data-ng-show="domainInfo.tariff">
+                                Тариф
+                            </div>
+
+                            <div class="col-md-6" data-ng-show="domainInfo.tariff">
+                                <input type="number" class="form-control" ng-model="domainInfo.tariff" disabled>
+                            </div>
+
+
+                            <div class="col-md-6" data-ng-show="domainInfo.tariff">
+                                Оконнчание тарифа
+                            </div>
+
+                            <div class="col-md-6" data-ng-show="domainInfo.tariff">
+                                {{ printDate(domainInfo.tariffUntil) }}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        Дополнительные опции
+                    </div>
+                    <div class="panel-body text-center">
+
+                        <div class="col-md-6">
+                            Разрешить завершать задачу с невыполненным чек-листом
+                        </div>
+
+                        <div class="col-md-6">
+                            <md-checkbox class="nopadding md-primary"
+                                         type="checkbox"
+                                         ng-model="domainSettings.allowCompleteTaskWithoutCheckList">
+                            </md-checkbox>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <br/>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="fa fa-area-chart">
+                             Сводная статистика
+                        </span>
+                    </div>
+
+                    <div class="panel-body text-center">
+                        <table class="table table-bordered">
+                            <thead>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <th>Число аккаунтов</th>
+                                <td> {{globalDomainStats.allStaffCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число активных аккаунтов</th>
+                                <td> {{globalDomainStats.allActiveStaffCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число лидов</th>
+                                <td> {{globalDomainStats.allLeadsCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число активных лидов</th>
+                                <td> {{globalDomainStats.activeLeadsNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число клиентов</th>
+                                <td> {{globalDomainStats.allCustomersCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число сделок / продаж</th>
+                                <td> {{globalDomainStats.allDealsCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Сумма сделок / продаж</th>
+                                <td> {{globalDomainStats.allDealsAmount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число возможностей</th>
+                                <td> {{globalDomainStats.allOpportunitiesCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Сумма возможностей</th>
+                                <td> {{globalDomainStats.allOpportunitiesAmount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число затрат компании</th>
+                                <td> {{globalDomainStats.allCompanyCostCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Сумма затрат компании</th>
+                                <td> {{globalDomainStats.allCompanyCostAmount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число активных задач</th>
+                                <td> {{globalDomainStats.allActiveTasksCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число задач в системе</th>
+                                <td> {{globalDomainStats.allTasksCount}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число активных клиентов</th>
+                                <td> {{globalDomainStats.activeCustomersNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число активных клиентов + где текущий пользователь - ответственный</th>
+                                <td> {{globalDomainStats.currentUserResponsibleAndActiveCustomersNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число документов</th>
+                                <td> {{globalDomainStats.documentsNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число проектов для прозвона</th>
+                                <td> {{globalDomainStats.coldCallProjectNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число веб-счетчиков</th>
+                                <td> {{globalDomainStats.webCounterNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число методов продаж</th>
+                                <td> {{globalDomainStats.leadGenMethodsNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число проектов продаж</th>
+                                <td> {{globalDomainStats.leadGenProjectsNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число b2b компаний</th>
+                                <td> {{globalDomainStats.companiesNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число статических сегментов</th>
+                                <td> {{globalDomainStats.staticSegmentsNumber}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Число динамических клиентов</th>
+                                <td> {{globalDomainStats.dynamicSegmentsNumber}}</td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

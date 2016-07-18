@@ -1,0 +1,149 @@
+<md-dialog aria-label="" style="">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span translate="DATA_SOURCE.CREATE.HEADER"></span>
+                </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style=" ">
+
+            <div class="panel-body text-center">
+                <div class="row nopadding">
+                    <div class="col-md-12" ng-show="debugMode">
+                        <label class="switch switch-success">
+                            режим разработчика
+                            <input type="checkbox" ng-model="simpleMode"><i></i>
+                            упрощенный режим </label>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <input data-ng-model="newDataSource.name" class="form-control"
+                               placeholder="{{'APP.COMMON.OBJECT.NAME' | translate}}">
+                    </div>
+                </div>
+
+                <div class="row nopadding" ng-if="simpleMode">
+                    <div class="col-md-6">
+                        <div class="row nopadding">
+
+                            <div class="col-md-12">
+                                <section class="panel panel-default">
+                                    <div class="panel-heading">
+                                        [ Используйте <b> режим разработчика </b> для вашего тарифа ]
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row nopadding" ng-if="!simpleMode">
+                    <div class="col-md-6">
+                        <span translate="DATA_SOURCE.EDIT.CONTROLLER_PARAM.HEADER"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <select ng-model="newDataSource.controlledClass">
+                            <option data-ng-repeat="controller in allDataSourceControllers"
+                                    value="{{controller.value}}">
+                                {{controller.name | translate}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="panel-body text-center">
+
+                        <div class="col-md-12">
+                            <br><br>
+
+                            <span translate="DATA_SOURCE.EDIT.PARAM.HEADER"></span>
+
+                            <button type="button" class="btn " ng-click="getHelpsModel()">
+                                <span translate="DATA_SOURCE.EDIT.PARAM.HELP.BUTTON"></span>
+                            </button>
+
+                            <table class="{{$root.tableClasses}} table-striped table-responsive">
+                                <thead>
+                                <tr>
+                                    <th class="mini-col-md">
+                                        №
+                                    </th>
+                                    <th class="">
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                    </th>
+                                    <th class="">
+                                        <span translate="DATA_SOURCE.EDIT.PARAM.VALUE.TABLE_HEADER"></span>
+                                    </th>
+                                    <th class="mini-col-md"></th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                <tr data-ng-repeat="par in newDataSource.parameters">
+                                    <td> {{$index+1}}</td>
+                                    <td><input data-ng-model="par.name" class="form-control"
+                                               placeholder="{{'DATA_SOURCE.EDIT.PARAM.NAME' | translate}}"> <br></td>
+                                    <td><input data-ng-model="par.value" class="form-control"
+                                               placeholder="{{'DATA_SOURCE.EDIT.PARAM.VALUE' | translate}}"></td>
+                                    <td>
+                                        <md-button class="nopadding" data-ng-click="deleteParamByIndex($index)">
+                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                            <md-tooltip>
+                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                            </md-tooltip>
+                                        </md-button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="5"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span translate="DATA_SOURCE.EDIT.PARAM.NEW.HEADER"></span>
+                                    </td>
+
+                                    <td>
+                                        <input data-ng-model="newParametre.name" class="form-control"
+                                               placeholder="{{'DATA_SOURCE.EDIT.PARAM.NAME' | translate}}">
+                                    </td>
+
+                                    <td>
+                                        <input data-ng-model="newParametre.value" class="form-control"
+                                               placeholder="{{'DATA_SOURCE.EDIT.PARAM.VALUE' | translate}}">
+                                    </td>
+
+                                    <td>
+                                        <button data-ng-click="addParameterToParametres()"
+                                                class="btn btn-success">
+                                            <span translate="DATA_SOURCE.EDIT.PARAM.ADD"></span>
+                                        </button>
+
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary"
+                           ng-disabled="newDataSource.name.length < 1  "
+                           ng-click="addDataSource();" style="margin-right:20px;">
+                    <span translate="DATA_SOURCE.CREATE.BUTTON"></span>
+                </md-button>
+            </md-dialog-actions>
+
+        </md-dialog-content>
+    </form>
+</md-dialog>

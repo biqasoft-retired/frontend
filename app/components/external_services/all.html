@@ -1,0 +1,274 @@
+<section class="page-form-ele page">
+    <div class="row">
+
+        <div class="col-md-12">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="badge">{{tokens.length}}</span>
+                    привязанные аккаунты
+                </div>
+                <div class="panel-body text-center">
+                    <div class="panel-body text-center">
+                        <div ng-if="tokens.length ===  0">
+                            <div class="callout callout-warning">
+                                <h4>Аккаунты отсутствуют</h4>
+                                <p> Свяжите один или более аккаунтов внешних сервисов </p>
+                            </div>
+                        </div>
+                        <div class="row modify_parent">
+                            <div class="col-md-4 col-lg-3 modify_child"
+                                 data-ng-repeat="project in tokens track by project.id "
+                                 style="padding-top: 20px;">
+                                <section class="panel panel-box"  hover-class="methodHovered">
+
+                                    <div class="card panel-item bg-reverse " style="">
+
+                                        <div>
+                                            <div class="text-center" align="center">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <!--<img src="assets/img//WEBDAV.png" alt="" class="img-responsive"-->
+                                                        <!--width="50" height="50"-->
+                                                        <!--ng-if="project.server!='https://webdav.yandex.ru'">-->
+                                                        <!--<img src="assets/img//YandexDisk.png" alt=""-->
+                                                        <!--class="img-responsive" width="50" height="50"-->
+                                                        <!--ng-if="project.server=='https://webdav.yandex.ru'">-->
+
+                                                        <img src="assets/img//{{::project.type}}.png" alt=""
+                                                             class="img-responsive" width="50" height="50">
+                                                        <md-tooltip>
+                                                            {{::project.type}} {{::project.name}} {{::project.login}}
+                                                        </md-tooltip>
+
+                                                    </div>
+
+                                                    <div class="col-md-8">
+                                                        <h5>
+                                                            <a class=""
+                                                               href="/external_services/details/{{project.id}}">
+                                                                {{project.name || project.login}}
+                                                            </a>
+                                                        </h5>
+                                                        <br/>
+
+                                                        <small ng-if="project.type=='WEBDAV'">
+                                                            <a class=""
+                                                               href="/storage/?contentProviderService=WEBDAV&contentProviderToken={{project.id}}">
+                                                                Просмотр файлов и папок
+                                                            </a>
+                                                        </small>
+
+                                                        <small ng-if="project.type=='YANDEX_DIRECT'">
+                                                            <a class=""
+                                                               href="http://cloud.biqasoft.com.dev/yandex/direct/allCompaigns/token/{{project.id}}">
+                                                                Рекламные компании
+                                                            </a>
+                                                        </small>
+
+                                                        <small ng-if="project.type=='GOOGLE_DRIVE'">
+                                                            <a class=""
+                                                               href="/storage/?contentProviderService=GOOGLE_DRIVE&contentProviderToken={{project.id}}">
+                                                                Просмотр файлов и папок
+                                                            </a>
+                                                        </small>
+
+                                                        <small ng-if="project.type=='DROPBOX'">
+                                                            <a class=""
+                                                               href="/storage/?contentProviderService=DROPBOX&contentProviderToken={{project.id}}">
+                                                                Просмотр файлов и папок
+                                                            </a>
+                                                        </small>
+
+                                                        <small ng-if="project.type=='S3_COMPATIBLE'">
+                                                            <a class=""
+                                                               href="/storage/?contentProviderService=S3_COMPATIBLE&contentProviderToken={{project.id}}">
+                                                                Просмотр файлов и папок
+                                                            </a>
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pull-right">
+                                            <small>
+                                                <md-tooltip>
+                                                    Добавлено
+                                                </md-tooltip>
+                                                {{::printDate(project.createdInfo.createdDate)}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-12">
+            <div class="panel-body text-center">
+                <div class="row modify_parent">
+                    <div class="col-lg-3 col-md-4 modify_child" style="padding-top: 20px;" ng-if="::debugMode" hover-class="methodHovered">
+
+                        <div class="card">
+                            <div class="card-image">
+                                <span class="card-img-label ng-binding">Я.Директ </span>
+                                <img src="assets/img/YANDEX_DIRECT.png" alt="" class="img-responsive">
+                            </div>
+
+                            <section class="panel panel-box" style="padding: 5px;">
+                                Яндекс Директ - это сервис контекстной рекламы. <br>
+                                Вы сможете просматривать рекламные компании и просматривать по <br>
+                                какому ключевому запросу пришел клиент и много другой информации, <br>
+                                включая сколько потратили на рекламу и привлечение именно этого клиента<br>
+                                <br><br>
+
+                                <a href="/yandex/direct/allTokens"><i class="fa fa-angle-right"></i><span>
+                                        Показать все подключенные аккаунты Я.Директа
+                                    </span></a>
+
+                                <br/><br/>
+
+                                <button type="button" class="btn btn-success"
+                                        ng-click="connectYandexDirect($event)">
+                                    Подключить
+                                </button>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 modify_child" style="padding-top: 20px;" hover-class="methodHovered">
+
+                        <div class="card">
+                            <div class="card-image">
+                                <span class="card-img-label ng-binding">Лиды с сайта </span>
+                                <img src="assets/img//leadsfromwebform.png" alt="" class="img-responsive"
+                                     style="padding-top: 20%;    padding-left: 3%;   padding-right: 3%;">
+                            </div>
+
+                            <section class="panel panel-box" style="padding: 5px;">
+                                <div class="panel-item bg-reverse">
+                                    <div>
+                                        Лиды с сайта — это модуль, позволяющий автоматически добавлять заявки (лиды)
+                                        с веб-форм на вашем сайте (либо Landing Page) прямо в CRM систему с
+                                        отслеживанием источника трафика (UTM-метки и прочее)
+                                    </div>
+                                    <br><br>
+                                    <md-button class="md-raised md-primary" href="analytics/web/counters">
+                                        Управление
+                                    </md-button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 modify_child" style="padding-top: 20px;" hover-class="methodHovered">
+
+                        <div class="card">
+                            <div class="card-image">
+                                <span class="card-img-label ng-binding">Dropbox </span>
+                                <img src="assets/img/DROPBOX.png" alt="" class="img-responsive"
+                                     style="padding-top: 20%; padding-left: 25%;">
+                            </div>
+
+                            <section class="panel panel-box" style="padding: 5px;">
+                                <div class="panel-item bg-reverse">
+                                    <div>
+                                        Dropbox — бесплатная служба, которая обеспечивает повсеместный доступ к
+                                        фото, документам и видео
+                                    </div>
+                                    <br><br>
+                                    <md-button class="md-raised md-primary" data-ng-click="getDropboxRequestToConnectNewAccount()">
+                                        Подключить
+                                    </md-button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 modify_child" style="padding-top: 20px;" hover-class="methodHovered">
+
+                        <div class="card">
+                            <div class="card-image">
+                                <span class="card-img-label ng-binding">Google Drive </span>
+                                <img src="assets/img//GOOGLE_DRIVE.png" alt="" class="img-responsive"
+                                     style="padding-top: 10%; padding-left: 15%;">
+                            </div>
+
+                            <section class="panel panel-box" style="padding: 5px;">
+                                <div class="panel-item bg-reverse">
+                                    <div>
+                                        Google Drive — бесплатная служба, которая обеспечивает повсеместный
+                                        доступ к фото, документам и видео
+                                    </div>
+                                    <br><br>
+
+                                    <md-button class="md-raised md-primary" data-ng-click="getGoogleDriveRequestToConnectNewAccount()">
+                                        Подключить
+                                    </md-button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 modify_child" style="padding-top: 20px;" hover-class="methodHovered">
+
+                        <div class="card">
+                            <div class="card-image">
+                                <span class="card-img-label ng-binding">WEBDAV</span>
+                                <img src="assets/img//WEBDAV.png" alt="" class="img-responsive"
+                                     style="padding-top: 10%; padding-left: 15%;">
+                            </div>
+
+                            <section class="panel panel-box" style="padding: 5px;">
+                                <div class="panel-item bg-reverse">
+                                    <div>
+                                        Webdav — набор расширений и дополнений к протоколу HTTP, поддерживающих
+                                        совместную работу пользователей над редактированием файлов и управление
+                                        файлами на удаленных веб-серверах.
+                                    </div>
+                                    <br><br>
+
+                                    <md-button class="md-raised md-primary" data-ng-click="addWebdav()">
+                                        Подключить
+                                    </md-button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4  " style="padding-top: 20px;" hover-class="methodHovered">
+
+                        <div class="card">
+                            <div class="card-image">
+                                <span class="card-img-label ng-binding">Яндекс Диск</span>
+                                <img src="assets/img//YandexDisk.png" alt="" class="img-responsive"
+                                     style="padding-top: 10%; padding-left: 15%;">
+                            </div>
+
+                            <section class="panel panel-box" style="padding: 5px;">
+                                <div class="panel-item bg-reverse">
+                                    <div>
+                                        Яндекс.Диск — облачный сервис, принадлежащий компании Яндекс, позволяющий
+                                        пользователям хранить свои данные на серверах в «облаке» и передавать их
+                                        другим пользователям в Интернете.
+                                    </div>
+                                    <br><br>
+
+                                    <md-button class="md-raised md-primary" data-ng-click="addYandexDisc()">
+                                        Подключить
+                                    </md-button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <br><br><br><br>
+            </div>
+        </div>
+    </div>
+</section>
+

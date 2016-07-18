@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-md-8 col-lg-8">
+        <div fs-select="" items="allDateExpression" freetext="" class="col-xs-6"
+             ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateFrom"
+             data-ng-change="objectRelChanged()">
+                                        <span ng-show="item"><span
+                                                class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>&nbsp;
+                                            {{item.name | translate}}
+                                        </span>
+            <span ng-hide="item">
+                    <span ng-show="$parent.objDateModel">
+                   {{ printDate($parent.objDateModel) }}
+                 </span>
+
+                     <span ng-show="!$parent.objDateModel">
+                        <span translate="APP.DIRECTIVE.DATE_SELECTOR.NOT_SELECTED_DATE"></span>
+                     </span>
+                </span>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dropdown">
+            <a class="dropdown-toggle" id="dLabel33" role="button"
+               data-toggle="dropdown"
+               data-target="#" href="">
+                <i class="fa fa-calendar" style="font-size: 150%;"></i>
+            </a>
+            <!-- position: relative; -->
+            <ul class="dropdown-menu" style="position: relative;" role="menu"
+                aria-labelledby="dLabel33">
+                <datetimepicker
+                        data-ng-model="objDateModel"
+                        data-ng-change="objDateModelFoo()"
+                        data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }">
+                </datetimepicker>
+            </ul>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,78 @@
+<div style="position: fixed; bottom: 4px; right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="Новый пользователь"
+     tooltip-append-to-body="true"
+     ng-click="addNewUser()">
+
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary" style="  margin-bottom: 3px;">
+            <div class="panel-heading">
+                <small>прямой доступ к базе данных</small>
+            </div>
+
+            <div>
+                Для доступа вы можете использовать любой клиент, совместимый с <a href="https://www.mongodb.org/" target="_blank">MongoDB 3 </a> , например,
+                <a href="http://3t.io/mongochef/" target="_blank">MongoChef </a> <br/>
+                URL: <b>db-public-gateway.biqasoft.com</b> <br/> порт: <b>27017</b>
+                <br/> database: <b> {{currentUser.domain}} </b>
+            </div>
+
+            <table class="{{$root.tableClasses}}" ng-show="allUsers.length > 0">
+                <thead>
+                <tr>
+                    <th class="">№</th>
+                    <th class="">User name</th>
+                    <th class=""></th>
+                    <th class=""></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr data-ng-repeat="user in allUsers">
+
+                    <td>{{$index + 1}}</td>
+                    <td data-ng-if="user.user">
+                        {{user.user}}
+                    </td>
+                    <td data-ng-if="user.login">{{user.login}}
+                        <span ng-if="user.quickURI">
+                            <br>
+                            <b>{{user.quickURI}}</b>
+                        </span>
+                    </td>
+
+                    <td data-ng-if="user.db"></td>
+
+                    <td data-ng-if="user.password">
+                        Пароль <br/>
+                        <b> {{user.password}} </b>
+                    </td>
+
+                    <td>
+                        <md-button class="nopadding" data-ng-click="deleteDomainServiceConfirmation(user.user)">
+                            <md-icon md-font-icon="delete">delete</md-icon>
+                            <md-tooltip>
+                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                            </md-tooltip>
+                        </md-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div ng-if="allUsers.length ===  0">
+                <div class="callout callout-warning">
+                    <h4>Пользователей нет!</h4>
+                    <p>Добавьте пользователя.</p>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</section>

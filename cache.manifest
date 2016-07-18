@@ -1,0 +1,12 @@
+CACHE MANIFEST
+# Версия 2
+
+CACHE:
+
+./index.html
+
+NETWORK:
+*
+
+FALLBACK:
+offline.html

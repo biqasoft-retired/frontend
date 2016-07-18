@@ -1,0 +1,108 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="сохранить изменения"
+               tooltip-append-to-body="true"
+               data-ng-click="updateDomainSettings()">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+        <div class="row">
+
+            <div ng-if="::debugMode">
+                {{domainSettings}}
+            </div>
+
+            <div class="col-lg-12 col-md-12">
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading"><span class="fa fa-ellipsis-v">
+            Дополниельные поля у стандартных объектов
+        </span>
+                    </div>
+                    <br/>
+                    <div class="panel-body text-center">
+                        <div class="row">
+                            <div class="col-md-6">
+                                Обновить доп. поля у существующих объектов <br>
+                                <small> если вы хотите добавлять дополнительные поля только для новых записей - уберите
+                                    эту галка
+                                </small>
+                            </div>
+
+                            <div class="col-md-6">
+                                <md-checkbox name="checkbox1" type="checkbox" data-ng-model="updateCurrentAdditionalFields">
+                            </div>
+                        </div>
+                        <hr/>
+
+                        <div ng-cloak>
+                            <md-content>
+                                <md-tabs md-dynamic-height md-border-bottom>
+                                    <md-tab label="Клиенты">
+                                        <md-content class="md-padding">
+                                            <custom-fields-selector
+                                                    ng-model="domainSettings.customFieldsCustomer"></custom-fields-selector>
+                                        </md-content>
+                                    </md-tab>
+
+                                    <md-tab label="Контрагенты">
+                                        <md-content class="md-padding">
+                                            <custom-fields-selector
+                                                    ng-model="domainSettings.customFieldsCompany"></custom-fields-selector>
+                                        </md-content>
+                                    </md-tab>
+
+                                    <md-tab label="Сделки">
+                                        <md-content class="md-padding">
+                                            <custom-fields-selector
+                                                    ng-model="domainSettings.customFieldsDeals"></custom-fields-selector>
+                                        </md-content>
+                                    </md-tab>
+
+                                    <md-tab label="Возможности">
+                                        <md-content class="md-padding">
+                                            <custom-fields-selector
+                                                    ng-model="domainSettings.customFieldsOpportunity"></custom-fields-selector>
+                                        </md-content>
+                                    </md-tab>
+
+                                    <md-tab label="Затраты">
+                                        <md-content class="md-padding">
+                                            <custom-fields-selector
+                                                    ng-model="domainSettings.customFieldsCosts"></custom-fields-selector>
+                                        </md-content>
+                                    </md-tab>
+
+                                    <md-tab label="Сотрудник">
+                                        <md-content class="md-padding">
+                                            <custom-fields-selector
+                                                    ng-model="domainSettings.customFieldsUserAccount"></custom-fields-selector>
+                                        </md-content>
+                                    </md-tab>
+
+                                    <md-tab label="Задача">
+                                        <md-content class="md-padding">
+                                            <custom-fields-selector
+                                                    ng-model="domainSettings.customFieldsTask"></custom-fields-selector>
+                                        </md-content>
+                                    </md-tab>
+
+                                    <md-tab label="Проект задач">
+                                        <md-content class="md-padding">
+                                            <custom-fields-selector
+                                                    ng-model="domainSettings.customFieldsTaskProject"></custom-fields-selector>
+                                        </md-content>
+                                    </md-tab>
+                                </md-tabs>
+                            </md-content>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <br/>
+    </div>
+</section>

@@ -1,0 +1,578 @@
+<script type="text/ng-template" id="dataSourcePredefinedTemplate.html">
+    <a data-no-drag="">
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+    </a>
+</script>
+
+<section class="page-form-ele page">
+
+    <section class="panel panel-default">
+        <div class="panel-heading">
+            <span translate="WIDGETS.CREATE.CUSTOM.CREATE.HEADER"></span>
+        </div>
+        <div class="panel-body text-center">
+
+            <div class="row">
+                <div class="col-md-5">
+                    <span translate="WIDGETS.CREATE.PREDEFINED.CHOOSE_DASHBOARD"></span>
+                    <br>
+                </div>
+
+                <div class="col-md-5">
+                    <div fs-Select="" items="allDashboards" freetext="" class="col-xs-8" ng-disabled="disabled"
+                         ng-model="currentDashboard">
+                        <span ng-show="item"><span class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>&nbsp; {{item.name}} </span>
+                        <span ng-hide="item">
+                            <span translate="WIDGETS.CREATE.CUSTOM.LOCATION.DASHBOARD.NOT_SELECTED"></span>
+                        </span>
+                    </div>
+
+                    <br>
+
+                    <input type="text" ng-model="newWidget.name" placeholder="{{'APP.COMMON.OBJECT.NAME' | translate}}"
+                           class="form-control"/>
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-success" data-ng-click="addWidget()">
+                        <span translate="WIDGETS.CREATE.PREDEFINED.ADD_WIDGET"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="row">
+        <div class="col-md-4">
+
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    <span translate="WIDGETS.CREATE.CUSTOM.LOCATION.HEADER"></span>
+                </div>
+                <div class="panel-body text-center">
+
+                    <accordion close-others="true" class="ui-accordion ui-accordion-warning">
+                        <accordion-group heading="{{'WIDGETS.CREATE.PREDEFINED.DATA_SOURCE.SIMPLE_TOOLTIP' | translate}}" is-open="status.isFirstOpen1">
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.CUSTOM.DATA_SOURCE_NAME.TABLE.HEADER"></span>
+                                    </td>
+                                    <td>
+                                        <span translate="WIDGETS.DRAW.DEFAULT_VALUE_PLACEHOLDER"></span>
+                                    </td>
+                                    <td>
+                                        <span translate="APP.COMMON.ACTION"></span>
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="dataSource in allDataSources" class="table-striped">
+                                    <td>
+                                        <a href="/data_source/details/{{dataSource.id}}" class="">
+                                            {{dataSource.name}} </a>
+                                    </td>
+
+                                    <td>
+                                        {{getResolvedOneData(dataSource)}}
+                                    </td>
+
+                                    <td>
+                                        <button class="btn btn-success"
+                                                data-ng-click="dataSourceWidgetNew(dataSource)">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+
+                        <accordion-group heading="{{'WIDGETS.CREATE.PREDEFINED.EXAMPLES.TASKS' | translate}}" is-open="status.isFirstOpen2">
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.TASKS.MINI"></span>
+                                    </td>
+
+                                    <td>
+                                        <button class="btn btn-success" data-ng-click="taskMiniWidgetNew()">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+
+                        <accordion-group heading="{{'WIDGETS.CREATE.PREDEFINED.EXAMPLES.CUSTOMER' | translate}}">
+
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.CUSTOM.DATA_SOURCE_NAME.TABLE.HEADER"></span>
+                                    </td>
+                                    <td>
+                                        <span translate="APP.COMMON.ACTION"></span>
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="table-striped">
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.CUSTOMER.LAST_LEADS"></span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" data-ng-click="leadsLastsWidgetNew()">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr class="table-striped">
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.CUSTOMER.DISTRIBUTION_BY_MANAGER"></span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success"
+                                                data-ng-click="customersAndLeadsByManagersWidgetNew()">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </accordion-group>
+
+                        <accordion-group heading="{{'WIDGETS.CREATE.PREDEFINED.EXAMPLES.COLD_CALL' | translate}}" ng-if="::debugMode">
+
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                    </th>
+                                    <th>
+                                        <span translate="APP.COMMON.ACTION"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="table-striped">
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.COLD_CALL.WIDGET"></span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" data-ng-click="coldCallWidgetNew()">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+
+                        <accordion-group heading="{{'WIDGETS.CREATE.PREDEFINED.EXAMPLES.AIM' | translate}}">
+
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                    </th>
+                                    <th>
+                                        <span translate="APP.COMMON.ACTION"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="table-striped">
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.AIM.BY_DATA_SOURCE"></span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" data-ng-click="companyAimWidgetNew()">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+
+                        <accordion-group heading="{{'WIDGETS.CREATE.PREDEFINED.EXAMPLES.PAYMENTS' | translate}}">
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                    </th>
+                                    <th>
+                                        <span translate="APP.COMMON.ACTION"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="table-striped">
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.PAYMENTS.DISTRIBUTION_BY_MANAGER"></span> ( 1 )
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" data-ng-click="managerPaymentsWidgetNew()">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="table-striped">
+                                    <td>
+                                        <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.PAYMENTS.DISTRIBUTION_BY_MANAGER"></span> ( 2 )
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" data-ng-click="managerPaymentsWidgetPieNew()">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+
+                        <accordion-group heading="{{'WIDGETS.CREATE.PREDEFINED.EXAMPLES.DATA_SOURCE.COMPLEX' | translate}}" is-open="status.isFirstOpen3">
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span translate="WIDGETS.CREATE.CUSTOM.DATA_SOURCE_NAME.TABLE.HEADER"></span>
+                                    </th>
+                                    <th>
+                                        <span translate="WIDGETS.DRAW.DEFAULT_VALUE_PLACEHOLDER"></span>
+                                    </th>
+                                    <th>
+                                        <span translate="APP.COMMON.ACTION"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="dataSource in allDataSources" class="table-striped">
+                                    <th>
+                                        <a href="/data_source/details/{{dataSource.id}}" class="">
+                                            {{dataSource.name}}
+                                        </a>
+                                    </th>
+                                    <th>
+                                        {{getResolvedOneData(dataSource)}}
+                                    </th>
+                                    <td>
+                                        <md-button data-ng-click="dataSourceWidgetComplexNew(dataSource)">
+                                            <md-icon md-font-icon="add">add</md-icon>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+
+                        <accordion-group heading=" Другое" is-open="status.isFirstOpen4">
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr>
+                                    <td>
+                                        iframe
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success" ng-click="iframeWidgetNew()">
+                                            <span translate="WIDGETS.CREATE.CUSTOM.USE_BUTTON.TABLE.HEADER"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+                    </accordion>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-8">
+            <div data-ng-include="widgetId" ng-if="widgetId !='b'">
+            </div>
+
+            <div ng-if="newWidget.templateController ===  'COLD_CALL'">
+                <div id="coldCallResult"></div>
+            </div>
+
+            <div ng-show="newWidget.templateController ===  'IFRAME'">
+                <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.IFRAME.URL"></span>: <br>
+                <input ng-model="url" ng-change="iframeWidgetNew()" ng-model-options="{ debounce: 300 }">
+
+                <br>
+                <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.IFRAME.CSS"></span>: <br>
+                <textarea ng-model="iframe_styles" ng-change="iframeWidgetNew()" ng-model-options="{ debounce: 300 }"></textarea>
+
+            </div>
+
+            <div ng-show="newWidget.templateController ===  'COMPANY_AIM_GAUGE'">
+                <br><br>
+                <section class="panel panel-default">
+                    <div class="panel-heading">
+                        <span translate="WIDGETS.CREATE.PREDEFINED.COMPANY_AIM_GAUGE.HEADER"></span>
+                    </div>
+                    <div class="panel-body text-center">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.COMPANY_AIM_GAUGE.START.VALUE"></span>:
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <input type="text" ng-model="newWidget.dataSources[0]"
+                                               placeholder="{{'WIDGETS.CREATE.CUSTOM.DATA_SOURCE_NAME.TABLE.HEADER' | translate}}"
+                                               typeahead="state as state.name for state in allDataSources | filter:{name:$viewValue}"
+                                               typeahead-on-select="updateCompanyAimWidget(newWidget.dataSources[0],0)"
+                                               typeahead-template-url="dataSourcePredefinedTemplate.html" class="form-control"
+                                               data-no-drag="">
+                                    </div>
+                                    <div class="col-md-2">
+                                        [{{ getResolvedOneData(newWidget.dataSources[0]) }}]
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <a href="/data_source/details/{{newWidget.dataSources[0].id}}"
+                                           class="btn btn-warning"> ? </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.COMPANY_AIM_GAUGE.CURRENT.VALUE"></span>:
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <input type="text" ng-model="newWidget.dataSources[1]"
+                                               placeholder="{{'WIDGETS.CREATE.CUSTOM.DATA_SOURCE_NAME.TABLE.HEADER' | translate}}"
+                                               typeahead="state as state.name for state in allDataSources | filter:{name:$viewValue}"
+                                               typeahead-on-select="updateCompanyAimWidget(newWidget.dataSources[1],1)"
+                                               typeahead-template-url="dataSourcePredefinedTemplate.html" class="form-control"
+                                               data-no-drag="">
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        [{{ getResolvedOneData(newWidget.dataSources[1]) }}]
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <a href="/data_source/details/{{newWidget.dataSources[1].id}}"
+                                           class="btn btn-warning"> ? </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.COMPANY_AIM_GAUGE.FINAL.VALUE"></span>:
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <input type="text" ng-model="newWidget.dataSources[2]"
+                                               placeholder="{{'WIDGETS.CREATE.CUSTOM.DATA_SOURCE_NAME.TABLE.HEADER' | translate}}"
+                                               typeahead="state as state.name for state in allDataSources | filter:{name:$viewValue}"
+                                               typeahead-on-select="updateCompanyAimWidget(newWidget.dataSources[2],2)"
+                                               typeahead-template-url="dataSourcePredefinedTemplate.html" class="form-control"
+                                               data-no-drag="">
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        [{{ getResolvedOneData(newWidget.dataSources[2]) }}]
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <a href="/data_source/details/{{newWidget.dataSources[2].id}}"
+                                           class="btn btn-warning"> ? </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <br><br> <br><br>
+
+                <div id="companyAimGauge"></div>
+            </div>
+
+            <div ng-show="newWidget.templateController ===  'DATA_SOURCE_ONE_DATA'">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <section class="panel panel-default">
+                            <div class="panel-heading">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.TEMPLATE.NAME"></span> №1
+                            </div>
+                            <div class="panel-body text-center">
+
+                                <div class="col-md-12">
+                                    <section class="panel panel-box">
+                                        <div class="panel-left panel-item bg-reverse"><p class="size-h4 ng-binding">
+                                            {{newWidget.name}} </p></div>
+                                        <div class="panel-right panel-item bg-success"><p style="font-size: 4em;"
+                                                                                          class="ng-binding">
+                                            {{ getResolvedOneData(newWidget.dataSources[0])}} </p>
+
+                                            <p class="text-muted" style="color: #ffffff"></p></div>
+                                    </section>
+                                </div>
+                                <input type="radio" ng-model="style" value="1" ng-change="dataSourceWidgetNew(newWidget.dataSources[0])">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.TEMPLATE.USE_THIS.NAME"></span>
+                                <br/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <section class="panel panel-default">
+                            <div class="panel-heading">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.TEMPLATE.NAME"></span> №2
+                            </div>
+                            <div class="panel-body text-center">
+                                <div class="panel status panel-danger">
+                                    <div class="panel-heading">
+                                        <h1 class="panel-title text-center"> {{ getResolvedOneData(newWidget.dataSources[0])}}</h1>
+                                    </div>
+                                    <div class="panel-body text-center">
+                                        <strong> {{newWidget.name}}</strong>
+                                    </div>
+                                </div>
+                                <input type="radio" ng-model="style" ng-change="dataSourceWidgetNew(newWidget.dataSources[0])" value="2">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.TEMPLATE.USE_THIS.NAME"></span>
+                                <br/>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="newWidget.templateController ===  'DATA_SOURCE_COMPLEX_DATA' || status.isFirstOpen3">
+
+                <div ng-if="newWidget.dataSources.length <2">
+                    <div class="callout callout-warning">
+                        <h4>
+                            <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.DATA_SOURCE.COMPLEX.NO_DATA.P1"></span>
+                        </h4>
+                        <p>
+                            <span translate="WIDGETS.CREATE.PREDEFINED.EXAMPLES.DATA_SOURCE.COMPLEX.NO_DATA.P2"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <section class="panel panel-default">
+                    <div class="panel-heading">
+                    </div>
+                    <div class="panel-body text-center">
+
+                        <div class="panel-body text-center" ng-show="newWidget.dataSources.length > 0">
+                            <table class="{{$root.tableClasses}} table-striped table-responsive">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                    </th>
+                                    <th>
+                                        <span translate="WIDGETS.DRAW.DEFAULT_VALUE_PLACEHOLDER"></span>
+                                    </th>
+                                    <th>
+                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                <tr data-ng-repeat="manager in newWidget.dataSources">
+                                    <td>
+                                        <a href="/data_source/details/{{manager.id}}" class=""> {{manager.name}} </a>
+                                    </td>
+                                    <td><span class="badge"> {{ getResolvedOneData(manager)}} </span></td>
+                                    <td>
+                                        <md-button class="" data-ng-click="deleteDataSourceComplexBuIndex($index)">
+                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                            <md-tooltip>
+                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                            </md-tooltip>
+                                        </md-button>
+                                    </td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="row" ng-show="newWidget.dataSources.length > 0">
+
+                    <div class="col-md-12">
+                        <section class="panel panel-default">
+                            <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>
+                                <span translate="WIDGETS.CREATE.PREDEFINED.TEMPLATE.NAME"></span> №1
+                            </div>
+                            <div class="panel-body text-center">
+                                <div id="chart1"></div>
+                                <input type="radio" ng-model="style" value="1" ng-change="redrawAllChartsAndTranslateDataFromDataSource()">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.TEMPLATE.USE_THIS.NAME"></span>
+                                <br/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-md-12">
+
+                        <section class="panel panel-default">
+                            <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>
+                                <span translate="WIDGETS.CREATE.PREDEFINED.TEMPLATE.NAME"></span> №2
+                            </div>
+                            <div class="panel-body text-center">
+                                <div id="chart2"></div>
+                                <input type="radio" ng-model="style" value="2" ng-change="redrawAllChartsAndTranslateDataFromDataSource()">
+                                <span translate="WIDGETS.CREATE.PREDEFINED.TEMPLATE.USE_THIS.NAME"></span>
+                                <br/>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+    .status .panel-title {
+        font-family: 'Oswald', sans-serif;
+        font-size: 72px;
+        font-weight: bold;
+        color: #fff;
+        line-height: 45px;
+        padding-top: 20px;
+        letter-spacing: -0.8px;
+    }
+</style>

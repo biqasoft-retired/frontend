@@ -1,0 +1,424 @@
+<script type="text/ng-template" id="items_renderer.html">
+    <div class="angular-ui-tree-handle" ng-class="{ taskDone: item.done === true }">
+        <div class="row">
+
+            <div class="col-md-1 col-sm-1">
+                {{$index+1}}
+            </div>
+
+            <div class="col-md-6 col-sm-10 " data-nodrag>
+                <a href="#" editable-text="item.name">{{ item.name|| printEmptyField() }}</a>
+            </div>
+
+            <div class="col-md-1"></div>
+
+            <div class="col-md-3 col-sm-6" data-ng-click="changeDone(item)" data-nodrag>
+                <div class="pull-right">
+                    <md-checkbox type="checkbox" data-ng-model="item.done">
+                </div>
+            </div>
+
+            <div class="col-md-1 col-sm-6 visible-lg visible-md" data-nodrag>
+                <a class="pull-right angular-ui-tree-icon angular-ui-tree-icon-action" data-nodrag
+                   ng-click="deleteChecklistItemConfirmation($index)">
+                    <span class="fa fa-times"></span>
+                </a>
+            </div>
+
+            <div class="col-md-1 col-sm-6 visible-sm visible-xs" data-nodrag>
+                <button data-nodrag class="btn btn-danger"
+                        ng-click="remove(this)">
+                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<section class="page-form-ele page" id="taskDetailsTemplate" style="padding-top: 5px;">
+    <div class="col-md-12 col-lg-6" style="padding-left: 8px;">
+        <section class="panel  "
+                 data-ng-class="{'panel-danger': !currentTask.completed && !returnTimeDifferenceBetweenDate(currentTask.finalDate),
+                  'panel-success' : currentTask.completed }"
+        >
+            <div class="panel-heading" style="padding-bottom: 3px; padding-top: 3px;">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                         <span class="label label-danger"
+                               ng-if="!currentTask.completed && !returnTimeDifferenceBetweenDate(currentTask.finalDate)">
+                                                Просрочена
+                        </span>
+
+                        <span class="label label-warning" ng-if="currentTask.favourite" style="margin-left: 3px;">
+                                Важная
+                         </span>
+
+                        <span class="label label-success" ng-if="currentTask.completed" style="margin-left: 3px;">
+                                Выполненная
+                         </span>
+
+                        <span class="label label-grey" ng-if="currentTask.archived" style="margin-left: 3px;">
+                                В архиве
+                         </span>
+                    </div>
+
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td><span translate="APP.COMMON.OBJECT.NAME"></span> задачи</td>
+                        <td>
+                            <a href="#" editable-text="currentTask.name">{{ currentTask.name|| printEmptyField() }}</a>
+                            <span ng-if="currentTask.connectedInfo.connectedCustomerId "> <a
+                                    href="/customer/details/{{currentTask.connectedInfo.connectedCustomerId}}">
+                                    (клиент) </a>
+                                </span>
+
+                            <md-menu class="pull-right nopadding">
+
+                                <md-button aria-label=" " class="nopadding "
+                                           ng-click="openMenu($mdOpenMenu, $event)">
+                                    <i class="fa fa-cog" style="font-size: 120%;"
+                                    ></i>
+                                    <md-tooltip md-direction="left">
+                                        <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                    </md-tooltip>
+                                </md-button>
+
+                                <md-menu-content width="4">
+                                    <md-menu-item>
+                                        <md-button ng-click="deleteTaskModal()">
+                                            <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                        </md-button>
+                                    </md-menu-item>
+
+                                    <md-menu-item ng-if="!currentTask.archived">
+                                        <md-button ng-click="archiveTaskConfirmation()">
+                                            в архив
+                                        </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item ng-if="currentTask.archived">
+                                        <md-button ng-click="deArchiveTaskConfirmation()">
+                                            переместить в активные
+                                        </md-button>
+                                    </md-menu-item>
+
+                                </md-menu-content>
+                            </md-menu>
+                        </td>
+                    </tr>
+
+                    <tr ng-class="{success : currentTask.completed ===  true , danger: currentTask.completed ===  false }">
+                        <td ng-switch="currentTask.completed">
+                                <span ng-switch-when="true">
+                                    Завершена
+                                </span>
+
+                            <span ng-switch-when="false">
+                                    Активная
+                                </span>
+                        </td>
+
+                        <td>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div ng-if="!currentTask.completed">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" ng-model="currentTask.completed"
+                                                   data-ng-disabled="!checkToUpdate()"
+                                                   data-ng-change="setCompeted()"><i></i>
+
+                                            <div data-ng-show="currentTask.checkListItems.length > 0 && !checkToUpdate()">
+                                                чтобы завершить задачу - завершите все шаги в чек-листе
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div ng-if="currentTask.completed">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" ng-model="currentTask.completed"
+                                                   data-ng-change="setNotCompeted()"><i></i>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="pull-right" style="padding-right: 10px;">
+                                        <b> {{currentTask.createdInfo.createdDate | timeAgo}} </b> <br/>
+                                        <small>
+                                            {{printDate(currentTask.createdInfo.createdDate)}}
+                                            <br/>
+                                            <a href="/user_account/details/{{::currentTask.createdInfo.createdById}}">
+                                                {{ printUser( resolveUser (currentTask.createdInfo.createdById) ) }}
+                                            </a>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td> Дата начала</td>
+                        <td>
+                            <div class="col-md-10">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown"
+                                       data-target="#" href="">
+                                        <p> {{ printDate(currentTask.startDate) || 'указать' }} </p>
+                                    </a>
+                                    <ul class="dropdown-menu " style="" role="menu"
+                                        aria-labelledby="dLabel">
+                                        <datetimepicker data-ng-model="currentTask.startDate"
+                                                        data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td> Дата конца</td>
+                        <td>
+                            <div class="col-md-10">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" id="dLabel2" role="button" data-toggle="dropdown"
+                                       data-target="#" href="">
+                                        <p> {{ printDate(currentTask.finalDate) || 'указать' }} </p>
+                                    </a>
+                                    <ul class="dropdown-menu" style="" role="menu"
+                                        aria-labelledby="dLabel2">
+                                        <datetimepicker data-ng-model="currentTask.finalDate"
+                                                        data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td> Приоритет</td>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <i class="fa fa-star-o" ng-if="!currentTask.favourite"
+                                       data-ng-click="currentTask.favourite = true" style="  font-size: 200%;"
+                                       tooltip-placement="right" tooltip="Отметить как важная"
+                                       tooltip-append-to-body="true"
+                                    ></i>
+                                    <i class="fa fa-star" ng-if="currentTask.favourite"
+                                       data-ng-click="currentTask.favourite = false"
+                                       style="  font-size: 200%; color: rgb(250, 197, 82);"
+                                       tooltip-placement="right" tooltip="Отметить как НЕ важная"
+                                       tooltip-append-to-body="true"
+                                    ></i>
+                                </div>
+
+                                <div class="col-md-9">
+                                                <span class="ui-select" style="width: 70px;">
+                                                        <select data-ng-model="currentTask.priority" convert-to-number>
+                                                            <option value="1" ng-selected="currentTask.priority ===  1">
+                                                                1
+                                                            </option>
+                                                            <option value="2" ng-selected="currentTask.priority ===  2">
+                                                                2
+                                                            </option>
+                                                            <option value="3" ng-selected="currentTask.priority ===  3">
+                                                                3
+                                                            </option>
+                                                            <option value="4" ng-selected="currentTask.priority ===  4">
+                                                                4
+                                                            </option>
+                                                            <option value="5" ng-selected="currentTask.priority ===  5">
+                                                                5
+                                                            </option>
+                                                            <option value="6" ng-selected="currentTask.priority ===  6">
+                                                                6
+                                                            </option>
+                                                        </select>
+                                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr ng-if="::debugMode">
+                        <td>
+                            <a href="/task/projects/details/{{currentTask.taskProject.id}}"
+                               ng-if="currentTask.taskProject">
+                                Проект
+                            </a>
+
+                            <span ng-if="!currentTask.taskProject">
+                                    Проект
+                                </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span translate="APP.COMMON.OBJECT.DESCRIPTION"></span>
+                        </td>
+
+                        <td>
+                            <md-input-container flex class="nopadding">
+                                <input ng-model="currentTask.description "
+                                       ng-model-options="{ debounce: 300 }"
+                                >
+                            </md-input-container>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Ответственные
+                        </td>
+
+                        <td>
+                            <user-accounts-selector
+                                    ng-model="currentTask.responsibles.userAccountsIDs"></user-accounts-selector>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <custom-fields-shower ng-model="currentTask.customFields"></custom-fields-shower>
+
+                <div class="row">
+
+                    <div class="colmd6 pull-right" style="padding-right: 10px;">
+
+                        <div ng-if="startTaskFoo() > 0" class="info">Начало через: {{ startTaskFoo() }} час.</div>
+                        <div class="info" ng-if="startTaskToEndFoo()">Время выполнения: {{ startTaskToEndFoo() }} час.
+                        </div>
+
+                        <div class="success text-center"
+                             ng-if="!returnTimeDifferenceBetweenDate(currentTask.finalDate)"
+                             ng-if="startTaskFoo() < 0 && !returnTimeDifferenceBetweenDate(currentTask.finalDate)">
+
+                            <b ng-show="returnTimeDifferenceBetweenDate((currentTask.finalDate)) > 0">
+                                Осталось: {{returnTimeDifferenceBetweenDate(currentTask.finalDate)}} ч.
+                            </b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                     <span ng-if="currentTask.checkListItems.length > 0" class="badge">
+                        {{ checkListStats().done / (checkListStats().notDone+checkListStats().done) * 100  |number:1}} %
+                    </span>
+                Чек-лист
+            </div>
+            <div class="panel-body">
+
+                <div class="row" ng-if="currentTask.checkListItems.length > 0">
+                    <div class="col-md-2">
+                        №
+                    </div>
+
+                    <div class="col-md-8">
+                        Шаг
+                    </div>
+
+                    <div class="col-md-2">
+                        Сделано
+                    </div>
+                </div>
+
+                <div ng-if="currentTask.checkListItems.length > 0">
+                    <div ui-tree="options">
+                        <ol ui-tree-nodes ng-model="currentTask.checkListItems">
+                            <li ng-repeat="item in currentTask.checkListItems" ui-tree-node
+                                ng-include="'items_renderer.html'"></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div ng-if="currentTask.checkListItems.length ===  0">
+                    <div class="callout callout-warning">
+                        <h4>Чек листа нет</h4>
+                        <p>Создайте пункты в чеклисте для пошагового контроля выполнения задач</p>
+                    </div>
+                </div>
+
+                <md-button data-ng-click="addNewCheckListItem()" style="margin-left: 45%;">
+                    <md-icon md-font-icon="add">add</md-icon>
+                </md-button>
+
+            </div>
+        </section>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="badge">  {{currentTask.connectedInfo.connectedFiles.length}} </span>
+                        Файлы и документы
+                    </div>
+                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+                    <div class="col-md-6">
+                        <input type="text"
+                               ng-model="documentsNameFilter" class="form-control background-input-color"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body text-center" style="padding-top: 10px;">
+
+                <upload-file-biqa ng-model="currentTask.connectedInfo.connectedFiles"
+                                  files-uploaded-objects-array="allObjects"
+                                  documents-name-filter="documentsNameFilter"></upload-file-biqa>
+            </div>
+            <br/>
+
+        </section>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="badge">  {{objectHistoryResultHolder.length}} </span>
+                        История изменений
+                    </div>
+                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+                    <div class="col-md-6">
+                        <input type="text"
+                               ng-model="historyChangesFilter" class="form-control background-input-color">
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body text-center">
+                <div ng-if="currentTask && currentTask.id">
+                    <objects-history-shower-biqa object-id="currentTask.id"
+                                                 result="objectHistoryResultHolder"
+                                                 fields-name-filter="historyChangesFilter"
+                                                 object-type="'TASK'"></objects-history-shower-biqa>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</section>

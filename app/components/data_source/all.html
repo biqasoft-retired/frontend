@@ -1,0 +1,453 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="Новый KPI"
+     tooltip-append-to-body="true"
+     ng-click="createNewDataSorce()">
+    <md-button class="md-fab md-primary">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <section class="panel panel-primary" style="  margin-bottom: 3px;">
+        <div class="panel-heading">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="badge">{{allCustomersCount}}</span>
+                    Все Объекты
+                    <md-menu>
+                        <button class="btn btn-primary btn-sm"
+                                ng-click="openMenu($mdOpenMenu, $event)">
+                            <span translate="APP.COMMON.MORE.BUTTON"></span>
+                        </button>
+
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button class=""
+                                           ng-click="downloadFileExcel()">
+                                    <md-icon md-font-icon="file_download">file_download</md-icon>
+                                    <span translate="CUSTOMER_SAVE_EXCEL"></span>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                    <button class="btn btn-primary btn-sm" ng-click="filterPanelShow=true;" ng-show="!filterPanelShow"
+                    >фильтры
+                    </button>
+
+                    <button class="btn btn-primary btn-sm" ng-click="filterPanelShow=false" ng-show="filterPanelShow">
+                        <span translate="APP.COMMON.HIDE.BUTTON"></span>
+                    </button>
+                </div>
+
+                <div class="col-md-2">
+                    <select ng-model="viewType" class="form-control"
+                            ng-options="field as field.name for field in viewTypes">
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <input ng-model="customerAndLeadGetRequestCriteriaDao.fullTextSearchRequest"
+                           ng-model-options="{ debounce: 600 }"
+                           data-ng-change="pageChanged(currentPage)"
+                           id="searchCustomer" class="form-control background-input-color" >
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-body text-center" ng-show="filterPanelShow">
+            <div class="row">
+
+                <div class="col-lg-6 col-md-12">
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Фильтры мета информации</b></td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useResolved }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useResolved"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                Успешно получено значение (да/нет)
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useResolved">
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.resolved"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useSystemIssued }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useSystemIssued"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                создано системой (да/нет)
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useSystemIssued">
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.systemIssued"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useControlledClass }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useControlledClass"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                Контроллер
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useControlledClass">
+
+                                <input type="text" class=""
+                                       data-ng-model="customerAndLeadGetRequestCriteriaDao.controlledClass"
+                                       data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                >
+                                <span> </span>
+
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useReturnType }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useReturnType"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                Тип данных возврата
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useReturnType">
+
+                                <input type="text" class=""
+                                       data-ng-model="customerAndLeadGetRequestCriteriaDao.returnType"
+                                       data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                >
+                                <span> </span>
+
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useLightStatus }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useLightStatus"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+                            <td>Светофор</td>
+                            <td ng-show="customerAndLeadGetRequestCriteriaDao.useLightStatus">
+                                <select ng-model="customerAndLeadGetRequestCriteriaDao.lightStatus">
+                                    <option data-ng-repeat="light in allLights"
+                                            value="{{light.value}}">{{light.name}}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="col-lg-6 col-md-12">
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Фильтры по дате создания</b></td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom }">
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                создано с
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom">
+                                <div>
+                                    <date-selector
+                                            ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateFrom"></date-selector>
+                                </div>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo"
+                                           data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                создано до
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo">
+                                <date-selector
+                                        ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateTo"></date-selector>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate"
+                                           data-ng-change="pageChanged(currentPage)">
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Данные будут отсортированы так, что последние добавленные лиды или клиенты окажутся вверху"
+                                          tooltip-append-to-body="true">
+                                           Последние добавленные вверху
+                                     </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Общее </b></td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.usePagination }">
+                            <td>
+                                Постраничный вывод <br/>
+                            </td>
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.usePagination"
+                                           data-ng-change="pageChanged(1)"
+
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.showArchived }">
+                            <td>
+                                Показывать из архива <br/>
+                            </td>
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.showArchived"
+                                           data-ng-change="pageChanged(1)"
+
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Объектов на страницу <br/>
+                            </td>
+                            <td>
+                                <input type="number" min="1" id="clientPerPage" class="form-control"
+                                       ng-model="itemsPerPage">
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <button class="btn btn-primary" data-ng-click=" pageChanged(currentPage)">Поиск
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="panel-body text-center  " ng-if="viewType.value ===  'table'">
+        <br>
+        <section class="panel panel-primary">
+            <div class="panel-heading" style="  visibility: hidden; margin-top: -20px;">
+            </div>
+
+            <table class="{{$root.tableClasses}}">
+                <thead>
+                <tr>
+                    <th class="mini-col-md">№</th>
+                    <th class="col-md-6"> <span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                    <th class="mini-col-md"> Значение</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr dir-paginate="project in projects | itemsPerPage: itemsPerPage  track by project.id "
+                    current-page="currentPage"
+                    data-ng-click="clickedCustomerLine(project)"
+                    total-items="allCustomersCount">
+
+                    <td class="mini-col-md">
+                        <a class=" " href="/data_source/details/{{project.id}}">
+                            {{$index+1}}
+                        </a>
+                    </td>
+
+                    <td class="mini-col-md">
+                        <a class="pull-left " href="/data_source/details/{{project.id}}">
+                            {{project.name}}
+                        </a>
+                    </td>
+
+                    <td class="mini-col-md" ng-style="{'background-color' : getColorForDataSource(project)}">
+                        {{ getResolvedOneData(project) }}
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div class="row" ng-if="viewType.value ===  'cards'">
+
+        <div class="col-md-6 col-lg-4"
+             hover-class="methodHovered"
+             dir-paginate="project in projects | itemsPerPage: itemsPerPage  track by project.id "
+             current-page="currentPage"
+             data-ng-click="clickedCustomerLine(project)"
+             total-items="allCustomersCount">
+
+            <section class="panel panel-default">
+                <div class="panel-heading">
+
+                    <i class="fa fa-circle" style="color: red;"
+                       ng-if="!project.resolved"
+                       tooltip-placement="right" tooltip="ОШИБКА ПРИ ПОЛУЧЕИИ ЗНАЧЕНИЯ {{::printDate(project.lastUpdate)}}"
+                       tooltip-append-to-body="true"></i>
+                    <i class="fa fa-circle" style="color: green;"
+                       ng-if="project.resolved"
+                       tooltip-placement="right" tooltip="Значение получено успешно  {{::printDate(project.lastUpdate)}}" tooltip-append-to-body="true"
+                    ></i>
+                    {{project.id}}
+                    <div class="pull-right">
+                        <small> от {{:: printDate(project.createdInfo.createdDate) }}</small>
+                    </div>
+                </div>
+
+                <section class="panel panel-box nopadding">
+                    <div class="panel-left panel-item bg-reverse">
+                        <p class="size-h6">
+                            <a class="" href="/data_source/details/{{project.id}}">
+                                {{project.name}}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="panel-right panel-item bg-success"
+                         ng-style="{'background-color' : getColorForDataSource(project)}">
+                        <p style="font-size: 2em;">
+                            {{ getResolvedOneData(project) }}
+                        </p>
+                        <p class="text-muted" style="color: #ffffff"></p>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <div class="panel-body text-center">
+        <dir-pagination-controls
+                template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                boundary-links="true"
+                on-page-change="pageChanged(newPageNumber)">
+        </dir-pagination-controls>
+    </div>
+
+    <floating-pagination-panel pages-numbers="pagesNumbers" current-page="currentPage"
+                               pages-numbers="pagesNumbers" page-changed="pageChanged">
+    </floating-pagination-panel>
+
+</section>

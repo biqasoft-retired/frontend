@@ -1,0 +1,447 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;"
+     ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="Обновить свой профиль"
+               tooltip-append-to-body="true"
+               data-ng-click="updateCurrentProfile();"
+               aria-label="">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+
+</div>
+<section class="page-form-ele page">
+
+    <div class="panel-body">
+
+        <div class="row">
+
+            <div class="col-md-4 col-lg-2">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span translate="APP.COMMON.ACTION"></span>
+                    </div>
+                    <div class="panel-body">
+
+                        <img class="img-rounded  " width="250" height="250"
+                             ng-src="{{getAvatarUrlByUser(currentUser)}}"/>
+                        <br/><br/>
+                        <span translate="USERACCOUNT.DETAILS.AVATAR_URL"></span> <br/>
+                        <input type="text" ng-model="currentUser.avatarUrl" size="10" class="form-control"
+                               placeholder="http://example.com/img.jpg"
+                               style="width: 100%">
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="https://support.biqasoft.com/#/view2" class="btn btn-warning"
+                                   target="_blank">
+                                    <span translate="USERACCOUNT.DETAILS.EDIT.CHANGE_PASSWORD"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-md-8 col-lg-6 " style="padding-left: 0 !important;">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        {{currentUser.firstname}} {{currentUser.lastname}}
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr data-ng-show="currentUser.lastOnline">
+                                <td>
+                                    <span translate="USERACCOUNT.WAS_ONLINE"></span>
+                                </td>
+                                <td>
+                                    {{printDate(currentUser.lastOnline)}} <br/>
+                                    <b> {{currentUser.lastOnline | timeAgo }} </b>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.FIRSTNAME"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{currentUser.firstname}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="currentUser.firstname" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.LASTNAME"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{currentUser.lastname}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="currentUser.lastname" class="form-control">
+                                    </div>
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.PATRONYMIC"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{currentUser.patronymic}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="currentUser.patronymic" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.POSITION"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{currentUser.position}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="currentUser.position" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.USERNAME"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{currentUser.username}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input disabled data-ng-model="currentUser.username" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.EMAIL"></span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{currentUser.email}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input data-ng-model="currentUser.email" class="form-control">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.IS_ACTIVE"></span>
+                                </td>
+
+                                <td>
+                                    <md-checkbox disabled type="checkbox" data-ng-model="currentUser.enabled"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> <span translate="USERACCOUNT.DETAILS.IP_LIMIT"></span>
+                                <span tooltip-placement="right"
+                                      tooltip="{{'USERACCOUNT.DETAILS.IP_LIMIT.TOOLTIP' | translate}}"
+                                      tooltip-append-to-body="true">
+                                    <md-icon md-font-icon="info_outline">info_outline</md-icon>
+                                </span>
+                                </td>
+                                <td>
+                                    <div ng-show="!hasRole('ROLE_USER_ACCOUNT_EDIT') && !hasRole('ROLE_ADMIN')">
+                                        {{currentUser.ipPattern}}
+                                    </div>
+
+                                    <div ng-show="hasRole('ROLE_USER_ACCOUNT_EDIT') || hasRole('ROLE_ADMIN')">
+                                        <input disabled data-ng-model="currentUser.ipPattern" class="form-control"
+                                               placeholder="{{'USERACCOUNT.DETAILS.IP_LIMIT.NO_RESTRICTIONS' | translate}}">
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <custom-fields-shower ng-model="currentUser.customFields"></custom-fields-shower>
+                    </div>
+                </section>
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS"></span>
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.DATE_FORMAT"></span>
+                                </td>
+                                <td>
+                                    <input type="text"
+                                           data-ng-model="$root.personalSettings.dateFormat" placeholder="medium"
+                                           class="form-control"
+                                           ng-change="">
+                                </td>
+
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.DATE_FORMAT.EXAMPLE"></span>: <br>
+                                    <b>
+                                        {{printDate(getDatetime)}}
+                                    </b>
+
+                                    <br>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.TIME_ZONE"></span>
+                                    <span tooltip-placement="right"
+                                          tooltip="{{'USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.TIME_ZONE.TOOLTIP' | translate}}"
+                                          tooltip-append-to-body="true">
+                                    <md-icon md-font-icon="info_outline">info_outline</md-icon>
+                                </span>
+                                    : {{timeZone}} <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.TIME_ZONE.HOURS"></span>.
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.UI.COLOR"></span>
+                                </td>
+
+                                <td>
+                                    <md-switch ng-model="$root.personalSettings.colors.enable" aria-label=""
+                                               data-ng-change="setColor()">
+                                        &nbsp;
+                                    </md-switch>
+                                </td>
+
+                                <td ng-show="$root.personalSettings.colors.enable">
+                                    <div class="col-md-1" style="padding-top: 6px;">
+                                        <span class="badge" colorpicker type="button" colorpicker-position="top"
+                                              ng-model="mainColor"
+                                              ng-model-options="{ debounce: 300 }"
+                                              data-ng-change="setColor()"
+                                              ng-style="{'background-color' : mainColor }"
+                                              tooltip-placement="right" tooltip="{{'APP.COLOR_SELECTOR.TOOLTIP' | translate}}"
+                                              tooltip-append-to-body="true"> &nbsp;
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <input type="text" ng-model="mainColor" class="form-control" data-ng-change="setColor()">
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.UI.TABLE.MODERN"></span>
+                                </td>
+                                <td>
+                                    <md-switch ng-model="$root.personalSettings.ui.table.modern"></md-switch>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.UI.MODERN_CUSTOM_FIELDS"></span>
+                                </td>
+                                <td>
+                                    <md-switch ng-model="$root.personalSettings.ui.modernCustomFields"></md-switch>
+                                </td>
+                            </tr>
+
+                            <tr ng-if="::debugMode">
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.LANGUAGE"></span>
+                                </td>
+
+                                <td>
+                                    <input data-ng-model="currentUser.language" class="form-control">
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <br>
+                <section class="panel panel-primary" ng-if="::debugMode">
+                    <div class="panel-heading">
+                        <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.DEBUG_MODE_FUNCTIONS"></span>
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.DEBUG_MODE_FUNCTIONS.OPEN_EMBED_CUSTOMER"></span>
+                                </td>
+
+                                <td>
+                                    <md-switch type="checkbox"
+                                               data-ng-model="$root.personalSettings.openEmbeddedCustomer">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.DEBUG_MODE_FUNCTIONS.DYNAMIC_COLOR"></span>
+                                </td>
+
+                                <td>
+                                    <md-switch type="checkbox" data-ng-model="$root.personalSettings.ui.dynamicColor">
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <br>
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY"></span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.GENERATE_CREDENTIALS"></span>
+                                </td>
+                                <td>
+                                    <md-button ng-click="generateCredentials()">
+                                        <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.GENERATE_CREDENTIALS.CREATE.BUTTON"></span>
+                                    </md-button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.APP"></span>
+                                </th>
+                                <th>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.USERNAME"></span>
+                                </th>
+                                <th>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.EXPIRE"></span>
+                                </th>
+                                <th></th>
+                                <th>
+                                    <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+                                </th>
+                            </tr>
+
+                            <tr ng-repeat="token in allOauthTokens">
+                                <td>
+                                    <a href="developers/oauth2/app/details/{{token.clientApplicationID}}">
+                                        {{token.clientApplicationID}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <span ng-if="currentUsername == token.userName">
+                                        <b>
+                                            <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.USERNAME_CURRENT_SESSION"></span>
+                                        </b>
+                                         <span tooltip-placement="right"
+                                               tooltip="{{'USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.USERNAME_CURRENT_SESSION.TOOLTIP' | translate}}"
+                                               tooltip-append-to-body="true">
+                                    <md-icon md-font-icon="info_outline">info_outline</md-icon>
+
+                                </span>
+                                        <br>
+                                    </span>
+                                    {{token.userName}}
+                                </td>
+                                <td>
+                                    <span ng-if="token.expire">
+                                        {{printDate(token.expire) }}
+                                    </span>
+
+                                    <span ng-if="!token.enabled">
+                                        <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.USERNAME_DISABLED"></span>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <md-button ng-click="deleteToken(token.userName, $index)">
+                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                    </md-button>
+                                </td>
+                                <td>
+                                    <span tooltip-placement="right"
+                                          tooltip=" {{printDate(token.createdInfo.createdDate)}}"
+                                          tooltip-append-to-body="true">
+                                    {{token.createdInfo.createdDate | timeAgo}}
+                                </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-md-12 col-lg-4" style="padding-left: 0 !important;">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span translate="USERACCOUNT.DETAILS.ROLES.HEADER"></span>
+                    </div>
+                    <div class="panel-body">
+                        <span role-security-selector data-ng-model="currentUser.roles"></span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

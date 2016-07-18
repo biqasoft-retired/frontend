@@ -1,0 +1,36 @@
+<div class="container">
+
+    <div class="panel-body" data-ng-controller="DirectTokenAllCtrl">
+
+
+        <div ng-if="tokens.length ===  0">
+            <div class="callout callout-warning">
+                <h4>Аккаунты в Яндекс Директе не привязаны</h4>
+
+                <p><a href="/external_services/">Привязать аккаунт</a></p>
+            </div>
+        </div>
+
+
+        <div ng-repeat="token in tokens">
+
+            <section class="panel panel-default">
+                <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>{{token.login}}</div>
+                <div class="panel-body">
+
+                    <!--Имя: {{token.name}} <br>-->
+                    Логин: {{token.login}} <br>
+                    Тип: {{token.type}} <br>
+                    Перейти в рекламные компании <a href="/yandex/direct/allCompaigns/token/{{token.id}}">
+                    {{token.id}} </a> <br>
+                    <!--API Token: {{token.token}} <br>-->
+                    <br><br>
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+</div>
+

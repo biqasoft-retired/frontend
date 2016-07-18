@@ -1,0 +1,78 @@
+<md-dialog aria-label="Настройки виджета">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span translate="WIDGETS.EDIT.HEADER"></span>
+                    {{currentEditableWidget.name || currentEditableWidget.id}} </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="answer('not applicable')">
+                    <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="">
+            <div style="padding: 10px;">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <span translate="WIDGETS.EDIT.ROW"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <input type="text" integer ng-model="currentEditableWidget.row" size="1"/>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span translate="WIDGETS.EDIT.COL"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <input type="text" integer ng-model="currentEditableWidget.col" size="1"/>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <span translate="WIDGETS.EDIT.SIZE_X"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <input type="text" integer ng-model="currentEditableWidget.sizeX" size="1"/>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span translate="WIDGETS.EDIT.SIZE_Y"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <input type="text" integer ng-model="currentEditableWidget.sizeY" size="1"/>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" integer ng-model="currentEditableWidget.name"/>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span translate="WIDGETS.EDIT.IS_DEMO"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <md-checkbox name="checkbox1" type="checkbox" data-ng-model="currentEditableWidget.demo"></md-checkbox>
+                    </div>
+
+                    <br>
+
+                    <div class="col-md-6">
+                        <span translate="WIDGETS.EDIT.RAW_DATA"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea json-text ng-model='currentEditableWidget' rows="15"></textarea>
+
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

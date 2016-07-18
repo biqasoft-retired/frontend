@@ -1,0 +1,44 @@
+<div class="card" style="    margin-top: 0; !important; border: 0; !important; overflow: visible; !important;">
+    <div class="card-image">
+        <span class="card-img-label" ng-if='allWidgetsData["|currentWidget|"].demo'> DEMO </span>
+        <section class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="text-center"> {{allWidgetsData["|currentWidget|"].widgetName}} </h4></div>
+            <div class="">
+                <div class="">
+                    <div class="panel-body text-center">
+                        <div class="panel status panel-danger">
+                            <div class="panel-heading">
+                                <h1 class="panel-title text-center">
+                                    {{ getResolvedOneData (allWidgetsData["|currentWidget|"].dataSource) }}</h1>
+                            </div>
+                            <div class="panel-body text-center">
+                                <a class=" " href='/data_source/details/{{allWidgetsData["|currentWidget|"].dataSource.id}}'>
+                                    <strong> {{allWidgetsData["|currentWidget|"].dataSource.name || allWidgetsData["|currentWidget|"].dataSource.id}} </strong>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900|Oswald);
+
+    .status {
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    .status .panel-title {
+        font-family: 'Oswald', sans-serif;
+        font-size: 72px;
+        font-weight: bold;
+        color: #fff;
+        line-height: 45px;
+        padding-top: 20px;
+        letter-spacing: -0.8px;
+    }
+</style>

@@ -1,0 +1,449 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="Создать новую компанию"
+     tooltip-append-to-body="true"
+     ng-click="addCompany()"
+>
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+
+    <section class="panel panel-primary" style="  margin-bottom: 3px;" data-ng-show="filterPanelShow">
+        <div class="panel-heading"><span class="fa fa-filter"></span> Фильтры
+            <button class="btn btn-primary btn-sm" ng-click="filterPanelShow=false">
+                <span translate="APP.COMMON.HIDE.BUTTON"></span>
+            </button>
+        </div>
+        <div class="panel-body text-center">
+
+            <div class="row">
+                <div class="col-lg-5 col-md-12">
+                    <table class="table table-bordered">
+
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Фильтры по квалификации</b></td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.showOnlyWhenIamResponsible }">
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.showOnlyWhenIamResponsible"
+                                           data-ng-change="pageChanged(currentPage)">
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Будут показаны только те лиды или клиенты, где ответсвенный менеджер - текущий пользователь"
+                                          tooltip-append-to-body="true">
+                                         Показывать только тех клиентов, где я ответственный
+                                      </span>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.onlyPartner }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.onlyPartner"
+                                           data-ng-change="pageChanged(currentPage)">
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="показывать только партнеров"
+                                          tooltip-append-to-body="true">
+                                         Только партнеры
+                                      </span>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.onlyClient }">
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.onlyClient"
+                                           data-ng-change="pageChanged(currentPage)">
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Только клиенты"
+                                          tooltip-append-to-body="true">
+                                         Показывать только клиентов
+                                      </span>
+                            </td>
+
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.active }">
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.active"
+                                           data-ng-change="pageChanged(currentPage)">
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                    <span class="" tooltip-placement="right" tooltip="Будут показаны только те лиды или клиенты, с которыми сейчас непосредственно работаем - лидов закрываем на продажу
+                                    , а с клиентами продолжаем работать" tooltip-append-to-body="true">
+                                            Показывать только активных
+                                          </span>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.important }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.important"
+                                           data-ng-change="pageChanged(currentPage)">
+                                    <span> </span>
+                                </label>
+                            </td>
+                            <td>Важный</td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useResponsiblesManagersList }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useResponsiblesManagersList"
+                                           data-ng-change="pageChanged()"
+
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                По ответственным менеджерам
+                            </td>
+                            <td ng-show="customerAndLeadGetRequestCriteriaDao.useResponsiblesManagersList">
+                                <div fs-multiselect="" items="allUserAccounts" freetext=""
+                                     ng-disabled="disabled" data-ng-disabled="editMode"
+                                     data-ng-change="pageChanged()"
+
+                                     ng-model="managersResponsibles">
+                                                            <span ng-show="item"><span
+                                                                    class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>
+                                                                &nbsp;{{item.firstname}} {{item.lastname}} {{item.username}}</span>
+                                    <span ng-hide="item"> нет пользователей </span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-lg-5 col-md-12">
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Фильтры по дате создания</b></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom }">
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom"
+                                           data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                создано с
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom">
+                                <div>
+                                    <date-selector
+                                            ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateFrom"></date-selector>
+                                </div>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo"
+                                           data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                создано до
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo">
+                                <date-selector
+                                        ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateTo"></date-selector>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate }">
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate"
+                                           data-ng-change="pageChanged(currentPage)">
+                                    <span> </span>
+                                </label>
+                            </td>
+
+                            <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Данные будут отсортированы так, что последние добавленные лиды или клиенты окажутся вверху"
+                                          tooltip-append-to-body="true">
+                                           Последние добавленные вверху
+                                     </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Общее </b></td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.usePagination }">
+                            <td>
+                                Постраничный вывод <br/>
+                            </td>
+
+                            <td>
+                                <label class="ui-checkbox">
+                                    <input type="checkbox" class=""
+                                           data-ng-model="customerAndLeadGetRequestCriteriaDao.usePagination"
+                                           data-ng-change="pageChanged(1)"
+                                    >
+                                    <span> </span>
+                                </label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Клиентов на страницу <br/>
+                            </td>
+                            <td>
+                                <input type="number" min="1" id="clientPerPage" class="form-control"
+                                       ng-model="itemsPerPage">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <button class="btn btn-primary" data-ng-click="pageChanged(currentPage)">
+                                    Поиск
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel panel-primary">
+        <div class="panel-heading">
+
+            <div class="row">
+                <div class="col-md-8">
+                    <span class="badge">{{allCustomersCount}}</span>
+                    Компании
+                    <md-button class="btn-sm" ng-click="$parent.filterPanelShow=true;"
+                               ng-if="!filterPanelShow">фильтры
+                    </md-button>
+                </div>
+
+                <div class="col-md-4">
+                    <input ng-model="customerAndLeadGetRequestCriteriaDao.fullTextSearchRequest"
+                           ng-model-options="{ debounce: 600 }"
+                           data-ng-change="pageChanged(currentPage)"
+                           id="searchCustomer" class="form-control background-input-color"
+                           placeholder="поиск">
+                </div>
+            </div>
+        </div>
+        <div class="panel-body text-center">
+            <table class="{{$root.tableClasses}} visible-md visible-lg">
+
+                <thead>
+                <tr>
+                    <th class="mini-col-md">№</th>
+                    <th ng-if="showObjectIDs()">ID</th>
+                    <th class="">
+                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                    </th>
+                    <th class="">Телефон</th>
+                    <th class="">Партнер</th>
+                    <th class="">Клиент</th>
+                    <th class=""> Email</th>
+                    <th class="">Менеджер</th>
+                    <th class="">
+                        <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr dir-paginate="project in projects |  itemsPerPage: itemsPerPage"
+                    current-page="currentPage"
+                    data-ng-click="clickedCustomerLine(project.customer)"
+                    total-items="allCustomersCount">
+
+                    <td class="mini-col-md"><a href="/company/details/{{project.id}}">
+                        {{ (currentPage-1)*itemsPerPage + $index+1}}
+                    </a></td>
+
+                    <td ng-if="showObjectIDs()">{{project.id}}</td>
+
+                    <td data-ng-class="{'warning': !project.name}">
+                        <a href="/company/details/{{project.id}}">{{project.name || printEmptyField()}} </a>
+                    </td>
+
+                    <td data-ng-class="{'warning': !project.telephone}">
+                        {{project.telephone}}
+                    </td>
+
+                    <td ng-if="project.partner" class="success"><i class="fa fa-plus"></i></td>
+                    <td ng-if="!project.partner" class="danger"><i class="fa fa-times"></i></td>
+
+                    <td ng-if="project.client" class="success"><i class="fa fa-plus"></i></td>
+                    <td ng-if="!project.client" class="danger"><i class="fa fa-times"></i></td>
+
+                    <td data-ng-class="{'warning': !project.email}">
+                        {{project.email}}
+                    </td>
+
+                    <td ng-if="!project.responsibleManagerID " class="danger">
+                        <h6>
+                            <span translate="CUSTOMER.COMMON.NO_RESPONSIBLE"></span>
+                        </h6>
+                    </td>
+
+                    <td ng-if="project.responsibleManagerID && project.responsibleManagerID!=currentUser.id">
+                        <a href="/user_account/details/{{project.responsibleManagerID}}">
+                            {{ printUser( resolveUser (project.responsibleManagerID) ) }}
+                        </a>
+                    </td>
+
+                    <td ng-if="project.responsibleManagerID && project.responsibleManagerID==currentUser.id "
+                        class="success col-md-1">
+                        <a href="/user_account/details/{{project.responsibleManagerID}}">
+                            <h6>Я</h6>
+                        </a>
+                    </td>
+
+                    <td class="" class="col-md-4">
+                        <a ng-href="/user_account/details/{{project.createdInfo.createdById}}">
+                            {{ printUser ( resolveUser ( project.createdInfo.createdById ) ) }}
+                        </a>
+
+                        <b> {{ project.createdInfo.createdDate | timeAgo }} </b> <br/>
+                        <small class="pull-right"> {{:: printDate(project.createdInfo.createdDate) }}</small>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <dir-pagination-controls
+                    template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                    boundary-links="true">
+            </dir-pagination-controls>
+
+            <floating-pagination-panel pages-numbers="pagesNumbers" current-page="currentPage"
+                                       pages-numbers="pagesNumbers" page-changed="pageChanged">
+            </floating-pagination-panel>
+
+            <div ng-if="projects.length === 0">
+                <div class="callout callout-warning">
+                    <h4>компании нет!</h4>
+                    <p>Добавьте компании вручную или через API, или измените фильтры.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="visible-sm visible-xs">
+
+        <div ng-repeat="project in allCompaigns track by project.id">
+
+            <div class="panel panel-success" ng-if="!project.completed">
+                <div class="panel-leftheading">
+                    <h3 class="panel-lefttitle"></h3>
+                </div>
+                <div class="panel-rightbody">
+                    <table class="{{$root.tableClasses}} cf">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td colspan="3">
+                                <h3><a href="/company/details/{{project.id}}"> {{project.name}} </a></h3>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td ng-if="project.partner" class="success"> партнер</td>
+                            <td ng-if="!project.partner" class="danger"> не партнер</td>
+                        </tr>
+
+                        <tr>
+
+                            <td ng-if="project.client" class="success"> клиент</td>
+                            <td ng-if="!project.client" class="danger"> не клиент</td>
+                        </tr>
+
+                        <tr>
+                            <td> {{project.email}}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

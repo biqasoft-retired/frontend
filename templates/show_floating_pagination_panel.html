@@ -1,0 +1,40 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px;" data-ng-show="pagesNumbers > 1">
+
+    <div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+         tooltip-placement="left" tooltip="{{'APP.DIRECTIVE.FLOATING_SHOW' | translate}}"
+         tooltip-append-to-body="true"
+         ng-click="settings.showPaginationPanel = !settings.showPaginationPanel"
+         ng-show="!settings.showPaginationPanel"
+    >
+
+        <md-button class="md-fab md-primary" aria-label="">
+            {{ currentPage }} / {{pagesNumbers}}
+        </md-button>
+    </div>
+
+    <section class="panel panel-primary" ng-if="settings.showPaginationPanel">
+        <div class="panel-heading" data-ng-click="settings.showPaginationPanel = !settings.showPaginationPanel">
+            <span class="badge">   {{ currentPage }}
+                 <span translate="APP.DIRECTIVE.FLOATING_SHOW.FROM"></span>
+                {{pagesNumbers}}  </span>
+            <span translate="APP.DIRECTIVE.FLOATING_SHOW.PAGES"></span>
+        </div>
+
+        <div class="panel-body text-center" data-ng-show="settings.showPaginationPanel">
+            <dir-pagination-controls
+                    template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                    boundary-links="true"
+                    on-page-change="pageChanged(newPageNumber)">
+            </dir-pagination-controls>
+
+            <br/>
+            <span>
+                <span translate="APP.DIRECTIVE.FLOATING_SHOW.HOTKEY_USE"></span>
+                 <br/> Ctrl+ <i class="fa fa-arrow-left"></i>
+                 <span translate="APP.AND"></span>
+              Ctrl+ <i class="fa fa-arrow-right"> </i>
+             </span>
+
+        </div>
+    </section>
+</div>

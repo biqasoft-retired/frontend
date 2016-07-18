@@ -1,0 +1,114 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="{{'USERACCOUNT.GROUP.CREATE.BUTTON' | translate}}"
+     tooltip-append-to-body="true"
+     ng-click="addNewGroup()">
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body" style="    margin: 10px;">
+        <div class="row">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span class="badge">  {{allUsersGroups.length}}  </span>
+                            <span translate="USERACCOUNT.GROUP.ALL.HEADER"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <input ng-model="filterModel"
+                                   id="searchCustomer" class="form-control background-input-color"
+                                   placeholder="{{'APP.FILTER.HEADER' | translate}}">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="col-lg-4 col-md-12"
+                 data-ng-repeat="userGroup in allUsersGroups | filter:filterModel track by userGroup.id" hover-class="methodHovered">
+                <section class="panel "
+                         data-ng-class="{'panel-danger': !userGroup.enabled, 'panel-success': userGroup.enabled }">
+                    <div class="panel-heading">
+
+                        <b> <span class="badge badge-info">  {{$index+1}} </span> </b>
+
+                        <a class="" href="/user_account/groups/details/{{userGroup.id}}">
+                            {{userGroup.name || printEmptyField() }}
+                        </a>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-md-4 col-lg-4">
+                                <a class="" href="/user_account/groups/details/{{userGroup.id}}">
+                                    <img class="img-rounded" width="150" height="150"
+                                         ng-src="{{getAvatarUrlByUser(userGroup)}}"/>
+                                </a>
+                            </div>
+
+                            <div class="col-md-8 col-lg-8">
+                                <table class="{{$root.tableClasses}}">
+                                    <thead>
+                                    <tr>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                        </td>
+                                        <td>
+                                            {{userGroup.name}}
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-if="::debugMode">
+                                        <td>
+                                            <span translate="USERACCOUNT.DETAILS.ROLES.HEADER"></span>
+                                        </td>
+                                        <td>
+                                            <ul class="nopadding">
+                                                <li ng-repeat="role in userGroup.grantedRoles">
+                                                    <small>{{role}}</small>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <span translate="USERACCOUNT.GROUP.DETAILS.USER_LIST"></span>
+                                        </td>
+                                        <td>
+                                            <ul class="nopadding">
+                                                <li ng-repeat="userId in userGroup.userAccountsIDs">
+                                                    <a href="/user_account/details/{{userId}}">
+                                                        {{ printUser(resolveUser(userId)) }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+                                        </td>
+                                        <td>
+                                            {{ printDate (userGroup.createdInfo.createdDate) }}
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

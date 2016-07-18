@@ -1,0 +1,330 @@
+<section class="page-form-ele page">
+    <br>
+
+    <div class="row">
+        <div class="col-md-6">
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    Frontend
+                </div>
+                <div class="panel-body text-center">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                Is cordova build
+                            </td>
+                            <td>
+                                {{build.isCordova}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Git revision client
+                            </td>
+                            <td>
+                                {{build.gitRevision || 'empty'}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Debug mode
+                            </td>
+                            <td>
+                                {{debugMode}}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <br>
+
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    Credentials
+                </div>
+                <div class="panel-body text-center">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                Username
+                            </td>
+                            <td>
+                                {{currentUser.username}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Domain
+                            </td>
+                            <td>
+                                {{domainSettings.id}}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <br>
+
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    Database
+                </div>
+                <div class="panel-body text-center">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                db
+                            </td>
+                            <td>
+                                {{dbStats.db}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                collections
+                            </td>
+                            <td>
+                                {{dbStats.collections}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                objects
+                            </td>
+                            <td>
+                                {{dbStats.objects}}
+                            </td>
+
+                        <tr>
+                            <td>
+                                avgObjSize
+                            </td>
+                            <td>
+                                {{dbStats.avgObjSize | bytes}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                dataSize
+                            </td>
+                            <td>
+                                {{dbStats.dataSize | bytes}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                storageSize
+                            </td>
+                            <td>
+                                {{dbStats.storageSize | bytes}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                numExtents
+                            </td>
+                            <td>
+                                {{dbStats.numExtents}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                indexes
+                            </td>
+                            <td>
+                                {{dbStats.indexes}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                indexSize
+                            </td>
+                            <td>
+                                {{dbStats.indexSize | bytes}}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="col-md-6">
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    REST API Server
+                </div>
+                <div class="panel-body text-center">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                Server version
+                            </td>
+                            <td>
+                                {{serverHealth.serverVersion || 'empty'}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Server version date
+                            </td>
+                            <td>
+                                {{ printDate(serverHealth.versionDate)}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Health
+                            </td>
+                            <td>
+                                {{serverHealth.status}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    Async API Server
+                </div>
+                <div class="panel-body text-center">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                Reconnect tries
+                            </td>
+                            <td>
+                                {{asyncServerHealth.connectTries}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Next reconnect timeout, millias
+                            </td>
+                            <td>
+                                {{asyncServerHealth.nextTryOnerrorMillias}}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    Connection to server overview
+                </div>
+                <div class="panel-body text-center">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                connected o REST API server
+                            </td>
+                            <td>
+                                {{configuration.connectedToApiServer}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                connected to async websocket server
+                            </td>
+                            <td>
+                                {{configuration.connectedToAsyncServer}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                REST URL
+                            </td>
+                            <td>
+                                {{serversURL.restAPIserverURL}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                ASYNC URL
+                            </td>
+                            <td>
+                                {{serversURL.asyncAPIserverURL}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+</section>
+
+

@@ -1,0 +1,142 @@
+<section class="page-form-ele page">
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-md-6">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.FIRSTNAME"></span>
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="newUserAccount.firstname" placeholder="" class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.LASTNAME"></span>
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="newUserAccount.lastname" placeholder="" class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.PATRONYMIC"></span>
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="newUserAccount.patronymic" placeholder="" class="form-control">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span translate="USERACCOUNT.NEW.CREDENTIALS"></span>
+                        <span class="pull-right">
+                            <span translate="APP.COMMON.DOMAIN"></span> <b>{{currentUser.domain}}</b>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.EMAIL"></span>
+                                    <br>
+                                    <small>
+                                        <span translate="USERACCOUNT.NEW.EMAIL_WILL_BE_USERNAME_TOOLTIP"></span>
+                                    </small>
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="newUserAccount.username"
+                                           data-ng-change="usernameChanged()" placeholder="" class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.NEW.PASSWORD"></span>
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="newUserAccount.password"
+                                           placeholder="{{'USERACCOUNT.NEW.PASSWORD.LEAVE_EMPTY_FOR_AUTO_GENERATION' | translate}}"
+                                           class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr ng-if="::debugMode">
+                                <td>
+                                    <span translate="USERACCOUNT.DETAILS.EMAIL"></span>
+                                     <br>
+                                    (UPPER YOU ENTERED USERNAME, HERE YOU CAN ENTER ANOTHER EMAIL)
+                                </td>
+
+                                <td>
+                                    <input type="text" ng-model="newUserAccount.email" placeholder="Email"
+                                           class="form-control">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="USERACCOUNT.NEW.SEND_EMAIL_WITH_CREDENTIALS"></span>
+                                </td>
+                                <td>
+                                    <md-checkbox type="checkbox" class=""
+                                                 data-ng-model="sendWelcomeEmail">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit" ng-click="addUserAccountController()" class="btn btn-primary"
+                                            ng-disabled="newUserAccount.username === ''">
+                                        <span translate="USERACCOUNT.NEW.ADD_ACCOUNT.BUTTON"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-md-6">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span translate="USERACCOUNT.DETAILS.ROLES.HEADER"></span>
+                    </div>
+                    <div class="panel-body">
+                        <span role-security-selector data-ng-model="newUserAccount.roles"></span>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-md-12"></div>
+        </div>
+    </div>
+</section>

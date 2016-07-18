@@ -1,0 +1,66 @@
+<md-content>
+    <md-dialog aria-label="Webdav">
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>
+                        Webdav
+                    </h2>
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+            <md-dialog-content style=" max-height:810px;
+                padding: 15px;
+            ">
+                <div>
+                    <div class="panel-body text-center">
+
+                        <div>
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                    </td>
+                                    <td>
+                                        <input data-ng-model="newToken.name" class="form-control">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span translate="EXTERNAL_SERVICES.WEBDAV.LOGIN.NAME"></span>
+                                    </td>
+                                    <td>
+                                        <input data-ng-model="newToken.login" class="form-control">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span translate="EXTERNAL_SERVICES.WEBDAV.PASSWORD.NAME"></span>
+                                    </td>
+                                    <td>
+                                        <input data-ng-model="newToken.token" class="form-control" type="password">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </md-dialog-content>
+
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" data-ng-click="addWebdavToServer()" style="margin-right:20px;">
+                    <span translate="EXTERNAL_SERVICES.WEBDAV.CREATE.BUTTON"></span>
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</md-content>

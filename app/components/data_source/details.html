@@ -1,0 +1,358 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="{{'APP.COMMON.SAVE.BUTTON' | translate}}"
+               tooltip-append-to-body="true"
+               data-ng-click="updateDataSource()"
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <section class="panel panel-primary">
+                    <div class="panel-heading">
+                        <i class="fa fa-circle" style="color: red;"
+                           ng-if="!currentDataSource.resolved"
+                           tooltip-placement="right"
+                           tooltip="{{'DATA_SOURCE.DETAILS.ERROR.GET_VALUE.TOOLTIP' | translate}} {{::printDate(currentDataSource.lastUpdate)}}"
+                           tooltip-append-to-body="true"></i>
+                        <i class="fa fa-circle" style="color: green;"
+                           ng-if="currentDataSource.resolved"
+                           tooltip-placement="right"
+                           tooltip="{{'DATA_SOURCE.DETAILS.SUCCESS.GET_VALUE.TOOLTIP' | translate}}  {{::printDate(currentDataSource.lastUpdate)}}"
+                           tooltip-append-to-body="true"
+                        ></i>
+                        KPI - {{currentDataSource.name}}
+                    </div>
+
+                    <div class="panel-body text-center">
+                        <section class="panel panel-box nopadding">
+                            <div class="col-md-8 nopadding" style="padding-bottom: 0px;">
+
+                                <table class="{{$root.tableClasses}} " style="margin-bottom: 0px;">
+                                    <tbody>
+
+                                    <tr ng-class="{'warning' : !currentDataSource.name}">
+                                        <td><b>
+                                            <span translate="DATA_SOURCE.DETAILS.NAME_FIELDS"></span>
+                                        </b></td>
+                                        <td>
+
+                                            <div class="row nopadding">
+                                                <div class="col-md-10 nopadding">
+                                                    <md-input-container flex class="nopadding">
+                                                        <input ng-model="currentDataSource.name"
+                                                               ng-model-options="{ debounce: 300 }"
+                                                        >
+                                                    </md-input-container>
+                                                </div>
+                                                <div class="col-md-2 nopadding">
+                                                    <md-menu class="pull-right nopadding">
+
+                                                        <md-button aria-label=" " class="nopadding "
+                                                                   ng-click="openMenu($mdOpenMenu, $event)">
+                                                            <i class="fa fa-cog" style="font-size: 120%;"
+                                                            ></i>
+                                                            <md-tooltip md-direction="left">
+                                                                <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                                            </md-tooltip>
+                                                        </md-button>
+
+                                                        <md-menu-content width="4">
+                                                            <md-menu-item>
+                                                                <md-button ng-click="deleteDataSource()">
+                                                                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                        </md-menu-content>
+                                                    </md-menu>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !currentDataSource.name}">
+                                        <td><b>
+                                            <span translate="DATA_SOURCE.DETAILS.CONTROLLER_FIELDS"></span>
+                                        </b></td>
+                                        <td>
+                                            <select ng-model="currentDataSource.controlledClass" class="form-control">
+                                                <option data-ng-repeat="controller in allDataSourceControllers"
+                                                        value="{{controller.value}}">
+                                                    {{controller.name | translate}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !currentDataSource.returnType}">
+                                        <td><b>
+                                            <span translate="DATA_SOURCE.DETAILS.RETURN_TYPE_FIELDS"></span>
+                                        </b></td>
+                                        <td>
+                                            <select ng-model="currentDataSource.returnType" class="form-control">
+                                                <option data-ng-repeat="controller in getAllDataSourceReturnTypes"
+                                                        value="{{controller.value}}">
+                                                    {{controller.name | translate}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <div class="pull-right" style="padding-right: 10px;">
+                                                <b> {{currentDataSource.createdInfo.createdDate | timeAgo}} </b> <br/>
+                                                <small>
+                                                    {{printDate(currentDataSource.createdInfo.createdDate)}}
+                                                    <br/>
+                                                    <a href="/user_account/details/{{::currentDataSource.createdInfo.createdById}}">
+                                                        {{ printUser( resolveUser (currentDataSource.createdInfo.createdById) ) }}
+                                                    </a>
+                                                </small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-4 nopadding bg-success" style="height: 221px !important;"
+                                 ng-style="{'background-color' : getColorForDataSource(currentDataSource)}">
+
+                                <p style="font-size: 5em; padding-top: 10%;" ng-if="currentDataSource.resolved">
+                                    {{getResolvedOneData(currentDataSource) }}
+                                </p>
+
+                                <p style="font-size: 2em;"
+                                   ng-if="!currentDataSource.resolved && currentDataSource.errorResolvedMessage">
+                                <div>
+                                    <b> {{currentDataSource.errorResolvedMessage}} </b>
+                                </div>
+                                </p>
+
+                                <p class="text-muted" style="color: #ffffff"></p>
+                            </div>
+                        </section>
+
+                        <custom-fields-shower ng-model="currentDataSource.customFields"></custom-fields-shower>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="row">
+    <div class="col-md-8">
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+
+                <div class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <span translate="DATA_SOURCE.EDIT.PARAM.HEADER"></span>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <md-button class="" ng-click="getHelpsModel()" style="padding: 0px; margin: -3px;">
+                            <md-icon md-font-icon="info_outline">info_outline</md-icon>
+                            <span translate="DATA_SOURCE.EDIT.PARAM.HELP.BUTTON"></span>
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body text-center">
+
+                <table class="{{$root.tableClasses}} table-striped table-responsive">
+                    <thead>
+                    <tr>
+                        <th class="mini-col-md">
+                            №
+                        </th>
+                        <th class="">
+                            <span translate="APP.COMMON.OBJECT.NAME"></span>
+                        </th>
+                        <th class="">
+                            <span translate="DATA_SOURCE.EDIT.PARAM.VALUE.TABLE_HEADER"></span>
+                        </th>
+                        <th class="mini-col-md"></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr data-ng-repeat="par in currentDataSource.parameters">
+                        <td> {{$index+1}}</td>
+                        <td><input data-ng-model="par.name" class="form-control" placeholder="{{'DATA_SOURCE.EDIT.PARAM.NAME' | translate}}"> <br>
+                        </td>
+                        <td><input data-ng-model="par.value" class="form-control" placeholder="{{'DATA_SOURCE.EDIT.PARAM.VALUE' | translate}}"></td>
+                        <td>
+                            <md-button class="nopadding" data-ng-click="deleteParamByIndex($index)">
+                                <md-icon md-font-icon="delete">delete</md-icon>
+                                <md-tooltip>
+                                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                </md-tooltip>
+                            </md-button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="5"></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                        </td>
+
+                        <td>
+                            <input data-ng-model="newParametre.name" class="form-control"
+                                   placeholder="{{'DATA_SOURCE.EDIT.PARAM.NEW.HEADER' | translate}}">
+                        </td>
+
+                        <td>
+                            <input data-ng-model="newParametre.value" class="form-control"
+                                   placeholder="{{'DATA_SOURCE.EDIT.PARAM.VALUE' | translate}}">
+                        </td>
+
+                        <td>
+                            <button data-ng-click="addParameterToParametres()" class="btn">
+                                <span translate="DATA_SOURCE.EDIT.PARAM.ADD"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-md-4" ng-show="currentDataSource.returnType === 'INTEGER'">
+        <section class="page-form-ele page">
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <section class="panel">
+                            <div class="panel-heading"
+                                 ng-style="{'background-color' : getColorForDataSource(currentDataSource)}"
+                            >
+                                <span translate="DATA_SOURCE.DETAILS.COLORS.HEADER"></span>
+                            </div>
+
+                            <div class="panel-body text-center">
+
+                                <span class="badge no-border" colorpicker type="button" colorpicker-position="top"
+                                      style="width: 60%;"
+                                      ng-model="currentDataSource.lights.success.color"
+                                      ng-style="{'background-color' : currentDataSource.lights.success.color }">
+                                    <span translate="DATA_SOURCE.DETAILS.COLORS.SUCCESS.NAME"></span>
+                                    <br>
+                                    <input class="form-control"
+                                           ng-model="currentDataSource.lights.success.value.intVal">
+                                </span>
+                                <br>
+
+                                <span class="badge no-border" colorpicker type="button" colorpicker-position="top"
+                                      style="width: 50%;"
+                                      ng-model="currentDataSource.lights.warning.color"
+                                      ng-style="{'background-color' : currentDataSource.lights.warning.color }">
+                                    <span translate="DATA_SOURCE.DETAILS.COLORS.WARNING.NAME"></span>
+                                    <br>
+                                    <input class="form-control"
+                                           ng-model="currentDataSource.lights.warning.value.intVal">
+                                </span>
+
+                                <br>
+
+                                <span class="badge no-border" colorpicker type="button" colorpicker-position="top"
+                                      style="width: 40%;"
+                                      ng-model="currentDataSource.lights.error.color"
+                                      ng-style="{'background-color' : currentDataSource.lights.error.color }">
+                                    <span translate="DATA_SOURCE.DETAILS.COLORS.ERROR.NAME"></span>
+                                     <br>
+                                    <input class="form-control" ng-model="currentDataSource.lights.error.value.intVal">
+                                </span>
+
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-md-12" ng-if="currentDataSource.returnType == 'INTEGER'">
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                <span translate="DATA_SOURCE.DETAILS.CHANGE_HISTORY.HEADER"></span>
+            </div>
+            <div class="panel-body text-center">
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row" style="    padding: 10px;">
+                            <div class="col-md-12">
+                                <table style="    width: 100%;">
+                                    <tr>
+                                        <td>
+                                            <span translate="DATA_SOURCE.DETAILS.CHANGE_HISTORY.CHOOSE_PERIOD"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span translate="DATA_SOURCE.DETAILS.CHANGE_HISTORY.CHOOSE_PERIOD.FROM"></span>
+                                        </td>
+                                        <td>
+                                            <date-selector ng-model="kpisBuilder.startDate"></date-selector>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span translate="DATA_SOURCE.DETAILS.CHANGE_HISTORY.CHOOSE_PERIOD.TO"></span>
+                                        </td>
+                                        <td>
+                                            <date-selector ng-model="kpisBuilder.finalDate"></date-selector>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td tooltip-placement="right"
+                                            tooltip="{{'DATA_SOURCE.DETAILS.CHANGE_HISTORY.CHOOSE_PERIOD.REPEATED_DATA' | translate}}"
+                                            tooltip-append-to-body="true">
+                                            <span translate="DATA_SOURCE.DETAILS.CHANGE_HISTORY.CHOOSE_PERIOD.REPEATED_DATA.NAME"></span>
+                                            <br>
+                                        </td>
+
+                                        <td>
+                                            <md-checkbox class="" style="    padding-top: 9px;"
+                                                         type="checkbox"
+                                                         ng-model="kpisBuilder.includeRepeatedData">
+                                            </md-checkbox>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <button class="btn " ng-click="getHistoryData()"
+                                                    style="    margin-top: 10px;">
+                                                <span translate="DATA_SOURCE.DETAILS.CHANGE_HISTORY.CHOOSE_PERIOD.REPEATED_DATA.SHOW.BUTTON"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div id="dataSourceHistory"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+<div style="position: fixed;  bottom: 20px;  right: 10px; z-index: 999999999999999;"
+         tooltip-placement="up" tooltip="{{'ANALYTICS.WEB.COUNTERS.SAVE' | translate}}"
+         tooltip-append-to-body="true"
+         ng-click="updateCounter()">
+        <md-button class="md-fab md-primary">
+            <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+        </md-button>
+</div>
+
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+            <section class="panel panel-primary">
+                <div class="panel-heading"><span class="fa fa-bar-chart"></span> <b>
+                    <span translate="ANALYTICS.WEB.COUNTERS.NAME"></span>
+                    {{webCounter.id}}
+                </b></div>
+                <div class="panel-body">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr></tr>
+                        </thead>
+
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                ID
+                            </td>
+                            <td>
+                                {{webCounter.id}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span translate="ANALYTICS.WEB.COUNTERS.NAME_COL"></span>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       ng-model="webCounter.name"
+                                       placeholder="{{'ANALYTICS.WEB.COUNTERS.COUNTER_NAME_EDIT_PLACEHOLDER' | translate}}" class="form-control">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span translate="ANALYTICS.WEB.COUNTERS.SITE_COL"></span>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       ng-model="webCounter.site"
+                                       placeholder="{{'ANALYTICS.WEB.COUNTERS.COUNTER_SITE_URL_EDIT_PLACEHOLDER' | translate}}" class="form-control">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span translate="ANALYTICS.WEB.COUNTERS.SEND_LEAD_ENABLE"></span>
+                                <br/>
+
+                                <small>
+                                    <span translate="ANALYTICS.WEB.COUNTERS.SEND_LEAD_DESCRIPTION"></span>
+                                </small>
+
+                            </td>
+                            <td>
+                                <md-checkbox ng-model="webCounter.elp"></md-checkbox>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span translate="ANALYTICS.WEB.COUNTERS.SHOW_PROMO_CODE"></span>
+                                <br/>
+                                <small>
+                                    <span translate="ANALYTICS.WEB.COUNTERS.SHOW_PROMO_CODE_DESCRIPTION"></span>
+                                </small>
+                            </td>
+                            <td>
+                                <md-checkbox ng-model="webCounter.pc"></md-checkbox>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+                    <div ng-if="::debugMode">
+                        {{webCounter | json}}
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <accordion close-others="true" class="ui-accordion ui-accordion-warning">
+                            <accordion-group heading="{{'ANALYTICS.WEB.COUNTERS.SHOW_HOW_ACTIVE' | translate}}">
+                                <div data-ng-include="'templates/web_counter_code.html'"></div>
+                            </accordion-group>
+                        </accordion>
+                    </div>
+                </div>
+            </section>
+        </div>
+</section>

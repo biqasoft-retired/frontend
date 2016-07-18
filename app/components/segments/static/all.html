@@ -1,0 +1,213 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="Создать новый статический сегмент"
+     tooltip-append-to-body="true"
+     ng-click="addNewStaticSegment()">
+    <md-button class="md-fab md-primary">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="badge">{{allSegments.length}}</span>
+                Статические сегменты
+            </div>
+            <div class="panel-body text-center">
+                <div class="visible-lg visible-md">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                            <th class="mini-col-md">№</th>
+                            <th ng-if="showObjectIDs()">ID</th>
+                            <th class=""><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                            <th class=""><span translate="APP.COMMON.OBJECT.DESCRIPTION"></span></th>
+
+                            <th class="mini-col-md">Клиенты / лиды</th>
+                            <th class="mini-col-md"> Сделки</th>
+                            <th class="mini-col-md"> Возможности</th>
+
+                            <th class="mini-col-md"> Лидов</th>
+                            <th class="mini-col-md"> Клиентов</th>
+
+                            <th class="col-md-1"><span translate="APP.COMMON.CREATED_DATE.SECTION"></span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-repeat="project in allSegments">
+
+                            <td class="mini-col-md"><a href="/segment/static/details/{{project.id}}"> {{$index+1}} </a>
+                            </td>
+
+                            <td><a href="/segment/static/details/{{project.id}}"> {{project.name || printEmptyField()}} </a>
+                            </td>
+                            <td data-ng-class="{'warning' : !project.description }"> {{project.description}}</td>
+
+                            <td ng-if="showObjectIDs()">{{project.id}}</td>
+
+                            <td>
+                                <div ng-if="::debugMode">
+                                    <div data-ng-repeat="customer in getCustomersByStaticSegment(project.id)">
+                                        <a href="/customer/details/{{customer.id}}">
+                                            {{customer.firstName}}
+                                            {{customer.lastName}}
+                                        </a>
+                                    </div>
+                                </div>
+                                <md-button href='#/customer/all/?staticSegmentsIDs=["{{project.id}}"]' class="btn">
+                                    <span translate="APP.COMMON.SHOW.BUTTON"></span>
+                                </md-button>
+                            </td>
+
+                            <td data-ng-class="{'warning' : getAllSegmentsStats(project.id).dealsAmount ===  0 }"
+                                class="mini-col-md-2">
+                                           <span class=""
+                                                 tooltip-placement="right"
+                                                 tooltip="Сумма сделок"
+                                                 tooltip-append-to-body="true">
+                                              <b> {{ printCurrencyPrintable(getAllSegmentsStats(project.id).dealsAmount)[0] }} </b>
+                                          <small> {{ printCurrencyPrintable(getAllSegmentsStats(project.id).dealsAmount)[1] }}</small>
+                                      </span>
+                                <br/>
+                                    <span class="badge pull-left " tooltip-placement="right" tooltip="Число сделок"
+                                          tooltip-append-to-body="true">
+                                     {{ getAllSegmentsStats(project.id).dealsNumber}} шт.
+                                    </span>
+                                 <span class="pull-right"
+                                       tooltip-placement="right" tooltip="Средний чек сделок"
+                                       tooltip-append-to-body="true">
+                                     <small>   {{( (getAllSegmentsStats(project.id).dealsAmount  / getAllSegmentsStats(project.id).dealsNumber ) | number:2 ) || 0 }} </small>
+
+                                          </span>
+                            </td>
+
+                            <td data-ng-class="{'warning' : getAllSegmentsStats(project.id).opportunityAmount ===  0 }"
+                                class="mini-col-md-2">
+                                           <span class=""
+                                                 tooltip-placement="right"
+                                                 tooltip="Сумма возможностей"
+                                                 tooltip-append-to-body="true">
+                                              <b> {{ printCurrencyPrintable(getAllSegmentsStats(project.id).opportunityAmount)[0] }} </b>
+                                          <small> {{ printCurrencyPrintable(getAllSegmentsStats(project.id).opportunityAmount)[1] }}</small>
+                                      </span>
+                                <br/>
+                                    <span class="badge pull-left " tooltip-placement="right" tooltip="Число возможностей"
+                                          tooltip-append-to-body="true">
+                                     {{ getAllSegmentsStats(project.id).opportunityNumber}} шт.
+                                    </span>
+                                 <span class="pull-right"
+                                       tooltip-placement="right" tooltip="Средний чек возможностей"
+                                       tooltip-append-to-body="true">
+                                            <small>
+                                                {{( (getAllSegmentsStats(project.id).opportunityAmount  / getAllSegmentsStats(project.id).opportunityNumber ) | number:2 ) || 0 }}
+                                            </small>
+                                 </span>
+                            </td>
+
+                            <td><span class="badge">{{getAllSegmentsStats(project.id).leadsCount}}</span></td>
+                            <td><span class="badge">{{getAllSegmentsStats(project.id).customerCount}}</span></td>
+
+                            <td>
+                                <a href="/user_account/details/{{project.createdInfo.createdById}}"> {{ printUser (
+                                    resolveUser ( project.createdInfo.createdById ) ) }} </a>
+
+                                <br/>
+                                <span class="pull-right">
+                                    <small> {{::printDate(project.createdInfo.createdDate )}}</small>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+
+<style>
+
+    .panel {
+        position: relative;
+    }
+
+    .panel-default > .panel-leftheading {
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+
+    .panel-primary > .panel-leftheading {
+        color: #fff;
+        background-color: #428bca;
+        border-color: #428bca;
+    }
+
+    .panelSuccess > .panel-leftheading {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .panel-info > .panel-leftheading {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+    }
+
+    .panel-warning > .panel-leftheading {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+    }
+
+    .panelDanger > .panel-leftheading {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+    .panel-leftheading {
+        width: 42px;
+        padding: 10px 15px;
+        border-right: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        float: left;
+        height: 100%;
+        position: absolute;
+    }
+
+    .panel-lefttitle {
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 15px;
+        font-size: 16px;
+        color: inherit;
+        -webkit-transform: rotate(90deg);
+        -webkit-transform-origin: left top;
+        -moz-transform: rotate(90deg);
+        -moz-transform-origin: left top;
+        -ms-transform: rotate(90deg);
+        -ms-transform-origin: left top;
+        -o-transform: rotate(90deg);
+        -o-transform-origin: left top;
+        transform: rotate(90deg);
+        transform-origin: left top;
+        position: absolute;
+        white-space: nowrap;
+    }
+
+    .panel-rightbody {
+        float: left;
+        margin-left: 45px;
+        padding: 15px;
+    }
+
+</style>

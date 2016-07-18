@@ -1,0 +1,250 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="сохранить"
+     tooltip-append-to-body="true"
+     ng-click="updateCompany()">
+
+    <md-button class="md-fab md-primary " ng-class="{'animation-hiding-1-5' : $window.changedTimes > 1}"
+               aria-label="">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="row">
+        <div class="col-md-12 col-lg-4" ng-class="{'col-lg-12' : showJson}">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="fa fa-university"></span> <b>
+                    {{currentCompany.name}} </b></div>
+                <div class="panel-body">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                <span translate="APP.COMMON.OBJECT.NAME"></span>
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <md-input-container flex class="nopadding">
+                                            <input ng-model="currentCompany.name"
+                                                   ng-model-options="{ debounce: 100 }"
+                                            >
+                                        </md-input-container>
+                                    </div>
+
+                                    <div class="col-md-3 nopadding">
+                                        <md-menu class="pull-right nopadding">
+
+                                            <md-button aria-label=" " class="nopadding "
+                                                       ng-click="openMenu($mdOpenMenu, $event)">
+                                                <i class="fa fa-cog" style="font-size: 120%;"
+                                                ></i>
+                                                <md-tooltip md-direction="left">
+                                                    <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                                </md-tooltip>
+                                            </md-button>
+
+                                            <md-menu-content width="4">
+                                                <md-menu-item>
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <md-icon md-font-icon="archive">archive</md-icon>
+                                                            <span translate="APP.COMMON.OBJECT.IN_ARCHIVE"></span>
+                                                        </div>
+
+                                                        <div class="col-md-4 nopadding">
+                                                            <md-checkbox class="nopadding md-primary"
+                                                                         type="checkbox"
+                                                                         ng-model="currentCompany.archived">
+                                                            </md-checkbox>
+                                                        </div>
+                                                    </div>
+                                                </md-menu-item>
+
+                                                <md-menu-item>
+
+                                                    <md-button class="" data-ng-click="deleteConfirmation(currentCompany)">
+                                                        <md-icon md-font-icon="delete">delete</md-icon>
+                                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                    </md-button>
+
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </div>
+
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span translate="APP.COMMON.OBJECT.DESCRIPTION"></span>
+                            </td>
+                            <td>
+                                <a href="#" editable-text="currentCompany.description">{{ currentCompany.description|| printEmptyField() }}</a>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-show="::debugMode">
+                            <td>
+                                JSON
+                            </td>
+
+                            <td>
+                                <button class="btn" ng-click="showJson = !showJson">
+                                    <span translate="APP.COMMON.SHOW.BUTTON"></span>
+                                </button>
+
+                                <div ng-if="showJson">
+                                    <br><br>
+                                    {{ currentCompany | json}} <br><br>
+                                </div>
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-12 col-lg-12">
+
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <b>
+                        <span translate="CUSTOM_FIELDS.TEMPLATES.HEADER"></span>
+                    </b>
+                </div>
+                <div class="panel-body">
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                            <th class="mini-col-md">№</th>
+                            <th>
+                                <span translate="APP.COMMON.OBJECT.NAME"></span>
+                            </th>
+                            <th>
+                                <span translate="CUSTOM_FIELDS.TEMPLATES.TEMPLATE_ENGINE.HEADER"></span>
+                            </th>
+                            <th>Mime type</th>
+                            <th>
+                                <span translate="CUSTOM_FIELDS.TEMPLATES.EXTENSION.HEADER"></span>
+                            </th>
+                            <th>
+                                <span translate="APP.COMMON.OBJECT.DESCRIPTION"></span>
+                            </th>
+                            <th>
+                                <span translate="CUSTOM_FIELDS.TEMPLATES.TEMPLATE.HEADER"></span>
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr ng-repeat="template in currentCompany.printableTemplates">
+                            <td class="mini-col-md">
+                                {{$index+1}}
+                            </td>
+
+                            <td>
+                                <input type="text" ng-model="template.name" class="form-control">
+                            </td>
+
+                            <td>
+                                <select ng-model="template.type" class="form-control"
+                                        ng-options="field.value as field.name for field in printableTypes">
+                                </select>
+                            </td>
+
+                            <td>
+                                <input type="text" ng-model="template.mimeType" class="form-control">
+                            </td>
+
+                            <td>
+                                <input type="text" ng-model="template.extension" placeholder=".html"
+                                       class="form-control">
+                            </td>
+
+                            <td>
+                                <textarea ng-model="template.description"></textarea>
+                            </td>
+
+                            <td class="col-md-4">
+                                <button class="btn" ng-show="!showTemplates" ng-click="showTemplates = !showTemplates">
+                                    <span translate="APP.COMMON.SHOW.BUTTON"></span>
+                                </button>
+                                <div ng-show="showTemplates">
+                                    <button class="btn" ng-click="showTemplates = !showTemplates">
+                                        <span translate="APP.COMMON.HIDE.BUTTON"></span>
+                                    </button>
+                                    <br>
+                                        <span translate="CUSTOM_FIELDS.FULL_SCREEN.NOTE"></span>
+                                    <br>
+                                    <div ui-codemirror ui-codemirror-opts="editorOptions" data-ng-model="template.data">
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <md-button class="" data-ng-click="deleteObjectPrntableTemplate($index)">
+                                    <md-icon md-font-icon="delete">delete</md-icon>
+                                    <md-tooltip>
+                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                    </md-tooltip>
+                                </md-button>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <md-button data-ng-click="addNewPrintableTemplate()"
+                               style="margin-top: 5px; margin-left: 50%;"
+                               data-nodrag>
+                        <md-icon md-font-icon="add">add</md-icon>
+                    </md-button>
+
+                     <span ng-if="::debugMode">
+                        {{currentCompany.printableTemplates}}
+                     </span>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-12 col-lg-12">
+            <section class="panel panel-primary">
+                <div class="panel-heading" style="border: none;">
+                    <span translate="CUSTOM_FIELDS.ATTRIBUTES.HEADER"></span>
+                </div>
+                <div class="panel-body nopadding">
+                    <custom-fields-selector ng-model="currentCompany.customFields"></custom-fields-selector>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+<style>
+    .my-input {
+        transition: all linear 0.5s;
+        background: transparent;
+    }
+
+    .my-input.ng-invalid {
+        color: white;
+        background: red;
+    }
+</style>

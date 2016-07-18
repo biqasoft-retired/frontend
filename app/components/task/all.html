@@ -1,0 +1,955 @@
+<style>
+    .doneTask {
+        opacity: 0.2;;
+    }
+</style>
+
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="{{'TASKS.CREATE.NEW.BUTTON' | translate}}"
+     tooltip-append-to-body="true"
+     ng-click="showNewTaskFoo()">
+
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+    <div class="panel-body">
+
+        <section class="panel panel-primary" ng-show="filterPanelShow">
+            <div class="panel-heading"><span class="fa fa-filter"></span>
+                <span translate="APP.FILTER.HEADER"></span>
+                <button class="btn btn-primary btn-sm"
+                        ng-click="$parent.filterPanelShow=false"
+                        ng-if="filterPanelShow ">
+                    <span translate="APP.FILTER.HIDE"></span>
+                </button>
+                <button class="btn btn-primary btn-sm"
+                        ng-click="$parent.filterPanelShow=true;  "
+                        ng-if="!filterPanelShow ">
+                    <span translate="APP.COMMON.SHOW.BUTTON"></span>
+                </button>
+            </div>
+            <div class="panel-body text-center" data-ng-show="filterPanelShow">
+
+                <div class="row">
+                    <div class="col-lg-5 col-md-6">
+                        <table class="{{$root.tableClasses}}">
+
+                            <thead>
+                            <tr>
+                                <td colspan="3"><b> Фильтры по типу задач</b></td>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr data-ng-class="{'info' : taskQueryBuilder.showOnlyWhenIamResponsible }">
+
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="taskQueryBuilder.showOnlyWhenIamResponsible"
+                                               data-ng-change="pageChanged(currentPage)">
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Будут показаны только те задачи, где ответсвенный - текущий пользователь"
+                                          tooltip-append-to-body="true">
+                                        Где я ответственный
+                                      </span>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox"><input name="checkbox1" type="checkbox"
+                                                                      data-ng-model="taskQueryBuilder.onlyDone"
+                                                                      data-ng-change="taskQueryBuilderOnlyDoneChanged()"><span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    Показывать только завершенные
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox"><input name="checkbox1" type="checkbox"
+                                                                      data-ng-model="taskQueryBuilder.onlyFavourite"
+                                                                      data-ng-change="taskQueryBuilderOnlyDoneChanged()"><span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    Показывать только важные
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input name="checkbox1" type="checkbox"
+                                               data-ng-model="taskQueryBuilder.onlyActive"
+                                               data-ng-change="taskQueryBuilderOnlyActiveChanged()"
+                                        ><span> </span></label>
+                                </td>
+
+                                <td>
+                                    Показывать только активные
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    приоритет
+                                </td>
+                                <td>
+
+                                    <from-to-selector object="taskQueryBuilder"
+                                                      from-value="'priorityMoreThan'"
+                                                      from-use="'usePriorityMoreThan'"
+                                                      to-value="'priorityLessThan'"
+                                                      to-use="'usePriorityLessThan'"
+                                    ></from-to-selector>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : taskQueryBuilder.useResponsiblesManagersList }">
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="taskQueryBuilder.useResponsiblesManagersList"
+                                               data-ng-change="pageChanged()"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    По ответственным менеджерам
+                                    <div ng-show="taskQueryBuilder.useResponsiblesManagersList">
+                                        <user-accounts-selector
+                                                ng-model="taskQueryBuilder.responsibles.userAccountsIDs"></user-accounts-selector>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <br/>
+
+                        <div class="">
+
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <td colspan="3"><b> Фильтры по дате завершения</b></td>
+                                </tr>
+
+                                </thead>
+                                <tbody>
+
+                                <tr data-ng-class="{'info' : taskQueryBuilder.useCompletedDateFrom }">
+                                    <td>
+                                        <label class="ui-checkbox">
+                                            <input type="checkbox" class=""
+                                                   data-ng-model="taskQueryBuilder.useCompletedDateFrom"
+                                                   data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                            >
+                                            <span> </span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        завершено с
+                                    </td>
+
+                                    <td ng-if="taskQueryBuilder.useCompletedDateFrom">
+                                        <date-selector ng-model="taskQueryBuilder.completedDateFrom"></date-selector>
+                                    </td>
+                                </tr>
+
+                                <tr data-ng-class="{'info' : taskQueryBuilder.useCompletedDateTo }">
+                                    <td>
+                                        <label class="ui-checkbox">
+                                            <input type="checkbox" class=""
+                                                   data-ng-model="taskQueryBuilder.useCompletedDateTo"
+                                                   data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                            >
+                                            <span> </span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        завершено до
+                                    </td>
+
+                                    <td ng-if="taskQueryBuilder.useCompletedDateTo">
+                                        <date-selector ng-model="taskQueryBuilder.completedDateTo"></date-selector>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5 col-md-6">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td colspan="3"><b> Фильтры по дате создания</b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr data-ng-class="{'info' : taskQueryBuilder.useRelativeCreatedDateFrom }">
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="taskQueryBuilder.useRelativeCreatedDateFrom"
+                                               data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    создано с
+                                </td>
+
+                                <td ng-if="taskQueryBuilder.useRelativeCreatedDateFrom">
+                                    <date-selector ng-model="taskQueryBuilder.relativeCreatedDateFrom"></date-selector>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="taskQueryBuilder.useRelativeCreatedDateTo"
+                                               data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    создано до
+                                </td>
+
+                                <td ng-if="taskQueryBuilder.useRelativeCreatedDateTo">
+                                    <date-selector ng-model="taskQueryBuilder.relativeCreatedDateTo"></date-selector>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : taskQueryBuilder.sortDESCbyCreatedDate }">
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="taskQueryBuilder.sortDESCbyCreatedDate"
+                                               data-ng-change="pageChanged(currentPage)">
+                                        <span> </span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Данные будут отсортированы так, что последние добавленные лиды или клиенты окажутся вверху"
+                                          tooltip-append-to-body="true">
+                                           Последние добавленные вверху
+                                     </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td colspan="3"><b> Общее </b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr data-ng-class="{'info' : taskQueryBuilder.usePagination }">
+                                <td>
+                                    Постраничный вывод <br/>
+                                </td>
+
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="taskQueryBuilder.usePagination"
+                                               data-ng-change="pageChanged(1)"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr data-ng-class="{'info' : taskQueryBuilder.showArchived }">
+                                <td>
+                                    Показывать из архива <br/>
+                                </td>
+
+                                <td>
+                                    <label class="ui-checkbox">
+                                        <input type="checkbox" class=""
+                                               data-ng-model="taskQueryBuilder.showArchived"
+                                               data-ng-change="pageChanged(1)"
+
+                                        >
+                                        <span> </span>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    Задач на страницу <br/>
+                                </td>
+                                <td>
+                                    <input type="number" min="1" id="clientPerPage" class="form-control"
+                                           ng-model="itemsPerPage">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary" data-ng-click=" pageChanged(currentPage)">Поиск
+                                    </button>
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-success" data-ng-click=" saveAsDynamicSegment( )">
+                                        Сохранить как шаблон
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span class="badge">  {{allCustomersCount}}  </span>
+                            Все задачи
+
+                            <button class="btn btn-primary btn-sm"
+                                    ng-click="$parent.filterPanelShow=true;  "
+                                    ng-if="!filterPanelShow ">фильтры
+                            </button>
+
+                            <button class="btn btn-primary btn-sm" data-ng-show="taskQueryBuilder.useCustomSort"
+                                    ng-click="taskQueryBuilder.useCustomSort = false;
+                                                                          taskQueryBuilder.customSortField = '';
+                                                                          pageChanged(currentPage);
+                       ">
+                                отменить сортировку
+                            </button>
+                        </div>
+
+                        <div class="col-md-4">
+                            <input ng-model="taskQueryBuilder.fullTextSearchRequest"
+                                   ng-model-options="{ debounce: 600 }"
+                                   data-ng-change="pageChanged(currentPage)"
+                                   id="searchCustomer" class="form-control background-input-color"
+                                   placeholder="поиск по имени, описанию, чек-листу... "
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body text-center"
+                     style="max-height: 75px; overflow-x: hidden;  overflow-y: auto;; background-color: #DDDDDD;     padding-bottom: 15px; padding-top: 10px;">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div data-ng-repeat="segment in alltDynamicSegments |filter:dynamicSegmentFilter track by segment.id "
+                                     class="col-lg-2 col-md-3 nopadding3" style="padding-top: 10px !important;"
+                                     data-ng-click="getByDynamicSegment(segment.id)"
+                                >
+                                    <span class="label label-info" ng-if="segment.id != activeDynamicSegmentID"> {{segment.name}}  </span>
+                                    <span class="label label-success" ng-if="segment.id ===  activeDynamicSegmentID"> {{segment.name}}  </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 nopadding">
+                            <input ng-model="dynamicSegmentFilter"
+                                   placeholder="фильтр шаблонов" class="form-control"
+                                   style="color: rgb(255, 255, 255); background-color: #DDDDDD;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body text-center visible-md visible-lg" ng-if="projects.length > 0">
+                    <div class="table-responsive">
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                                <th class="mini-col-md">№</th>
+                                <th class="" style="  width: 10%; text-align: center;" colspan="1">
+                                    Статус
+                                </th>
+
+                                <th class="taskResponsibleWidth "></th>
+
+                                <th class="col-md-4" style="text-align: center;"
+                                    data-ng-class="{'danger' : taskQueryBuilder.customSortField ===  'fullText' }"
+                                    data-ng-click="taskQueryBuilder.useCustomSort = true;
+                                                taskQueryBuilder.customSortField = 'fullText';
+                                                taskQueryBuilder.reverseSortDirectionByCustomField = !taskQueryBuilder.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                ">
+                                    <i class="fa fa-sort-alpha-asc"
+                                       ng-if="!taskQueryBuilder.reverseSortDirectionByCustomField"></i>
+                                    <i class="fa fa-sort-alpha-desc"
+                                       ng-if="taskQueryBuilder.reverseSortDirectionByCustomField"></i>
+                                    <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                </th>
+
+                                <th class=""
+                                    data-ng-class="{'danger' : taskQueryBuilder.customSortField ===  'priority' }"
+                                    data-ng-click="taskQueryBuilder.useCustomSort = true;
+                                                taskQueryBuilder.customSortField = 'priority';
+                                                taskQueryBuilder.reverseSortDirectionByCustomField = !taskQueryBuilder.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                ">
+                                    <i class="fa fa-sort-numeric-asc"
+                                       ng-if="!taskQueryBuilder.reverseSortDirectionByCustomField"></i>
+                                    <i class="fa fa-sort-numeric-desc"
+                                       ng-if="taskQueryBuilder.reverseSortDirectionByCustomField"></i>
+
+                                </th>
+
+                                <th class="col-md-1 visible-lg">Проект</th>
+
+                                <th class=""
+                                    data-ng-class="{'danger' : taskQueryBuilder.customSortField ===  'startDate' }"
+                                    data-ng-click="taskQueryBuilder.useCustomSort = true;
+                                                taskQueryBuilder.customSortField = 'startDate';
+                                                taskQueryBuilder.reverseSortDirectionByCustomField = !taskQueryBuilder.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                ">
+                                    <i class="fa fa-sort-numeric-asc"
+                                       ng-if="!taskQueryBuilder.reverseSortDirectionByCustomField"></i>
+                                    <i class="fa fa-sort-numeric-desc"
+                                       ng-if="taskQueryBuilder.reverseSortDirectionByCustomField"></i>
+                                    Начало
+                                </th>
+
+                                <th class=""
+                                    data-ng-class="{'danger' : taskQueryBuilder.customSortField ===  'finalDate' }"
+                                    data-ng-click="taskQueryBuilder.useCustomSort = true;
+                                                taskQueryBuilder.customSortField = 'finalDate';
+                                                taskQueryBuilder.reverseSortDirectionByCustomField = !taskQueryBuilder.reverseSortDirectionByCustomField;
+                                                pageChanged(currentPage);
+                                ">
+                                    <i class="fa fa-sort-numeric-asc"
+                                       ng-if="!taskQueryBuilder.reverseSortDirectionByCustomField"></i>
+                                    <i class="fa fa-sort-numeric-desc"
+                                       ng-if="taskQueryBuilder.reverseSortDirectionByCustomField"></i>
+                                    Конец
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr dir-paginate="project in projects | itemsPerPage: itemsPerPage track by project.id  "
+                                current-page="currentPage"
+                                ng-mouseover="hoverTask($event, project)"
+                                data-ng-class="{'doneTask': project.completed }"
+                                total-items="allCustomersCount">
+
+                                <td> {{ (currentPage-1)*itemsPerPage + $index+1}}</td>
+
+                                <td class="">
+                                    <div class="row" ng-if="choosedTask ===  project.id">
+                                        <div class="col-md-12" data-ng-if="!project.completed">
+                                            <button class="btn btn-success " data-ng-click="setCompeted(project.id)"
+                                                    style="  border-radius: 17px !important;"
+                                                    tooltip-animation="false" tooltip="Поставить статус: Выполнено"
+                                                    tooltip-append-to-body="true"
+
+                                            ><i
+                                                    class="fa fa-check-square-o"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" data-ng-if="project.completed">
+                                            <button class="btn btn-danger" data-ng-click="setNotCompeted(project.id)"
+                                                    style="  border-radius: 17px !important;"
+                                                    tooltip-animation="false" tooltip="Поставить статус: В процессе"
+                                                    tooltip-append-to-body="true"
+                                            >
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div ng-if="project.checkListItems.length > 0 && !project.completed && choosedTask != project.id"
+                                         class="success">
+                                        <progressbar class="progressbar-sm progress-rounded progress-striped"
+                                                     value="  countDoneCheckedListInTask(project) /  project.checkListItems.length    *100 "
+                                                     type="info">
+                                        </progressbar>
+                                        <b style="
+                                                                            margin-top: -35px;
+                                                                            margin-left: -16px;
+                                                                            /* left: 5px; */
+                                                                            position: absolute;
+                                                                            margin-bottom: 0px;
+                                                                            padding-bottom: 0px;
+                                   ">
+                                            {{ countDoneCheckedListInTask(project) / project.checkListItems.length *100
+                                            |number:2 }} %
+                                        </b>
+                                    </div>
+
+                                    <div ng-if="project.completed && choosedTask != project.id" class="danger">
+                                        <div ng-if="project.checkListItems.length > 0">
+                                            <progressbar class="progressbar-sm progress-rounded progress-striped"
+                                                         value="  countDoneCheckedListInTask(project) /  project.checkListItems.length    *100 "
+                                                         type="info">
+                                            </progressbar>
+                                            <b style="margin-top: -10px;"> {{ countDoneCheckedListInTask(project) /
+                                                project.checkListItems.length *100 |number:2 }} %
+                                            </b>
+                                        </div>
+                                        Завершено
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="row" style="padding-right: 5px;">
+                                        <div data-ng-repeat="resp in project.responsibles.userAccountsIDs">
+                                            <div class="col-md-6 " style="padding: 13px;;"
+                                                 tooltip-placement="right" tooltip="
+                                               {{ printUser(  resp  ) }}
+                                              " tooltip-append-to-body="true"
+
+                                            >
+                                                <a href="/user_account/details/{{::resp}}">
+                                                    <img class="img-rounded  " width="30" height="30"
+                                                         ng-src="{{getAvatarUrlByUser(resolveUser(resp) )}}"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td ng-class="::{'taskCheckListProgress' : project.checkListItems.length > 0 && debugMode} "
+                                    data-ng-click="clickedCustomerLine(project)"
+                                    ng-style="{'width' :  countWidthCheckList (project)  }"
+
+                                    tooltip-placement="bottom"
+                                    tooltip="От: {{ printDate(project.createdInfo.createdDate)}} {{ printUser(  resolveUser(project.createdInfo.createdById)  ) }}
+                                         " tooltip-append-to-body="true"
+
+                                ><a href="/task/details/{{::project.id}}">
+
+                                    <div style="z-index: 999999;"
+                                         ng-class="::{'taskCheckListProgressName' : project.checkListItems.length >  0 && debugMode}">
+                                        <i class="fa fa-circle" style="color: yellow;" ng-if="project.favourite"
+                                           tooltip-placement="right" tooltip="важная" tooltip-append-to-body="true"></i>
+                                        <i class="fa fa-circle" style="color: red;" ng-if="!project.completed"
+                                           tooltip-placement="right" tooltip="активная"
+                                           tooltip-append-to-body="true"></i>
+                                        <i class="fa fa-circle" style="color: green;" ng-if="project.completed"
+                                           tooltip-placement="right" tooltip="завершенная"
+                                           tooltip-append-to-body="true"></i>
+                                        {{project.name | truncate: 42: '...' }}
+                                    </div>
+
+                                </a>
+
+                                    <span ng-if="::project.connectedInfo.connectedCustomerId "> <a
+                                            href="/customer/details/{{::project.connectedInfo.connectedCustomerId}}">
+                                        (клиент) </a>
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div ng-if="::project.priority==6">
+                                        <span class="label label-danger"> 6 / 6</span>
+                                    </div>
+
+                                    <div ng-if="::project.priority==5">
+                                        <span class="label label-warning"> 5 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="::project.priority==4">
+                                        <span class="label label-info"> 4 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="::project.priority==3">
+                                        <span class="label label-success"> 3 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="::project.priority==2">
+                                        <span class="label label-primary"> 2 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="::project.priority==1">
+                                        <span class="label label-default"> 1 / 6 </span>
+                                    </div>
+
+                                </td>
+
+                                <td class="visible-lg " data-ng-class="{'warning' : !project.taskProject}">
+                                    <a href="/task/projects/details/{{project.taskProject.id}}">
+                                        {{ project.taskProject.name}}
+                                    </a>
+                                </td>
+
+                                <td ng-if="startTaskFoo(project) ==  null || startTaskFoo(project) <= 0 " class="danger">
+                                    <span ng-if="project.startDate != null">
+                                        <i> {{ printDate(project.startDate) }} </i>
+                                        </span>
+                                </td>
+
+                                <td ng-if="startTaskFoo(project) != null && startTaskFoo(project) > 0"
+                                    tooltip-placement="bottom" tooltip="{{ printDate(project.startDate)}}"
+                                    tooltip-append-to-body="true"
+                                    class="success">
+                                    <div class="success">
+                                        <small>
+                                            до начала {{startTaskFoo(project)}} ч.
+                                        </small>
+                                    </div>
+                                </td>
+
+                                <td ng-if="returnTimeDifferenceBetweenDate(project.finalDate) ==  null" class="danger"
+                                    tooltip-placement="bottom" tooltip="{{ printDate(project.finalDate)}}"
+                                    tooltip-append-to-body="true">
+                                    <div ng-if="project.finalDate">
+                                        просрочена
+                                        <i> {{ project.finalDate | timeAgo}} </i>
+                                    </div>
+                                </td>
+
+                                <td ng-if="returnTimeDifferenceBetweenDate(project.finalDate) != null"
+                                    tooltip-placement="bottom" tooltip="{{ printDate(project.finalDate) }}"
+                                    tooltip-append-to-body="true"
+                                    class="success">
+                                    <div class="success" ng-if="returnTimeDifferenceBetweenDate(project.finalDate) != null">
+                                        <small>
+                                            осталось {{returnTimeDifferenceBetweenDate(project.finalDate)}} ч.
+                                            <i> {{ printDate(project.finalDate)}} </i>
+                                        </small>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </section>
+
+            <dir-pagination-controls
+                    template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                    boundary-links="true">
+            </dir-pagination-controls>
+
+            <floating-pagination-panel pages-numbers="pagesNumbers" current-page="currentPage"
+                                       pages-numbers="pagesNumbers" page-changed="pageChanged">
+            </floating-pagination-panel>
+
+            <div class="panel-body text-center" ng-if="projects.length ===  0">
+                <section class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body text-center">
+
+                        <div class="callout callout-danger">
+                            <h4> Задач для отображения нет </h4>
+                            <p> Измените фильтры или добавьте задачи! </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="visible-sm visible-xs">
+            <div dir-paginate="project in projects | itemsPerPage: itemsPerPage track by project.id"
+                 current-page="currentPage"
+                 total-items="allCustomersCount">
+
+                <div class="panel panel-success" ng-if="!project.completed">
+                    <div class="panel-leftheading">
+                        <h3 class="panel-lefttitle">Активно</h3>
+                    </div>
+                    <div class="panel-rightbody">
+                        <table class="{{$root.tableClasses}} cf">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="3">
+                                    <h3><a href="/task/details/{{project.id}}"> {{project.name}} </a></h3>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2"> Приоритет</td>
+                                <td>
+                                    <div ng-if="project.priority==6">
+                                        <span class="label label-danger"> 6 / 6</span>
+                                    </div>
+
+                                    <div ng-if="project.priority==5">
+                                        <span class="label label-warning"> 5 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="project.priority==4">
+                                        <span class="label label-info"> 4 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="project.priority==3">
+                                        <span class="label label-success"> 3 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="project.priority==2">
+                                        <span class="label label-primary"> 2 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="project.priority==1">
+                                        <span class="label label-default"> 1 / 6 </span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    C {{ printDate(project.startDate)}}
+                                </td>
+
+                                <td>
+                                    до
+                                </td>
+                                <td>
+                                    {{ printDate(project.finalDate)}}
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td data-ng-show="!project.completed">
+                                    <button class="btn btn-success " data-ng-click="setCompeted(project.id)"><i
+                                            class="fa fa-check-square-o"></i>
+                                        <i tooltip-animation="false" tooltip="Выполнено" tooltip-append-to-body="true"
+                                           style="color: red;"></i>
+                                    </button>
+                                </td>
+
+                                <td data-ng-show="project.completed">
+                                    <button class="btn btn-danger" data-ng-click="setNotCompeted(project.id)"><i
+                                            class="fa fa-times"></i>
+                                        <i tooltip-animation="false" tooltip="В процессе" tooltip-append-to-body="true"
+                                           style="color: red;"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                </div>
+
+                <div class="panel panel-danger" ng-if="project.completed">
+                    <div class="panel-leftheading">
+                        <h3 class="panel-lefttitle">Завершено</h3>
+                    </div>
+
+                    <div class="panel-rightbody">
+
+                        <table class="{{$root.tableClasses}} cf">
+                            <thead>
+                            <tr>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="3">
+                                    <h3><a href="/task/details/{{project.id}}"> {{project.name}} </a></h3>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2"> Приоритет</td>
+                                <td>
+                                    <div ng-if="project.priority==6">
+                                        <span class="label label-danger"> 6 / 6</span>
+                                    </div>
+
+                                    <div ng-if="project.priority==5">
+                                        <span class="label label-warning"> 5 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="project.priority==4">
+                                        <span class="label label-info"> 4 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="project.priority==3">
+                                        <span class="label label-success"> 3 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="project.priority==2">
+                                        <span class="label label-primary"> 2 / 6 </span>
+                                    </div>
+
+                                    <div ng-if="project.priority==1">
+                                        <span class="label label-default"> 1 / 6 </span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    C {{ printDate(project.startDate)}}
+                                </td>
+
+                                <td>
+                                    до
+                                </td>
+                                <td>
+                                    {{ printDate(project.finalDate)}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button class="btn btn-success " data-ng-click="setCompeted(project.id)"><i
+                                            class="fa fa-check-square-o"></i>
+                                        <i tooltip-animation="false" tooltip="Выполнено" tooltip-append-to-body="true"
+                                           style="color: red;"></i>
+                                    </button>
+                                </td>
+
+                                <td></td>
+                                <td>
+                                    <button class="btn btn-danger" data-ng-click="setNotCompeted(project.id)"><i
+                                            class="fa fa-times"></i>
+                                        <i tooltip-animation="false" tooltip="В процессе" tooltip-append-to-body="true"
+                                           style="color: red;"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+
+    .panel {
+        position: relative;
+    }
+
+    .panel-default > .panel-leftheading {
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+
+    .panel-primary > .panel-leftheading {
+        color: #fff;
+        background-color: #428bca;
+        border-color: #428bca;
+    }
+
+    .panel-success > .panel-leftheading {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .panel-info > .panel-leftheading {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+    }
+
+    .panel-warning > .panel-leftheading {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+    }
+
+    .panel-danger > .panel-leftheading {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+    .panel-leftheading {
+        width: 42px;
+        padding: 10px 15px;
+        border-right: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        float: left;
+        height: 100%;
+        position: absolute;
+    }
+
+    .panel-lefttitle {
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 15px;
+        font-size: 16px;
+        color: inherit;
+        -webkit-transform: rotate(90deg);
+        -webkit-transform-origin: left top;
+        -moz-transform: rotate(90deg);
+        -moz-transform-origin: left top;
+        -ms-transform: rotate(90deg);
+        -ms-transform-origin: left top;
+        -o-transform: rotate(90deg);
+        -o-transform-origin: left top;
+        transform: rotate(90deg);
+        transform-origin: left top;
+        position: absolute;
+        white-space: nowrap;
+    }
+
+    .panel-rightbody {
+        float: left;
+        margin-left: 45px;
+        padding: 15px;
+    }
+</style>

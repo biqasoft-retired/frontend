@@ -1,0 +1,147 @@
+<section class="page-form-ele page">
+             <section class="panel panel-primary">
+                <div class="panel-heading">
+                    Компания Яндекс.Директ по токену {{tokenId}}
+                </div>
+
+                <div class="panel-body">
+                    <div ng-repeat="clientInfo in clientInfo" >
+                    <!--"id": {{clientInfo.id}}, <br>-->
+                    <!--"SendAccNews": {{clientInfo.SendAccNews}},<br>-->
+                    "Email": {{clientInfo.CampaignEmails}},<br>
+                    "Скидка": {{clientInfo.Discount}},<br>
+                    "Логин": {{clientInfo.Login}},<br>
+                    <!--"SmsPhone": {{clientInfo.SmsPhone}},<br>-->
+                    <!--"Роль": {{clientInfo.Role}},<br>-->
+                    "ФИО": {{clientInfo.FIO}},<br>
+                    <!--"DateCreate": {{clientInfo.DateCreated}},<br>-->
+                    "Архивировано": {{clientInfo.StatusArch}},<br>
+                    <!--"SendNews": {{clientInfo.SendNews}},<br>-->
+                    <!--"Phone": {{clientInfo.Phone}},<br>-->
+                    <!--"NonResident": {{clientInfo.NonResident}},<br>-->
+                    <!--"SendWarn": {{clientInfo.SendWarn}}<br>-->
+                    </div>
+                    <br/>
+                </div>
+
+
+                <div class="panel-body text-center">
+
+                    <div data-ng-show="allHistoryCampaigns.length > 0">
+                        <label> Сохраненные состояния Компаний Яндекс Директа по состоянию на </label>
+                        <select data-ng-model="historyAcc"
+                                ng-options="campaign.id as printDate(campaign.createdInfo.createdDate) for campaign in allHistoryCampaigns"
+                                ng-change="toHistoryCampaigns()">
+                        </select>
+                    </div>
+
+
+                    <div ng-if="historyAcc !==''">
+                        <br><br>
+                        <a href="/yandex/direct/history/allCompaigns/token/{{tokenId}}/historyId/{{historyAcc}}"><h3> Окунуться в
+                            историю! </h3></a>
+                    </div>
+
+
+                    <!--Yandex API GetCampaignsList-->
+
+                    <div class="table-responsive">
+                        <table class="{{$root.tableClasses}} cf">
+                            <thead>
+                            <tr>
+                                <th class="">ID</th>
+                                <th class=""><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                                <th class="">Баланс</th>
+                                <th class="">
+                                    <span translate="APP.COMMON.MONEY.AMOUNT"></span>
+                                </th>
+                                <th class="">Статус</th>
+                                <th class="">В архиве</th>
+                                <th class="">Активна</th>
+                                <!--<th>Логин</th>-->
+                                <th class="">Показывается</th>
+                                <th class="">Начало показа</th>
+                                <th class="">Промодерировано</th>
+                                <th class="">Кликов</th>
+                                <th class="">Показов</th>
+                                <th class="">CTR</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                            <tr ng-repeat="compaign in allCompaigns">
+
+                                <td><a href="/yandex/direct/banners/compaigns/{{compaign.CampaignID}}/token/{{tokenId}}">
+                                    {{compaign.CampaignID}} </a></td>
+
+                                <td>
+                                    <a href="/yandex/direct/banners/compaigns/{{compaign.CampaignID}}/token/{{tokenId}}">{{compaign.Name}} </a>
+                                </td>
+
+                                <td> {{compaign.Rest}}</td>
+                                <td> {{compaign.Sum}}</td>
+
+                                <td> {{compaign.Status}}</td>
+
+                                <!--В архиве или нет или нет-->
+                                <td ng-if="compaign.StatusArchive ===  'Yes'">
+                                    <i tooltip-animation="false" tooltip="В архиве" tooltip-append-to-body="true" class="fa fa-archive"
+                                       style="color: red;"></i>
+                                </td>
+
+                                <td ng-if="compaign.StatusArchive ===  'No'">
+                                    <i tooltip-animation="false" tooltip="Не в архиве" tooltip-append-to-body="true"
+                                       class="fa fa-archive" style="color: green;"></i>
+                                </td>
+                                <!--В архиве или нет или нет-->
+
+                                <!--Активна или нет-->
+                                <td ng-if="compaign.IsActive ===  'Yes'">
+                                    <i tooltip-animation="false" tooltip="Активна" tooltip-append-to-body="true" class="fa fa-toggle-on"
+                                       style="color: green;"></i>
+                                </td>
+                                <td ng-if="compaign.IsActive ===  'No'">
+                                    <i tooltip-animation="false" tooltip="Не активна" tooltip-append-to-body="true"
+                                       class="fa fa-toggle-off" style="color: red;"></i>
+                                </td>
+                                <!--Активна или нет-->
+
+                                <!--<td> {{compaign.Login}}</td>-->
+
+                                <td ng-if="compaign.StatusShow ===  'Yes'">
+                                    <i tooltip-animation="false" tooltip="Показывается" tooltip-append-to-body="true"
+                                       class="fa fa-check-square-o" style="color: green;"></i>
+                                </td>
+                                <td ng-if="compaign.StatusShow ===  'No'">
+                                    <i tooltip-animation="false" tooltip="Не показывется" tooltip-append-to-body="true"
+                                       class="fa fa fa-times" style="color: red;"></i>
+                                </td>
+
+                                <td> {{compaign.StartDate}}</td>
+
+                                <td ng-if="compaign.StatusModerate ===  'Yes'">
+                                    <i tooltip-animation="false" tooltip="Промодерировно" tooltip-append-to-body="true"
+                                       class="fa fa-check-square-o" style="color: green;"></i>
+                                </td>
+                                <td ng-if="compaign.StatusModerate ===  'No'">
+                                    <i tooltip-animation="false" tooltip="Не Промодерировно" tooltip-append-to-body="true"
+                                       class="fa fa fa-times" style="color: red;"></i>
+                                </td>
+
+                                <td> {{compaign.Clicks}}</td>
+                                <td> {{compaign.Shows}}</td>
+                                <td> {{compaign.Clicks / compaign.Shows * 100 | number:3}} %</td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    </div>
+                </section>
+    </section>
+
+

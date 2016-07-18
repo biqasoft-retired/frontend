@@ -1,0 +1,72 @@
+<div style="max-height: 900px; overflow-y: auto">
+    <div class="panel-body text-center"
+         ng-if="!result || result.length == 0">
+        <div class="callout callout-warning" style="margin: 0px;">
+            <h4>
+                <span translate="APP.HISTORY.NO_CHANGES"></span>
+            </h4>
+        </div>
+    </div>
+
+    <span ng-if="debugMode">
+         <json-printer result="result"></json-printer>
+    </span>
+
+    <table class="{{$root.customFieldsTableClasses}} "
+           ng-if="result && result.length > 0">
+
+        <thead>
+        <tr>
+            <th ng-click="loadHistory()">
+            </th>
+            <th>
+                <span translate="APP.HISTORY.FIELDS.NAME"></span>
+            </th>
+            <th>
+                <span translate="APP.HISTORY.FIELDS.OLD"></span>
+            </th>
+            <th>
+                <span translate="APP.HISTORY.FIELDS.NEW"></span>
+            </th>
+            <th>
+                <span translate="APP.HISTORY.FIELDS.DATE"></span>
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="change in result | filter: fieldsNameFilter" style="max-height: 100px; overflow-y: auto">
+            <td>
+                <div class="col-md-12   nopadding"
+                     tooltip-placement="right" tooltip="{{ printUser( resolveUser(change.userId) )}}" tooltip-append-to-body="true">
+                    <a href="/user_account/details/{{change.userId}}">
+                        <img class="img-rounded" width="30" height="30" ng-src="{{getAvatarUrlByUser(resolveUser(change.userId))}}"/>
+                    </a>
+                </div>
+            </td>
+
+            <td>
+                <b>
+                    {{printFieldsName(change)}}
+                </b>
+            </td>
+
+            <td>
+                {{ printValue(change, 'left') }}
+            </td>
+
+            <td>
+                {{ printValue(change, 'right') }}
+            </td>
+
+            <td>
+                <span tooltip-placement="right" tooltip="{{printDate(change.date)}}"
+                      tooltip-append-to-body="true">
+                        {{change.date | timeAgo}}
+                </span>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>

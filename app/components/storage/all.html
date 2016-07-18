@@ -1,0 +1,296 @@
+<style>
+    .overlayedAll {
+    }
+
+    .overlayedAllShow {
+        position: fixed;
+        background-color: rgba(145, 202, 228, 0.45);
+        height: 100%;
+        width: 100%;
+        z-index: 999999999;
+    }
+</style>
+
+<div ng-show="dropSupported" ng-file-drop="onFileSelect($files)"
+     ng-file-drop-available="dropSupported=true"
+     ng-file-drag-over-class="dragOverClass($event)"
+     ng-file-drag-over-delay="500"
+>
+
+    <section ng-show="isOverlayed()" class="overlayedAllShow">
+        <i class="fa fa-cloud-upload" style="font-size: 2000%; position: fixed; left: 45%; top: 40%; color: white"></i>
+    </section>
+
+    <section class="page-form-ele page">
+
+        <div class="panel-body">
+            <div class="">
+                <section class="panel panel-default" ng-show="selectedFiles != null && !uploadedAll">
+                    <div class="panel-heading">
+                        Прогресс загрузки
+                    </div>
+                    <div class="panel-body text-center">
+                        <div>
+                            <!--{{progress}} <br>-->
+                            <!--<b> {{uploadedAll}} </b>-->
+                            <div class="err" ng-show="errorMsg != null">{{errorMsg}}</div>
+                            <!--<br/>-->
+                            <!--Прогресс:-->
+                            <!--<br/>-->
+                            <!--<br/>-->
+                            <table class="table table-responsive table-striped">
+                                <thead>
+                                <tr>
+                                    <td>Номер</td>
+                                    <td><span translate="APP.COMMON.OBJECT.NAME"></span></td>
+                                    <td>Размер</td>
+                                    <td>Тип</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="sel-file" ng-repeat="f in selectedFiles"
+                                    ng-class="{ success: progress[$index] === 100 }">
+
+                                    <img ng-show="dataUrls[$index]" ng-src="{{dataUrls[$index]}}">
+                                    <button class="button" ng-click="start($index)"
+                                            ng-show="progress[$index] < 0">Start
+                                    </button>
+                                    <span class="progress" ng-show="progress[$index] >= 0"></span>
+                                    <button class="button" ng-click="abort($index)"
+                                            ng-show="hasUploader($index) && progress[$index] < 100">Abort
+                                    </button>
+
+                                    <td> {{($index + 1) + '.'}} {{progress[$index]}}%</td>
+                                    <td>{{f.name}}</td>
+                                    <td>{{f.size | bytes}}</td>
+                                    <td>{{f.type}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="panel panel-primary visible-lg visible-md">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <ol class="breadcrumb-alt">
+                                <li data-ng-repeat="url in folderTree  track by $index"
+                                    ng-click=" changeFolder(url)">
+                                    <a href="javascript:;">
+                                        {{ url.name || url }}
+                                    </a>
+                                </li>
+                            </ol>
+
+                            <span ng-if="folderTree.length ===  0">
+                            Файлы
+                        </span>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            загрузить
+                            <input data-ui-file-upload class="btn btn-warning" type="file"
+                                   ng-file-select="onFileSelect($files)" multiple>
+                            <button class="btn btn-primary" ng-click="createNewFolderDialog()">Новая папка</button>
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="text" data-ng-model="textFilter" class="form-control background-input-color"
+                                   placeholder="поиск в текущей папки {{projects.length}} объектов"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body text-center">
+
+                    <div class="row" style="padding-top: 4px; padding-bottom: 4px;">
+
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div data-ng-repeat="segment in alltDynamicSegments |filter:dynamicSegmentFilter track by segment.id"
+                                     class="col-lg-2 col-md-2 nopadding" style="padding-top: 10px !important;"
+                                     tooltip-placement="bottom"
+                                     tooltip="{{::segment.description}}"
+                                     tooltip-append-to-body="true"
+                                     data-ng-click="getByDynamicSegment(segment)"
+                                >
+                                <span class="label label-info" ng-if="segment.id != activeDynamicSegmentID">
+                         <img src="assets/img//{{::segment.type}}.png" alt="" class="" width="20" height="20">   {{::segment.name}}
+                                    <span ng-if="segment.lastUpdate">
+                              <small> ({{segment.lastUpdateNumber}})</small>
+                            </span>
+                                </span>
+                                    <span class="label label-success" ng-if="segment.id ===  activeDynamicSegmentID">
+                                     <img src="assets/img//{{::segment.type}}.png" alt="" class="" width="20" height="20">   {{::segment.name}}
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 nopadding">
+                            <input ng-model="dynamicSegmentFilter"
+                                   class="form-control"
+                                   placeholder="провайдеры"
+                                   style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+                        </div>
+                    </div>
+
+                    <div ng-if="projects.length ===  0">
+                        <div class="callout callout-warning">
+                            <h4>Файлы отсутствуют</h4>
+                            <p>Ни загружено ни одного файла</p>
+                        </div>
+                    </div>
+
+                    <table class="table table-condensed table-stripped  table-hover" ng-if="projects.length > 0 ">
+                        <thead>
+                        <tr>
+                            <th class="mini-col-md" colspan="1"></th>
+                            <th class="mini-col-md"></th>
+                            <th class="col-md-7"><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                            <th class="">Размер</th>
+                            <th class=""></th>
+                            <th class=""><span translate="APP.COMMON.CREATED_DATE.SECTION"></span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="project in projects | filter:textFilter | orderBy:'-folder'">
+                            <td class="col-md-1 mini-col-md" ng-if="project.file">
+                            </td>
+
+                            <td ng-if="project.folder" colspan="2">
+                                <i class="fa fa-folder"
+                                   style=" font-size: 300%; color: rgba(168, 168, 168, 1);"></i>
+                            </td>
+
+                            <td ng-if="project.file">
+                                <i class="fa fa-file" ng-if="!project.avatarUrl" style=" font-size: 300%;"></i>
+                                <!-- in google thumbnails is 170x170  -->
+                                <img class="" ng-if="project.avatarUrl" align="center" height="80" width="80"
+                                     ng-src="{{project.avatarUrl}}"/>
+                            </td>
+
+                            <td class="col-md-5" ng-if="!project.folder">
+
+                             <span ng-if="project.name.length <= 43"
+                                   class="pull-left"
+                                   ng-click="downloadFile(project)">
+                                  {{project.name}}
+                             </span>
+
+                                <span ng-if="project.name.length > 43"
+                                      class="pull-left"
+                                      ng-click="downloadFile(project)"
+                                      tooltip-placement="right" tooltip="{{project.name}}"
+                                      tooltip-append-to-body="true">
+                                  {{project.name | truncate: 43: '...' }}
+                             </span>
+
+                                <span ng-click="$parent.$parent.$parent.changeFolder(project);"
+                                      class="pull-left"
+                                      ng-if="project.folder">
+                                          {{project.name | truncate: 43: '...' }}
+                                     </span>
+
+                                <span ng-if="project.connectedInfo.connectedCustomerId "> <a
+                                        href="/customer/details/{{project.connectedInfo.connectedCustomerId}}">
+                                        (клиент) </a>    </span>
+                                <span ng-if="project.connectedTaskId "> <a
+                                        href="/task/details/{{project.connectedTaskId}}"> (задача) </a>    </span>
+                                <span ng-if="project.connectedOpportunityId "> <a
+                                        href="/opportunity/details/{{project.connectedOpportunityId}}">
+                                        (возможность) </a>    </span>
+
+                            </td>
+
+                            <td class="col-md-5" ng-if="project.folder"
+                                ng-click="$parent.$parent.$parent.changeFolder(project);"
+                            >
+                             <span ng-if="project.name.length <= 43" class="pull-left">
+                                  {{project.name}}
+                             </span>
+
+                                <span ng-if="project.name.length > 43" class="pull-left"
+                                      tooltip-placement="right" tooltip="{{project.name}}"
+                                      tooltip-append-to-body="true">
+                                  {{project.name | truncate: 43: '...' }}
+                             </span>
+                            </td>
+
+                            <td class="col-md-1">
+                            <span ng-if="!project.folder && project.fileSize">
+                                  {{project.fileSize | bytes}}
+                            </span>
+
+                                <span ng-if="(project.folder && !project.fileSize) || project.onlyExport">
+                                  -
+                            </span>
+                            </td>
+
+                            <td>
+                                <span data-ng-if="project.onlyExport">
+                                    <md-menu>
+                                        <button class="btn" style="background-color: rgba(0, 0, 0, 0);"
+                                                ng-click="openMenu($mdOpenMenu, $event)">
+                                            <i class="fa fa-download"></i>
+                                        </button>
+
+                                        <md-menu-content width="4">
+                                            <md-menu-item data-ng-repeat="(key, value) in project.exportLinks">
+                                                <md-button href="{{ value }}">
+                                                <span>
+                                                    <i class="fa fa-link"></i>
+                                                    {{ key  | truncate: 15: '...' }}
+                                                </span>
+                                                </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </span>
+
+                                <button class="btn" style="background-color: rgba(0, 0, 0, 0);"
+                                        ng-click="chooseEditableObject(project, $event)"
+                                >
+                                    <i class="fa fa-cog"></i>
+                                </button>
+
+                                <button class="btn" style="background-color: rgba(0, 0, 0, 0);"
+                                        ng-if="!project.folder && !project.onlyExport"
+                                        ng-click="downloadFile(project)"
+                                        tooltip-placement="right" tooltip="скачать" tooltip-append-to-body="true"
+                                >
+                                    <i class="fa fa-download"></i>
+                                </button>
+
+                                <button class="btn" style="background-color: rgba(0, 0, 0, 0);"
+                                        ng-if="project.mimeType == 'audio/mpeg' "
+                                        ng-click="listenAudioDownloadedAdd(project)">
+                                    <i class="material-icons">queue_music</i>
+                                    <md-tooltip>
+                                        прослушать
+                                    </md-tooltip>
+                                </button>
+
+                            </td>
+
+                            <td class="" class="col-md-4">
+                     <span ng-if="!project.folder">
+                                  <a ng-href="/user_account/details/{{project.createdInfo.createdById}}">
+                                      {{ printUser ( resolveUser ( project.createdInfo.createdById ) ) }}
+                                  </a>
+                            <b> {{ project.createdInfo.createdDate | timeAgo }} </b>  <br/>
+                      </span>
+                                <small class="pull-right"> {{ :: printDate( project.createdInfo.createdDate )}}</small>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </section>
+</div>

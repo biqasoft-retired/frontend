@@ -1,0 +1,49 @@
+<section class="page-form-ele page">
+    <div class="panel-body ">
+
+        <section class="panel panel-primary" style="  margin-bottom: 3px;">
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <span class="">  <h3> Приложение {{app.name}} </h3> хочет получить доступ к данным вашего аккаунта </span>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <br>
+                            <img class="img-rounded  " width="150" height="150" style="margin-top: 20px;"
+                                 ng-src="{{ app.avatarUrl || 'assets/img/no-avatar.png' }}"/>
+                            <br> <br>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary" data-ng-click="giveAccess()">
+                                        Дать доступ
+                                    </button>
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <button class="btn" data-ng-click="deniedAccess()">
+                                        Отказать в доступе
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div ng-if="app.description">
+                                <br><br>
+                                <span translate="APP.COMMON.OBJECT.DESCRIPTION"></span> приложения: <br>
+                                {{app.description}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <br>
+                    <span> и запрашивает выполнять следующие операции от имени текущего пользователя</span>
+                    <span role-security-selector data-ng-model="app.roles"></span>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

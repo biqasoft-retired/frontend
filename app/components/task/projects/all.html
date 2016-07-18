@@ -1,0 +1,288 @@
+<style>
+
+
+    .center {
+
+        position: fixed;
+        /*width:500px;*/
+        /*height:200px;*/
+        /*background-color:#FFF;*/
+        /*padding:10px;*/
+        /*border:5px solid #CCC;*/
+        z-index: 200;
+        /*margin: 5% auto;*/
+        /*left: 0;*/
+        /*right: 0;*/
+
+        /*position: fixed;*/
+        top: 50%;
+        left: 50%;
+        /*margin-top: -100px;*/
+        /*margin-left: -250px;*/
+    }
+
+</style>
+
+
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+
+     tooltip-placement="left" tooltip="Создать проект задач"
+     tooltip-append-to-body="true"
+     ng-click="addProject()"
+        >
+
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+
+</div>
+
+
+<section class="page-form-ele page">
+
+    <!--<div class="panel-body"  >-->
+    <!--<div class="row">-->
+
+    <!--<div class="col-md-7">-->
+    <!--<section class="panel panel-default">-->
+    <!--<div class="panel-heading"><span class="glyphicon glyphicon-th"></span>  Информация </div>-->
+    <!--<div class="panel-body text-center">-->
+
+    <!--<p>-->
+    <!--Проекты задач используются для объединения задач в группы.-->
+    <!--</p>-->
+
+    <!--<p>-->
+    <!--Это используется для отлеживания выполнения не только одной задачи, но и некоторого проекта в целом.-->
+    <!--</p>-->
+
+    <!--</div>-->
+
+    <!--</section>-->
+    <!--</div>-->
+
+
+    <!--<div class="col-md-5">-->
+    <!--<section class="panel panel-default">-->
+    <!--<div class="panel-heading"><span class="glyphicon glyphicon-th"></span>  Новый проект </div>-->
+    <!--<div class="panel-body text-center">-->
+
+    <!--<div class="row">-->
+    <!--<div class="col-md-6">-->
+    <!--<input type="text" ng-model="newProject.name" placeholder="введите название нового проекта" class="form-control">-->
+    <!--</div>-->
+
+    <!--<div class="col-md-6">-->
+    <!--<button class="btn btn-success" data-ng-click="addProject()">Добавить проект задач</button>-->
+    <!--</div>-->
+
+
+    <!--</div>-->
+
+
+    <!--&lt;!&ndash;{{allTasksProjects}}&ndash;&gt;-->
+
+
+    <!--</div>-->
+
+    <!--</section>-->
+
+    <!--</div>-->
+    <!--</div>-->
+
+
+    <!--</div>-->
+
+
+    <section data-ng-repeat="taskProject in allTasksProjects track by taskProject.id">
+        <div class="col-md-12 col-lg-12">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="badge">{{$index+1}}</span>
+                    <!--Проект:-->
+                    <!--<h1>-->
+
+
+                    <!--</h1>-->
+
+                    <a href="/task/projects/details/{{taskProject.id}}" class="" style="color: white">
+                        {{taskProject.name || printEmptyField()}} </a>
+                </div>
+                <div class="panel-body">
+
+
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+
+                            <td>№</td>
+                            <td>
+                                <span translate="APP.COMMON.OBJECT.NAME"></span>
+                            </td>
+
+
+                            <td>Дата начала</td>
+                            <td>Дата Конца</td>
+
+                            <td>Прогресс по чек-листам</td>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-repeat="task in taskProject.tasks track by task.id">
+
+                            <td ng-class="{warning:task.favourite ===  true  }">{{$index+1}}</td>
+
+
+                            <td ng-class="{success : task.completed ===  true , danger: task.completed ===  false }">
+                                <a href="/task/details/{{task.id}}"> {{task.name}} </a>
+                            </td>
+
+
+                            <td ng-if="returnTimeDifferenceBetweenDate(task.startDate) ===  'null'" class="danger">
+                                <div>
+                                    Задача уже началась <br>
+                                    {{ printDate(task.startDate) }}
+                                </div>
+                            </td>
+
+
+                            <td ng-if="returnTimeDifferenceBetweenDate(task.startDate) != 'null'" class="success">
+                                <div class="success" ng-if="returnTimeDifferenceBetweenDate(task.startDate) != 'null'">
+                                    До начала {{returnTimeDifferenceBetweenDate(task.startDate)}} ч. <br>
+                                    {{ printDate(task.startDate) }}
+                                </div>
+                            </td>
+
+
+                            <td ng-if="returnTimeDifferenceBetweenDate(task.finalDate) ===  'null'" class="danger">
+                                <div>
+                                    Время на выполнение вышло
+                                </div>
+                            </td>
+
+                            <td ng-if="returnTimeDifferenceBetweenDate(task.finalDate) != 'null'" class="success">
+                                <div class="success" ng-if="returnTimeDifferenceBetweenDate(task.finalDate) != 'null'">
+                                    До конца {{returnTimeDifferenceBetweenDate(task.finalDate)}} ч. <br>
+                                    {{ printDate(task.finalDate) }}
+                                </div>
+                            </td>
+
+
+                            <td data-ng-class="{ danger : task.checkListItems.length ==0  }">
+
+                                <progressbar class="progressbar-sm progress-rounded progress-striped"
+                                             value="  countDoneCheckedListInTask(task) /  task.checkListItems.length    *100 "
+                                             type="info"></progressbar>
+
+                                <div class="row">
+                                    <div class="text-center">
+                                        <b> [ {{ countDoneCheckedListInTask(task) / task.checkListItems.length *100
+                                            |number:2 }} % ]</b>
+                                    </div>
+                                </div>
+                            </td>
+
+
+                        </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+
+                </div>
+
+            </section>
+        </div>
+    </section>
+
+
+</section>
+
+
+<style>
+
+    .panel {
+        position: relative;
+    }
+
+    .panel-default > .panel-leftheading {
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+
+    .panel-primary > .panel-leftheading {
+        color: #fff;
+        background-color: #428bca;
+        border-color: #428bca;
+    }
+
+    .panel-success > .panel-leftheading {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+
+    .panel-info > .panel-leftheading {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+    }
+
+    .panel-warning > .panel-leftheading {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+    }
+
+    .panel-danger > .panel-leftheading {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+    .panel-leftheading {
+        width: 42px;
+        padding: 10px 15px;
+        border-right: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        float: left;
+        height: 100%;
+        position: absolute;
+    }
+
+    .panel-lefttitle {
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 15px;
+        font-size: 16px;
+        color: inherit;
+        -webkit-transform: rotate(90deg);
+        -webkit-transform-origin: left top;
+        -moz-transform: rotate(90deg);
+        -moz-transform-origin: left top;
+        -ms-transform: rotate(90deg);
+        -ms-transform-origin: left top;
+        -o-transform: rotate(90deg);
+        -o-transform-origin: left top;
+        transform: rotate(90deg);
+        transform-origin: left top;
+        position: absolute;
+        white-space: nowrap;
+    }
+
+    .panel-rightbody {
+        float: left;
+        margin-left: 45px;
+        padding: 15px;
+    }
+
+</style>

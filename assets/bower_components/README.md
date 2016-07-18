@@ -1,0 +1,1 @@
+assets that not actively supported and have not repos in node nom

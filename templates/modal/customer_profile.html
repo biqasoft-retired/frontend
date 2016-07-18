@@ -1,0 +1,127 @@
+<md-dialog aria-label="" style="">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span translate="CUSTOMER.DETAILS.SOCIAL.HEADER"></span>
+                </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="max-width:800px;max-height:810px;">
+            <div>
+                <div class="row nopadding">
+                    <div class="col-md-12">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td><b>
+                                    <span translate="Адрес аватара"></span>
+                                </b></td>
+                                <td>
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="detailedCustomerInfo.avatarUrl"
+                                               ng-model-options="{ debounce: 300 }"
+                                        >
+                                    </md-input-container>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>
+                                    <span translate="CUSTOMER.DETAILS.SOCIAL.FACEBOOK.NAME"></span>
+                                </b></td>
+                                <td>
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="detailedCustomerInfo.socialNetworks.fb"
+                                               ng-model-options="{ debounce: 300 }"
+                                        >
+                                    </md-input-container>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>
+                                    <span translate="CUSTOMER.DETAILS.SOCIAL.VK.NAME"></span>
+                                </b></td>
+                                <td>
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="detailedCustomerInfo.socialNetworks.vk"
+                                               ng-model-options="{ debounce: 300 }"
+                                        >
+                                    </md-input-container>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>
+                                    <span translate="CUSTOMER.DETAILS.SOCIAL.TWITTER.NAME"></span>
+                                </b></td>
+                                <td>
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="detailedCustomerInfo.socialNetworks.twitter"
+                                               ng-model-options="{ debounce: 300 }"
+                                        >
+                                    </md-input-container>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>
+                                    <span translate="CUSTOMER.DETAILS.SOCIAL.OK.NAME"></span>
+                                </b></td>
+                                <td>
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="detailedCustomerInfo.socialNetworks.ok"
+                                               ng-model-options="{ debounce: 300 }"
+                                        >
+                                    </md-input-container>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>
+                                    <span translate="CUSTOMER.DETAILS.SOCIAL.INSTAGRAM.NAME"></span>
+                                </b></td>
+                                <td>
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="detailedCustomerInfo.socialNetworks.instagram"
+                                               ng-model-options="{ debounce: 300 }"
+                                        >
+                                    </md-input-container>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>
+                                    <span translate="CUSTOMER.DETAILS.SOCIAL.LINKEDIN.NAME"></span>
+                                </b></td>
+                                <td>
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="detailedCustomerInfo.socialNetworks.linkedin"
+                                               ng-model-options="{ debounce: 300 }"
+                                        >
+                                    </md-input-container>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>
+                                    <span translate="CUSTOMER.DETAILS.SOCIAL.YOUTUBE.NAME"></span>
+                                </b></td>
+                                <td>
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="detailedCustomerInfo.socialNetworks.youtube"
+                                               ng-model-options="{ debounce: 300 }"
+                                        >
+                                    </md-input-container>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+        </md-dialog-actions>
+    </form>
+</md-dialog>

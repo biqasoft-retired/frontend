@@ -1,0 +1,68 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+
+     tooltip-placement="left" tooltip="Новое приложение"
+     tooltip-append-to-body="true"
+     ng-click="addNewUser()"
+>
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="panel panel-primary">
+    <div class="panel-heading">
+
+        <div class="row">
+            <div class="col-md-6">
+                <span class="badge">  {{apps.length}}    </span>
+                OAuth2 приложения
+                <br>
+              <small>  OAuth 2 приложения позволяют разработчикам создавать свои приложения на основе данных системы через API</small>
+            </div>
+
+            <div class="col-md-2">
+                <select ng-model="viewType" class="form-control" data-ng-change="changedView()"
+                        ng-options="field as field.name for field in viewTypes">
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <input type="text" data-ng-model="textFilter" class="form-control background-input-color">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="md-padding" layout="row" layout-wrap layout-align="left start">
+        <div class="col-lg-3 col-md-6 col-sm-12"
+             ng-repeat="user in apps | filter:textFilter">
+            <md-card class="md-padding"  >
+                <img ng-src="{{ user.avatarUrl || 'assets/img/thumb11.jpg' }}"
+                        style="    max-height: 200px;"
+                      class="md-card-image"
+                     ng-class="{'column-image' : true}">
+                <md-card-title>
+                    <md-card-title-text>
+
+                                <span class="md-headline">
+                                    <a href="/developers/oauth2/app/details/{{user.id}}">
+                                        {{user.name || printEmptyField()}}</a>
+                                </span>
+                        <br><br>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-md card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+
+                <md-card-actions layout="row" layout-align="end center">
+
+                    <b> {{user.createdInfo.createdDate | timeAgo }} </b>
+                </md-card-actions>
+
+                <md-card-footer>
+
+                </md-card-footer>
+            </md-card>
+    </div>
+</div>

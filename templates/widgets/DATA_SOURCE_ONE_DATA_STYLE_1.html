@@ -1,0 +1,26 @@
+<div class="widget-demo" style="    margin-top: 0; !important; border: 0; !important; overflow: visible; !important;">
+    <div class="widget-demo-image">
+        <span class="widget-demo-img-label" ng-if='allWidgetsData["|currentWidget|"].demo'> DEMO </span>
+
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="text-center">  {{allWidgetsData["|currentWidget|"].widgetName}} </span></div>
+            <div class="panel-body text-center">
+
+                <div class="col-md-12 nopadding">
+                    <section class="panel panel-box nopadding">
+                        <div class="panel-left panel-item bg-reverse"><p class="size-h4 ng-binding">
+                            <a class=" " href='/data_source/details/{{allWidgetsData["|currentWidget|"].dataSource.id}}'>
+                                {{allWidgetsData["|currentWidget|"].dataSource.name || printEmptyField()}}
+                            </a>
+                        </p></div>
+                        <div class="panel-right panel-item bg-success" style="border-radius: 0px;"><p style="font-size: 4em;" class="ng-binding">
+                            {{ getResolvedOneData (allWidgetsData["|currentWidget|"].dataSource) }} </p>
+
+                            <p class="text-muted" style="color: #ffffff"></p></div>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

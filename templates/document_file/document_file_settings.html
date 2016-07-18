@@ -1,0 +1,115 @@
+<md-dialog aria-label="" style="">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2> {{ editableObject.name }} </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style=" ">
+            <div class="panel-body text-center">
+
+                <table class="table">
+
+                    <tr>
+                        <td>
+                            <span translate="APP.COMMON.OBJECT.NAME"></span></td>
+                        <td>
+                            <div class="row nopadding">
+                                <div class="col-md-9 nopadding">
+                                    <md-input-container flex class="nopadding">
+                                        <input ng-model="editableObject.name"
+                                               ng-model-options="{ debounce: 100 }"
+                                        >
+                                    </md-input-container>
+                                </div>
+
+                                <div class="col-md-3 nopadding">
+                                    <md-menu class="pull-right nopadding">
+
+                                        <md-button aria-label=" " class="nopadding "
+                                                   ng-click="openMenu($mdOpenMenu, $event)">
+                                            <i class="fa fa-cog" style="font-size: 120%;"
+                                            ></i>
+                                            <md-tooltip md-direction="left">
+                                                <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                            </md-tooltip>
+                                        </md-button>
+
+                                        <md-menu-content width="4">
+                                            <md-menu-item>
+                                                <md-button class="" data-ng-click="deleteDocumentFileConfirmation(editableObject)">
+                                                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                </md-button>
+                                            </md-menu-item>
+
+                                            <md-menu-item>
+                                                <md-button class="" data-ng-click="getDirectLink(editableObject.id)">
+                                                    <span translate="STORAGE.GET_DIRECT_LINK.BUTTON"></span>
+                                                </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+
+                                    </md-menu>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span translate="APP.COMMON.OBJECT.IN_ARCHIVE"></span>
+                            :
+                        </td>
+
+                        <td>
+                            <label class="ui-checkbox">
+                                <input name="checkbox1" type="checkbox" ng-model="editableObject.archived">
+                                <span> </span>
+                            </label>
+                        </td>
+                    </tr>
+
+                    <tr ng-show="directLinks[editableObject.id]">
+                        <td>
+                            <span translate="STORAGE.GET_DIRECT_LINK.BUTTON"></span>
+                        </td>
+                        <td>
+                            <input type="text" ng-model="directLinks[editableObject.id]" class="form-control" disabled>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <div ng-if="editableObject && editableObject.length > 0">
+                    <table class="table table-bordered table-stripped">
+                        <thead>
+                        <tr>
+                            <th>
+                                <span translate="STORAGE.META_INFO.KEY"></span>
+                            </th>
+                            <th>
+                                <span translate="STORAGE.META_INFO.VALUE"></span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!--<tr data-ng-repeat="meta in editableObject.metaInfo">-->
+                            <!--<td>{{meta.name}}</td>-->
+                            <!--<td>{{meta.value}}</td>-->
+                        <!--</tr>-->
+                        </tbody>
+                    </table>
+                </div>
+
+                <md-dialog-actions layout="row">
+                    <md-button class="md-raised md-primary"
+                               ng-click="saveChangesOnCurrentObject()" style="margin-right:20px;">
+                        <span translate="APP.COMMON.SAVE.BUTTON"></span>
+                    </md-button>
+                </md-dialog-actions>
+
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

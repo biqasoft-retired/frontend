@@ -1,0 +1,83 @@
+<section class="page-form-ele page">
+    <br>
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <section class="panel panel-default">
+                <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> Шаблон уведомлений <b> </b>
+                </div>
+                <div class="panel-body text-center">
+                    <div class="panel-body text-center">
+                        <div text-angular ng-model="currentNotificationTemplate"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-6">
+            <section class="panel panel-default">
+                <div class="panel-heading"><span class="glyphicon glyphicon-th"></span> Каналы уведомлений</div>
+                <div class="panel-body text-center">
+
+                    <accordion class="ui-accordion ui-accordion-warning">
+                        <accordion-group heading=" Email" is-open="status.isFirstOpen1">
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <td><span translate="APP.COMMON.OBJECT.NAME"></span> источника</td>
+                                    <td>
+                                        <span translate="APP.COMMON.ACTION"></span>
+                                    </td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="dataSource in allDataSources" class="table-striped">
+                                    <td> {{dataSource.name}}</td>
+
+                                    <td>
+                                        <button class="btn btn-success"
+                                                data-ng-click="dataSourceWidgetNew(dataSource.id)">Использовать
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+
+                        <accordion-group heading="Android">
+
+                            <textarea data-ng-model="androidTestMessage.shortText"
+                                      class="textarea-fill-all-parent"></textarea>
+
+                            <table class="{{$root.tableClasses}}">
+                                <thead>
+                                <tr>
+                                    <td>platform</td>
+                                    <td>model</td>
+                                    <td>uuid</td>
+                                    <td>Тест</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="table-striped" ng-repeat="not in androidNotifications">
+                                    <td> {{not.platform}}</td>
+                                    <td> {{not.model}}</td>
+                                    <td> {{not.uuid}}</td>
+                                    <td>
+                                        <button class="btn btn-success" data-ng-click="testMessageToAndroid(not.id)">
+                                            Текстовое сообщение
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+                    </accordion>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+

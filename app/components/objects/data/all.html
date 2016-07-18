@@ -1,0 +1,335 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="Создать новый объект"
+     tooltip-append-to-body="true"
+     ng-click="addCompany()">
+    <md-button class="md-fab md-primary">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page">
+
+    <section class="panel panel-primary" style="  margin-bottom: 3px;" ng-show="filterPanelShow">
+        <div class="panel-heading"><span class="fa fa-filter"></span> Фильтры
+            <md-button class="btn-sm" ng-click="filterPanelShow=false">
+                <span translate="APP.COMMON.HIDE.BUTTON"></span>
+            </md-button>
+        </div>
+        <div class="panel-body text-center">
+
+            <div class="row">
+
+                <div class="col-lg-5 col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Фильтры по дате создания</b></td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom }">
+
+                            <td>
+                                <md-checkbox type="checkbox" class=""
+                                             data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom"
+                                             data-ng-change="changedUseRelativeCreatedDateFrom(); "
+                                ></md-checkbox>
+                            </td>
+
+                            <td>
+                                создано с
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom">
+                                <div>
+                                    <date-selector
+                                            ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateFrom"></date-selector>
+                                </div>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <md-checkbox type="checkbox" class=""
+                                             data-ng-model="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo"
+                                             data-ng-change="changedUseRelativeCreatedDateTo(); "
+                                ></md-checkbox>
+                            </td>
+
+                            <td>
+                                создано до
+                            </td>
+
+                            <td ng-if="customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo">
+                                <date-selector
+                                        ng-model="customerAndLeadGetRequestCriteriaDao.relativeCreatedDateTo"></date-selector>
+                            </td>
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate }">
+                            <td>
+                                <md-checkbox type="checkbox" class=""
+                                             data-ng-model="customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate"
+                                             data-ng-change="pageChanged(currentPage)"></md-checkbox>
+                            </td>
+
+                            <td>
+                                    <span class="" tooltip-placement="right"
+                                          tooltip="Данные будут отсортированы так, что последние добавленные лиды или клиенты окажутся вверху"
+                                          tooltip-append-to-body="true">
+                                           Последние добавленные вверху
+                                     </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="col-lg-5 col-md-12">
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td colspan="3"><b> Общее </b></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.usePagination }">
+                            <td>
+                                Постраничный вывод <br/>
+                            </td>
+
+                            <td>
+                                <md-checkbox type="checkbox" class=""
+                                             data-ng-model="customerAndLeadGetRequestCriteriaDao.usePagination"
+                                             data-ng-change="pageChanged(1)"
+
+                                ></md-checkbox>
+                            </td>
+
+                        </tr>
+
+                        <tr data-ng-class="{'info' : customerAndLeadGetRequestCriteriaDao.showArchived }">
+                            <td>
+                                Показывать из архива <br/>
+                            </td>
+
+                            <td>
+                                <md-checkbox type="checkbox" class=""
+                                             data-ng-model="customerAndLeadGetRequestCriteriaDao.showArchived"
+                                             data-ng-change="pageChanged(1)"
+
+                                ></md-checkbox>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Объектов на страницу <br/>
+                            </td>
+                            <td>
+                                <input type="number" min="1" id="clientPerPage" class="form-control"
+                                       ng-model="itemsPerPage">
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <button class="btn btn-primary" data-ng-click=" pageChanged(currentPage)">Поиск
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <button class="btn btn-success" data-ng-click=" saveAsDynamicSegment( $eve)">
+                                    Сохранить
+                                    как динамический сегмент
+                                </button>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel panel-primary">
+        <div class="panel-heading">
+
+            <div class="row">
+                <div class="col-md-8">
+                    <span class="badge">{{allCustomersCount}}</span>
+
+                    <a href="/objects/custom/meta/details/{{customObjectMeta.id}}" style="color: white !important;">
+                        {{customObjectMeta.name || printEmptyField()}}
+                    </a>
+
+                    <md-menu>
+
+                        <md-button class="btn-sm"
+                                   ng-click="openMenu($mdOpenMenu, $event)">
+                            <span translate="APP.COMMON.MORE.BUTTON"></span>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button class=""
+                                           ng-click="downloadFileExcel()">
+                                    <md-icon md-font-icon="file_download">file_download</md-icon>
+                                    <span translate="CUSTOMER_SAVE_EXCEL"></span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-show="currentDynamicSegmentObjectEdited"
+                                           ng-click="saveUpdateDynamicSegment()">
+                                    <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+                                    Сохранить изменения в критерии сегмента <b> {{currentDynamicSegment.name ||
+                                    ''}} </b>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                    <md-button class="btn-sm" ng-click="filterPanelShow=true;" ng-show="!filterPanelShow"
+                    >фильтры
+                    </md-button>
+                </div>
+
+                <div class="col-md-4">
+                    <input ng-model="customerAndLeadGetRequestCriteriaDao.fullTextSearchRequest"
+                           placeholder="поиск"
+                           ng-model-options="{ debounce: 600 }"
+                           data-ng-change="pageChanged(currentPage)"
+                           id="searchCustomer" class="form-control background-input-color"
+                    >
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body text-center"
+             style="max-height: 80px; overflow-x: hidden;  overflow-y: auto;; background-color: #DDDDDD; padding-bottom: 8px; padding-top: 10px;">
+            <div class="row">
+
+                <div class="col-md-10">
+                    <div class="row">
+                        <div data-ng-repeat="segment in alltDynamicSegments |filter:dynamicSegmentFilter   track by segment.id"
+                             class="col-lg-2 col-md-2 nopadding" style="padding-top: 10px !important;"
+                             tooltip-placement="bottom"
+                             tooltip="{{segment.description}}"
+                             tooltip-append-to-body="true"
+                             data-ng-click="getByDynamicSegment(segment)"
+                        >
+                                <span class="label label-info" ng-if="segment.id != activeDynamicSegmentID">
+                                    {{segment.name}}
+                                    <span ng-if="segment.lastUpdate">
+                              <small> ({{segment.lastUpdateNumber}})</small>
+                            </span>
+                                </span>
+                            <span class="label label-success" ng-if="segment.id ===  activeDynamicSegmentID"> {{segment.name}}  </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 nopadding">
+                    <input ng-model="dynamicSegmentFilter"
+                           placeholder="{{ 'CUSTOMER_DYNAMIC_SEGMENTS' | translate}}" class="form-control"
+                           style="color: rgb(255, 255, 255); background-color: #DDDDDD;">
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body text-center">
+            <table class="{{$root.tableClasses}}">
+                <thead>
+                <tr>
+                    <th class="mini-col-md">№</th>
+                    <th ng-if="showObjectIDs()">ID</th>
+                    <th class=""><span translate="APP.COMMON.OBJECT.NAME"></span></th>
+                    <th ng-if="showObjectIDs()" class="">Id коллекции</th>
+                    <th class="">Полей</th>
+                    <th class=""><span translate="APP.COMMON.CREATED_DATE.SECTION"></span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr dir-paginate="project in projects  | itemsPerPage: itemsPerPage"
+                    current-page="currentPage"
+                    data-ng-click="clickedCustomerLine(project.customer)"
+                    total-items="allCustomersCount">
+
+                    <td class="mini-col-md">
+                        <a href="/objects/custom/data/object/details/id/{{project.id}}/collectionId/{{project.collectionId}}">
+                            {{ (currentPage-1)*itemsPerPage + $index+1}}
+                        </a>
+                    </td>
+
+                    <td ng-if="showObjectIDs()">{{project.id}}</td>
+
+                    <td data-ng-class="{'warning': !project.name}">
+                        <a href="/objects/custom/data/object/details/id/{{project.id}}/collectionId/{{project.collectionId}}">
+                            {{project.name || printEmptyField()}}
+                        </a>
+                    </td>
+
+                    <td ng-if="showObjectIDs()">
+                        {{project.collectionId}}
+                    </td>
+                    <td data-ng-class="{'warning': !project.customFields}">
+                        {{project.customFields.length}}
+                    </td>
+
+                    <td class="" class="col-md-4">
+                        <a ng-href="/user_account/details/{{project.createdInfo.createdById}}">
+                            {{ printUser ( resolveUser ( project.createdInfo.createdById ) ) }}
+                        </a>
+
+                        <b> {{ project.createdInfo.createdDate | timeAgo }} </b> <br/>
+                        <small class="pull-right"> {{:: printDate(project.createdInfo.createdDate) }}</small>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+
+            <dir-pagination-controls
+                    template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                    boundary-links="true">
+            </dir-pagination-controls>
+
+            <div style="position: fixed;  bottom: 4px;  right: 93px;" ng-show="pagesNumbers > 1">
+
+                <section class="panel panel-primary">
+                    <div class="panel-heading" data-ng-click="showPaginationPanel = !showPaginationPanel">
+                        <span class="fa fa-th-list"></span> Страницы
+                    </div>
+
+                    <div class="panel-body text-center" data-ng-show="showPaginationPanel">
+                        <dir-pagination-controls
+                                template-url="node_modules/angular-utils-pagination/dirPagination.tpl.html"
+                                boundary-links="true" on-page-change="pageChanged(newPageNumber)">
+                        </dir-pagination-controls>
+
+                        <br/>
+                                <span>Вы можете использовать <br/> Ctrl+ <i class="fa fa-arrow-left"></i>
+                            и Ctrl+ <i class="fa fa-arrow-right"> </i>
+                            </span>
+                    </div>
+                </section>
+            </div>
+
+            <div ng-if="projects.length ===  0">
+                <div class="callout callout-warning">
+                    <h4>Объектов нет!</h4>
+                    <p>Добавьте объект вручную или через API, или измените фильтры.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

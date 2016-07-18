@@ -1,0 +1,248 @@
+<div class="panel-body text-center">
+    <div class="row" style="padding-top: 10px;" ng-if="showUploadBox">
+        <div class="" ng-class="" style="padding-left: 20px; padding-right: 30px;">
+            <div ng-show="dropSupported" class="drop-box" ng-class="{'no-objects-color': ngModel.length ===  0}"
+                 ng-file-drop="onFileSelect($files)"
+                 ng-file-drop-available="dropSupported=true"
+                 ng-file-drag-over-class="dragOverClass($event)"
+                 ng-file-drag-over-delay="100">
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row nopadding">
+                            <div class="col-md-10 nopadding">
+                                <div ng-if="ngModel.length ===  0">
+                                    <h4 class="nopadding">
+                                        <span translate="STORAGE.UPLOAD.NO_UPLOADED_FILES"></span>
+                                    </h4>
+                                </div>
+
+                                <span ng-if="uploadFileName">
+                                    {{uploadFileName}}
+                                </span>
+
+                                <span ng-if="!uploadFileName">
+                                      <span translate="STORAGE.UPLOAD.DROP_HERE"></span>
+                                </span>
+
+                            </div>
+                            <div class="col-md-2 nopadding">
+                                <input data-ui-file-upload class="btn" type="file"
+                                       ng-file-select="onFileSelect($files)" multiple>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-file-drop-available="dropSupported=true"
+                 ng-show="!dropSupported">
+                <span translate="STORAGE.UPLOAD.DROP_HERE.NOT_SUPPORTED"></span>
+            </div>
+        </div>
+    </div>
+
+    <section class="panel panel-default" ng-show="selectedFiles != null && !uploadedAll">
+        <div class="panel-heading">
+            <span translate="STORAGE.UPLOAD.PROCESS.HEADER"></span>
+        </div>
+        <div class="panel-body text-center">
+            <div>
+                <div class="err" ng-show="errorMsg != null">{{errorMsg}}</div>
+                <table class="table table-responsive table-striped">
+                    <thead>
+                    <tr>
+                        <td>
+                            №
+                        </td>
+                        <td>
+                            <span translate="APP.COMMON.OBJECT.NAME"></span>
+                        </td>
+                        <td>
+                            <span translate="STORAGE.UPLOAD.SIZE"></span>
+                        </td>
+                        <td>
+                            <span translate="STORAGE.UPLOAD.EXTENSION"></span>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="sel-file" ng-repeat="f in selectedFiles"
+                        ng-class="{ success: progress[$index] === 100 }">
+
+                        <img ng-show="dataUrls[$index]" ng-src="{{dataUrls[$index]}}">
+                        <button class="button" ng-click="start($index)"
+                                ng-show="progress[$index] < 0">
+                            Start
+                        </button>
+                        <span class="progress" ng-show="progress[$index] >= 0"></span>
+                        <button class="button" ng-click="abort($index)"
+                                ng-show="hasUploader($index) && progress[$index] < 100">Abort
+                        </button>
+
+                        <td> {{($index + 1) + '.'}} {{progress[$index]}}%</td>
+                        <td>{{f.name}}</td>
+                        <td>{{f.size | bytes}}</td>
+                        <td>{{f.type}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <b ng-if="::debugMode">{{ngModel}}</b>
+
+    <table class="table table-responsive table-striped"
+           data-ng-show="ngModel.length > 0">
+        <thead>
+        <tr>
+            <td><b>
+                <span translate="APP.COMMON.OBJECT.NAME"></span>
+            </b>
+            </td>
+            <td><b>
+                <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+            </b></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="document in filesUploadedObjectsArray | filter:documentsNameFilter">
+            <td>
+                <span class="pull-left"> {{$index+1}} </span>
+                {{document.name}}
+            </td>
+
+            <td>
+                <a ng-href="/user_account/details/{{::document.createdInfo.createdById}}">
+                    {{ printUser ( resolveUser ( document.createdInfo.createdById ) ) }}
+                </a>
+
+                <span class="pull-right">
+                   {{ document.createdInfo.createdDate | timeAgo }}
+                    <md-tooltip>
+                       {{ ::printDate(document.createdInfo.createdDate) }}
+                    </md-tooltip>
+                </span>
+            </td>
+            <td>
+
+                <button class="btn" style="background-color: rgba(0, 0, 0, 0);"
+                        ng-click="downloadFileDir(document)">
+                    <i class="fa fa-download"></i>
+                    <md-tooltip>
+                        <span translate="STORAGE.UPLOAD.DOWNLOAD"></span>
+                    </md-tooltip>
+                </button>
+
+                <button class="btn" style="background-color: rgba(0, 0, 0, 0);"
+                        ng-if="document.mimeType == 'audio/mpeg' " ng-click="listenAudioDownloadedAdd(document)">
+                    <i class="material-icons">queue_music</i>
+                    <md-tooltip>
+                        <span translate="STORAGE.UPLOAD.LISTEN"></span>
+                    </md-tooltip>
+                </button>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .no-objects-color {
+        background-color: rgba(221, 221, 221, 0.33) !important;
+    }
+
+    .upload-buttons input[type="file"] {
+        width: 6.3em \0/ IE9;
+    }
+
+    .sel-file {
+        padding: 1px 5px;
+        font-size: smaller;
+        color: grey;
+    }
+
+    .response .sel-file li, .response .reqh {
+        color: blue;
+        padding-bottom: 5px;
+    }
+
+    fieldset {
+        border: 1px solid #DDD;
+        width: 420px;
+        padding: 10px;
+        line-height: 23px;
+    }
+
+    fieldset label {
+        /*font-size: smaller;*/
+    }
+
+    .progress {
+        display: inline-block;
+        width: 100px;
+        border: 3px groove #CCC;
+    }
+
+    .progress div {
+        font-size: smaller;
+        background: orange;
+        width: 0;
+    }
+
+    .drop-box {
+        background: #F8F8F8;
+        border: 5px dashed #DDD;
+        /*width: 200px;*/
+        height: 85px !important;
+        text-align: center;
+        padding-top: 25px;
+        float: left;
+        margin-left: 10px;
+    }
+
+    button {
+        padding: 1px 5px;
+        font-size: smaller;
+        margin: 0 3px;
+    }
+
+    form .progress {
+        line-height: 15px;
+    }
+
+    form button {
+        padding: 3px 10px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .err {
+        font-size: 12px;
+        color: #C53F00;
+        margin: 15px;
+        padding: 15px;
+        background-color: #F0F0F0;
+        border: 1px solid black;
+    }
+
+    :not(output):-moz-ui-invalid {
+        box-shadow: none;
+    }
+
+    .preview img, .preview audio, .preview video {
+        max-width: 300px;
+        max-height: 150px;
+    }
+
+    :not(output):-moz-ui-invalid {
+        box-shadow: none;
+    }
+
+    .panel {
+        position: relative;
+    }
+</style>

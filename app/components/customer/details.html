@@ -1,0 +1,1841 @@
+<div style="position: fixed;  bottom: 4px;  right: 13px; z-index: 999999999999999;"
+     tooltip-placement="left" tooltip="{{'CUSTOMER.DETAILS.CREATE_NEW_TASK' | translate}}"
+     tooltip-append-to-body="true"
+     ng-click="showNewTaskFoo($event)"
+>
+
+    <md-button class="md-fab md-primary" aria-label="">
+        <md-icon md-svg-src="assets/ic_add_black_24px.svg"></md-icon>
+    </md-button>
+</div>
+
+<section class="page-form-ele page" id="topPosition">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-8" style="padding: 3px; !important">
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+
+                        <section class="panel panel-box" style="    margin-bottom: 6px;">
+                            <div class="panel-top bg-primary"
+                                 ng-style="{'background-color': detailedCustomerInfo.salesFunnelStatus.color || ''}">
+                                <div class="text-center">
+                                    <h3 class="ng-binding">
+                                        <a href="#sementsBox" du-smooth-scroll style="color: white">
+                                            {{detailedCustomerInfo.firstName}}
+                                            {{detailedCustomerInfo.lastName}}
+                                            <br/>
+                                            <span ng-if="detailedCustomerInfo.archived">
+                                                <span translate="CUSTOMER.DETAILS.IN_ARCHIVE"></span>
+                                            </span>
+                                        </a>
+                                    </h3>
+
+                                    <div class="pull-right" style="    margin-top: -25px;">
+
+                                        <a href="#objecthistory" du-smooth-scroll>
+                                                 <span tooltip-placement="right" style="color: white"
+                                                       tooltip="{{  printDate(detailedCustomerInfo.createdInfo.createdDate)  }}"
+                                                       tooltip-append-to-body="true">
+                                                       {{ detailedCustomerInfo.createdInfo.createdDate | timeAgo  }} <br/>
+                                                </span>
+                                        </a>
+
+                                        <a ng-href="/user_account/details/{{::detailedCustomerInfo.createdInfo.createdById}}">
+                                            {{ printUser ( resolveUser ( detailedCustomerInfo.createdInfo.createdById ) ) }}
+                                        </a>
+
+                                        <div ng-if="detailedCustomerInfo.customer"
+                                             style="bottom: -30px; position: relative;  right: 0px;">
+                                            <div ng-if="detailedCustomerInfo.b2b">
+                                                <a href="/company/details/{{detailedCustomerInfo.company.id}}">
+                                                    <u>
+                                                        <span translate="CUSTOMER.DETAILS.B2B_CUSTOMER"></span>
+                                                    </u>
+                                                </a>
+
+                                            </div>
+                                            <div ng-if="!detailedCustomerInfo.b2b">
+                                                <span translate="CUSTOMER.DETAILS.B2C_CUSTOMER"></span>
+                                            </div>
+                                        </div>
+
+                                        <div ng-if="detailedCustomerInfo.lead"
+                                             style="bottom: -30px; position: relative;  right: 0px;">
+                                            <div ng-if="detailedCustomerInfo.b2b">
+                                                <span translate="CUSTOMER.DETAILS.B2B_LEAD"></span>
+                                                <br/>
+                                                <a href="/company/details/{{detailedCustomerInfo.company.id}}">
+                                                    {{detailedCustomerInfo.company.name}} </a>
+
+                                            </div>
+                                            <div ng-if="!detailedCustomerInfo.b2b">
+                                                <span translate="CUSTOMER.DETAILS.B2C_LEAD"></span>
+                                            </div>
+                                        </div>
+
+                                        <div style="  top: 10px; position: relative;" ng-if="::debugMode">
+                                            <a href="#client-analytics" du-smooth-scroll>
+                                                <span translate="CUSTOMER.DETAILS.WEB_ANALYTICS_SECTION"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="divider divider-lg"></div>
+                                <div class="divider divider-lg"></div>
+                            </div>
+                            <div class="panel-img bg-primary" style="
+
+                                                      position: absolute;
+                                                      /* left: 0px; */
+                                                      top: 40%;
+                                                      /*left: 3%;*/
+                                                      left: 5%;
+                                                      opacity: 0.8;
+                                                      width: 130px;
+                                                      height: 130px;
+                                                                            " ng-click="showProfileOverview()">
+                                <img alt=""
+                                     ng-src="{{detailedCustomerInfo.avatarUrl || 'assets/img/default-user-icon-profile.png'}}"
+                                     class="img-circle"
+                                     style="max-width: 112px; max-height: 112px;">
+                            </div>
+
+                            <div class="list-justified-container" style="padding-bottom: 1px;">
+                                <ul class="list-justified text-center">
+
+                                    <li style="padding: 0px !important;">
+                                        <p class="size-h3">{{allConnectedTasks.length}}</p>
+                                        <p class="text-muted">
+                                            <a href="#tasksBox" du-smooth-scroll>
+                                                <span translate="CUSTOMER.DETAILS.TASK_SECTION"></span>
+                                            </a>
+                                        </p>
+                                    </li>
+
+                                    <li style="padding: 0px !important;">
+                                        <p tooltip-placement="right"
+                                           tooltip="{{'CUSTOMER.DETAILS.OPPORTUNITY_AMOUNT_SECTION' | translate}}"
+                                           tooltip-append-to-body="true">
+                                                    <span class="size-h4">
+                                                           {{ printCurrencyPrintable(allExistingOpportunitiesAmount)[0] }}
+                                                    </span>
+                                            <small>
+                                                {{ printCurrencyPrintable(allExistingOpportunitiesAmount)[1] }}
+                                            </small>
+                                        </p>
+
+                                        <p class="text-muted">
+                                            <a href="#opportunities" du-smooth-scroll>
+                                                <span translate="CUSTOMER.DETAILS.OPPORTUNITY_SECTION"></span>
+                                                <span class="badge badge-square" tooltip-placement="right"
+                                                      tooltip="{{'CUSTOMER.DETAILS.OPPORTUNITY.NUMBER' | translate}}"
+                                                      tooltip-append-to-body="true">
+                                                        {{existingOpporunities.length}}
+                                                    </span>
+                                            </a>
+
+                                            <span data-ng-if="detailedCustomerInfo.customerOverview.lastOpportunityDate"
+                                                  tooltip-placement="right"
+                                                  tooltip="{{'CUSTOMER.DETAILS.OPPORTUNITY.LAST_DATE' | translate}}"
+                                                  tooltip-append-to-body="true">
+                                                        <br/>
+                                                         {{detailedCustomerInfo.customerOverview.lastOpportunityDate | timeAgo}}
+                                                    </span>
+                                        </p>
+                                    </li>
+
+                                    <li style="padding: 0px !important;">
+                                        <p tooltip-placement="right" tooltip="{{'CUSTOMER.DETAILS.DEALS.AMOUNT.PLACEHOLDER' | translate}}"
+                                           tooltip-append-to-body="true">
+                                                    <span class="size-h4">
+                                                           {{ printCurrencyPrintable(allExistingDealsAmount)[0] }}
+                                                    </span>
+                                            <small>
+                                                {{ printCurrencyPrintable(allExistingDealsAmount)[1] }}
+                                            </small>
+                                        </p>
+
+                                        <p class="text-muted">
+                                            <a href="#deals" du-smooth-scroll>
+                                                <span translate="CUSTOMER.DETAILS.DEALS.NAME.SECTION"></span>
+                                                <span class="badge badge-square" tooltip-placement="right"
+                                                      tooltip="{{'CUSTOMER.DETAILS.DEALS.NUMBER' | translate}}" tooltip-append-to-body="true">
+                                                        {{existingDeals.length}}
+                                                    </span>
+                                            </a>
+
+                                            <span data-ng-if="detailedCustomerInfo.customerOverview.lastDealDate"
+                                                  tooltip-placement="right"
+                                                  tooltip="{{'CUSTOMER.DETAILS.DEALS.LAST_DATE' | translate}}"
+                                                  tooltip-append-to-body="true"
+                                            >
+                                                        <br/>
+                                                         {{detailedCustomerInfo.customerOverview.lastDealDate | timeAgo}}
+                                                    </span>
+                                        </p>
+                                    </li>
+                                </ul>
+
+                                <div class="row">
+
+                                    <div class="col-md-3" ng-if="!detailedCustomerInfo.archived">
+                                        <button class="btn btn-warning2"
+                                                data-ng-click="archiveCustomerConfirmation()">
+                                            <span translate="CUSTOMER.DETAILS.TO_ARCHIVE"></span>
+                                        </button>
+                                    </div>
+
+                                    <div class="col-md-3" ng-if="detailedCustomerInfo.archived">
+                                        <button class="btn btn-warning"
+                                                data-ng-click="deArchiveCustomerConfirmation()">
+                                            <span translate="CUSTOMER.DETAILS.TO_ACTIVE"></span>
+                                        </button>
+                                    </div>
+
+                                    <div class="col-md-3" ng-show="::debugMode">
+                                        <button class="btn btn-warning" data-ng-click="">
+                                            <span translate="CUSTOMER.DETAILS.CALL"></span>
+                                        </button>
+                                    </div>
+
+                                    <div class="col-md-3" ng-show="::debugMode">
+                                        <button class="btn btn-warning" data-ng-click="">
+                                            <span translate="CUSTOMER.DETAILS.SEND_EMAIL"></span>
+                                        </button>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <button class="btn btn-success" data-ng-click="updateAllProfile()"
+                                                ng-if=":: !editMode && !autoSaveObjects">
+                                            <span translate="CUSTOMER.DETAILS.SAVE"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 hidden-scrollbar" style="padding-left: 0px; padding-right: 5px;">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span class="badge">  {{allConnectedTasks.length}} </span>
+                                        <span translate=" CUSTOMER.DETAILS.TASK_SECTION"></span>
+                                    </div>
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+
+                                    <div class="col-md-6">
+                                        <input type="text" ng-model="tasksNameFilter"
+                                               class="form-control background-input-color">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center">
+
+                                <div ng-if="allConnectedTasks.length ===  0">
+                                    <div class="callout callout-warning">
+                                        <h4>
+                                            <span translate="CUSTOMER.DETAILS.NO_TASK"></span>
+                                        </h4>
+                                        <p>
+                                            <span translate="CUSTOMER.DETAILS.NO_TASK_P"></span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive"
+                                     style="padding-left: 0px;  max-height: 200px; overflow: auto;;">
+                                    <table class="{{$root.tableClasses}} cf "
+                                           data-ng-show="allConnectedTasks.length > 0">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-md-4">
+                                                <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                            </th>
+                                            <th class="mini-col-md"></th>
+                                            <th>
+                                                <span translate="TASKS.START_DATE"></span>
+                                            </th>
+                                            <th>
+                                                <span translate="TASKS.FINAL_DATE"></span>
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="project in allConnectedTasks | filter:tasksNameFilter track by project.id">
+                                            <td>
+                                                <div class="row nopadding pull-left">
+                                                    <div class="col-lg-12 col-md-12 nopadding">
+                                                        <a href="/task/details/{{project.id}}">
+                                                            <i class="fa fa-star" ng-if="project.favourite"
+                                                               style="color: grey;"></i>
+                                                            <i class="fa fa-circle" ng-if="!project.completed"
+                                                               style="color: green;"></i>
+                                                            {{project.name}} </a>
+                                                    </div>
+                                                </div>
+
+                                                <div tooltip-placement="right"
+                                                     tooltip="{{::project.createdInfo.createdDate | timeAgo}}"
+                                                     tooltip-append-to-body="true" class="pull-right">
+
+                                                    <a ng-href="/user_account/details/{{project.createdInfo.createdById}}">
+                                                        <small>
+                                                            {{ printUser ( resolveUser ( project.createdInfo.createdById ) ) }}
+                                                        </small>
+                                                    </a>
+
+                                                    <small class="pull-right">
+                                                        {{:: printDate( project.createdInfo.createdDate) }}
+                                                    </small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="pull-right">
+
+                                                    <div ng-if="project.priority==6">
+                                                        <span class="label label-danger"> 6 / 6</span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==5">
+                                                        <span class="label label-warning"> 5 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==4">
+                                                        <span class="label label-info"> 4 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==3">
+                                                        <span class="label label-success"> 3 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==2">
+                                                        <span class="label label-primary"> 2 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==1">
+                                                        <span class="label label-default"> 1 / 6 </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td tooltip-placement="right" tooltip="{{project.startDate | timeAgo}}"
+                                                tooltip-append-to-body="true">
+                                                <small class="pull-right"> {{ printDate(project.startDate) }}
+                                                </small>
+                                            </td>
+                                            <td> {{ printDate(project.finalDate) }}
+
+                                            <td>
+                                                <div data-ng-repeat="resp in project.responsibles.userAccountsIDs">
+                                                    <div class="col-md-6" tooltip-placement="right" tooltip="{{ printUser( resolveUser(resp) )}}" tooltip-append-to-body="true">
+                                                        <a href="/user_account/details/{{resp}}">
+                                                            <img class="img-rounded" width="30" height="30" ng-src="{{getAvatarUrlByUser(resolveUser(resp))}}"/>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-lg-6">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading"><span class="fa fa-user"></span>
+                                <span translate="CUSTOMER.DETAILS.MAIN_INFO"></span>
+                            </div>
+                            <div class="panel-body text-center">
+
+                                <table class="{{$root.tableClasses}}">
+                                    <thead>
+                                    <tr>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr ng-if="detailedCustomerInfo.b2b" class="info">
+                                        <td>
+                                            <b>
+                                                <span translate="CUSTOMER.DETAILS.COMPANY"></span>
+                                            </b>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <div fs-Select="" items="allCompanies" freetext=""
+                                                         class="col-xs-8"
+
+                                                         ng-model="detailedCustomerInfo.company">
+                                                        <span ng-show="item"><span
+                                                                class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>&nbsp;{{item.name}} {{item.ogrn}}  </span>
+                                                        <span ng-hide="item">
+                                                              <span translate="CUSTOMER.DETAILS.COMPANY_NO"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <a href="/company/details/{{detailedCustomerInfo.company.id}}"
+                                                       class="btn btn-warning btn-sm pull-right roundedButton"
+                                                       tooltip-placement="right" tooltip="{{'CUSTOMER.DETAILS.COMPANY_GO' | translate}}"
+                                                       tooltip-append-to-body="true">
+                                                        <i class="fa fa-external-link"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="callout callout-warning"
+                                                 data-ng-if="!detailedCustomerInfo.company">
+                                                <br/>
+                                                <h4>
+                                                    <span translate="CUSTOMER.DETAILS.COMPANY_NO_HEADER"></span>
+                                                </h4>
+                                                <p>
+                                                    <span translate="CUSTOMER.DETAILS.COMPANY_NO_HEADER_P"></span>
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !detailedCustomerInfo.firstName}">
+                                        <td><b>
+                                            <span translate="CUSTOMER.DETAILS.FIRSTNAME"></span>
+                                        </b></td>
+                                        <td>
+                                            <md-input-container flex class="nopadding">
+                                                <input ng-model="detailedCustomerInfo.firstName"
+                                                       ng-model-options="{ debounce: 300 }"
+                                                >
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !detailedCustomerInfo.lastName}">
+                                        <td><b>
+                                            <span translate="CUSTOMER.DETAILS.LASTNAME"></span>
+                                        </b></td>
+                                        <td>
+                                            <md-input-container flex class="nopadding">
+                                                <input ng-model="detailedCustomerInfo.lastName"
+                                                       ng-model-options="{ debounce: 300 }"
+                                                >
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !detailedCustomerInfo.patronymic}">
+                                        <td><b>
+                                            <span translate="CUSTOMER.DETAILS.PATRONYMIC"></span>
+                                        </b>
+                                        </td>
+                                        <td>
+
+                                            <md-input-container flex class="nopadding">
+                                                <input ng-model="detailedCustomerInfo.patronymic"
+                                                       ng-model-options="{ debounce: 300 }"
+                                                >
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !detailedCustomerInfo.telephone}">
+                                        <td><b>
+                                            <span translate="CUSTOMER.DETAILS.TELEPHONE"></span>
+                                        </b></td>
+                                        <td>
+                                            <md-input-container flex class="nopadding">
+                                                <input ng-model="detailedCustomerInfo.telephone"
+                                                       ng-model-options="{ debounce: 300 }"
+                                                >
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !detailedCustomerInfo.email}">
+                                        <td data-ng-click="showEmails()">
+                                            <b> <u>Email</u> </b>
+                                        </td>
+
+                                        <td>
+                                            <md-input-container flex class="nopadding">
+                                                <input ng-model="detailedCustomerInfo.email"
+                                                       ng-model-options="{ debounce: 300 }"
+                                                >
+                                            </md-input-container>
+
+                                            <table class="{{$root.tableClasses}}"
+                                                   ng-if="detailedCustomerInfo.emails.length > 0">
+                                                <thead>
+                                                <tr>
+                                                </tr>
+                                                </thead>
+                                                <tbody style="background-color: white;">
+                                                <tr ng-repeat="email in detailedCustomerInfo.emails">
+                                                    <td> {{$index+1}}</td>
+
+                                                    <td><input type="text"
+                                                               ng-model="email"
+                                                               placeholder="{{'CUSTOMER.DETAILS.ADDITIONAL_EMAIL' | translate}}"
+                                                               class="form-control"></td>
+                                                    <td ng-if="::!editMode">
+                                                        <md-button class="" data-ng-click="deleteAdditionalEmail($index)">
+                                                            <md-icon md-font-icon="delete">delete</md-icon>
+                                                            <md-tooltip>
+                                                                <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                            </md-tooltip>
+                                                        </md-button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div ng-show="showEmailVal">
+                                                <br/><br/>
+                                                <input type="text"
+                                                       ng-model="newAdditionalEmail"
+                                                       placeholder="{{'CUSTOMER.DETAILS.ADDITIONAL_EMAIL' | translate}}"
+                                                       class="form-control">
+                                                <br/>
+
+                                                <md-button data-ng-click="addAdditionalEmail()">
+                                                    <md-icon md-font-icon="add">add</md-icon>
+                                                </md-button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !detailedCustomerInfo.address}">
+                                        <td><b>
+                                            <span translate="CUSTOMER.DETAILS.ADDRESS"></span>
+                                        </b></td>
+                                        <td>
+
+                                            <md-input-container flex class="nopadding">
+                                                <input ng-model="detailedCustomerInfo.address"
+                                                       ng-model-options="{ debounce: 300 }"
+                                                >
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-class="{'warning' : !detailedCustomerInfo.position}">
+                                        <td><b>
+                                            <span translate="CUSTOMER.DETAILS.POSITION"></span>
+                                        </b></td>
+                                        <td>
+
+                                            <md-input-container flex class="nopadding"
+                                                                ng-model-options="{ debounce: 300 }"
+                                            >
+                                                <input ng-model="detailedCustomerInfo.position"
+                                                       ng-model-options="{ debounce: 300 }"
+                                                >
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <custom-fields-shower ng-model="detailedCustomerInfo.customFields"></custom-fields-shower>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-md-3 nopadding">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="fa fa-cubes"></span>
+                                        <span translate="CUSTOMER.DETAILS.STATUS"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center" style="padding-top: 7px;">
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <span translate="CUSTOMER.DETAILS.IS_CUSTOMER"></span>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <md-checkbox class="md-warn" style="margin-right: -65px !important;"
+                                                 type="checkbox"
+                                                 ng-model="detailedCustomerInfo.customer"
+                                                 data-ng-change="chanedLeadAndCustomer('customer')"
+                                    >
+                                    </md-checkbox>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <span translate="CUSTOMER.DETAILS.IS_LEAD"></span>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+
+                                    <md-checkbox class="" style="margin-right: -65px !important;"
+                                                 type="checkbox"
+                                                 ng-model="detailedCustomerInfo.lead"
+                                                 data-ng-change="chanedLeadAndCustomer('lead')"
+                                    >
+                                    </md-checkbox>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <span translate="CUSTOMER.DETAILS.IS_ACTIVE"></span>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <md-checkbox class="md-primary" type="checkbox"
+                                                 ng-model="detailedCustomerInfo.active">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <span translate="CUSTOMER.DETAILS.IS_IMPORTANT"></span>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <md-checkbox class="md-primary" type="checkbox"
+                                                 ng-model="detailedCustomerInfo.important">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    B2B
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <md-checkbox class="md-primary" type="checkbox" data-ng-change="downloadCompanies()"
+                                                 ng-model="detailedCustomerInfo.b2b">
+                                </div>
+
+                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 delete-padding-large-screen"
+                                     style="">
+
+                                    <div ng-show="detailedCustomerInfo.lead">
+                                        <b tooltip-placement="right" tooltip="{{'CUSTOMER.DETAILS.SALES_FUNNEL.STATUS.PLACEHOLDER' | translate}}"
+                                           tooltip-append-to-body="true">
+                                            <span translate="CUSTOMER.DETAILS.SALES_FUNNEL.STATUS.NAME"></span>
+                                            (
+                                            {{getNumberOfuniversalResolverWithField(bindedLEadGenMethod.leadConversionSalesFunnel.salesFunnelStatuses,detailedCustomerInfo.salesFunnelStatus.id,
+                                            'id' ) + 1}} / {{
+                                            bindedLEadGenMethod.leadConversionSalesFunnel.salesFunnelStatuses.length }}
+                                            )
+                                        </b>
+
+                                        <div fs-Select=""
+                                             items="bindedLEadGenMethod.leadConversionSalesFunnel.salesFunnelStatuses"
+                                             freetext="" class="col-xs-8"
+
+                                             ng-model="detailedCustomerInfo.salesFunnelStatus">
+                                            <i class="fa fa-circle" ng-style="{'color': item.color || ''}"></i>
+                                            <span ng-show="item"
+                                            ><span
+                                                    class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>
+                                                        &nbsp;{{item.name}}  </span>
+                                            <span ng-hide="item">
+                                                  <span translate="CUSTOMER.DETAILS.NO_SALES_FUNNEL"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div ng-show="detailedCustomerInfo.customer">
+                                        <b tooltip-placement="right" tooltip="{{'CUSTOMER.DETAILS.SALES_FUNNEL.STATUS.PLACEHOLDER' | translate}}"
+                                           tooltip-append-to-body="true">
+                                            <span translate="CUSTOMER.DETAILS.SALES_FUNNEL.STATUS.NAME"></span>
+                                            (
+                                            {{getNumberOfuniversalResolverWithField(bindedLEadGenMethod.accountManagementSalesFunnel.salesFunnelStatuses,detailedCustomerInfo.salesFunnelStatus.id,
+                                            'id' ) + 1}} / {{ bindedLEadGenMethod.accountManagementSalesFunnel.salesFunnelStatuses.length }}
+                                            )
+                                        </b>
+
+                                        <div fs-Select=""
+                                             items="bindedLEadGenMethod.accountManagementSalesFunnel.salesFunnelStatuses"
+                                             freetext="" class="col-xs-8"
+                                             ng-model="detailedCustomerInfo.salesFunnelStatus">
+                                            <i class="fa fa-circle" ng-style="{'color': item.color || ''}"></i>
+
+                                            <span ng-show="item" style="width: 100%;"><span
+                                                    class="flag"></span>
+                                                        &nbsp;{{item.name}}  </span>
+                                            <span ng-hide="item">
+                                                  <span translate="CUSTOMER.DETAILS.SALES_FUNNEL.NO_STATUS"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div ng-if="detailedCustomerInfo.salesFunnelStatus.description">
+                                        <br>
+                                        <b> {{detailedCustomerInfo.salesFunnelStatus.description}} </b>
+                                        <br> <br>
+                                    </div>
+
+                                </div>
+                                <br><br>
+
+                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 delete-padding-large-screen"
+                                     style="">
+                                    <div>
+                                        <b>
+                                            <span translate="CUSTOMER.DETAILS.RESPONSIBLE_MANAGER.NAME"></span>
+                                        </b>
+                                    </div>
+
+                                    <div class="row delete-padding-large-screen">
+                                        <div class="col-md-2 col-sm-2 col-xs-2 delete-padding-large-screen">
+                                            <a href="/user_account/details/{{responsibleManager.id}}">
+                                                <img class="img-rounded" align="center" height="30" width="30"
+                                                     style="opacity: 0.5"
+                                                     ng-src="{{getAvatarUrlByUser(responsibleManager)}}"/>
+                                            </a>
+                                        </div>
+
+                                        <div class="col-md-10 col-sm-10 col-xs-10 delete-padding-large-screen delete-padding-large-screen-manager"
+                                             style="">
+                                            <div fs-Select="" items="allUserAccounts" freetext="" class="col-xs-12"
+                                                 data-ng-change="updateAllProfile()"
+                                                 ng-model="responsibleManager">
+                                            <span ng-show="item">
+                                                &nbsp;
+
+                                                {{item.firstname}} {{item.lastname}}
+                                            </span>
+
+                                                <span ng-hide="item">
+                                                    <span translate="CUSTOMER.DETAILS.RESPONSIBLE_MANAGER.NO"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-md-lg-2 col-md-3"
+                         style="padding-left: 3px; padding-right: 3px;">
+                        <section class="panel panel-primary2 " style="    background-color: rgb(224,224,224);">
+                            <div class="panel-heading"><span class="fa fa-clipboard"></span>
+                                <span translate="CUSTOMER.DETAILS.NOTES.HEADER"></span>
+                            </div>
+                            <div class="panel-body text-center" style="  padding: 0px; margin: 0px;">
+                                <textarea class="textarea-fill-all-parent ng-pristine ng-untouched ng-valid"
+                                          style="  margin-bottom: -5px;  height: 239px;"
+                                          ng-model="detailedCustomerInfo.description"
+                                          ng-model-options="{ debounce: 600 }"
+                                          cols="30" placeholder="{{'CUSTOMER.DETAILS.NOTES.PLACEHOLDER' | translate}}" rows="12">
+                                </textarea>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading"><span class="fa fa-gear"></span>
+                                <span translate="CUSTOMER.DETAILS.LEAD_GEN_METHOD.SOURCE.HEADER"></span>
+                            </div>
+                            <div class="panel-body text-center">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a href="/marketing/lead_gen_methods/id/{{bindedLEadGenMethod.id}}">
+                                            <i>
+                                                <span translate="CUSTOMER.DETAILS.LEAD_GEN_METHOD.SHORT.NAME"></span>
+                                            </i>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-9">
+
+                                        <div fs-Select="" items="allLeadGenMethods"
+                                             freetext="" class="col-xs-8"
+                                             ng-model="bindedLEadGenMethod"
+                                             data-ng-change="leadLenMethodChanged()"
+                                        >
+                                                        <span ng-show="item"><span
+                                                                class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>
+                                                            &nbsp;{{item.name}}  </span>
+                                            <span ng-hide="item">
+                                                <span translate="CUSTOMER.DETAILS.LEAD_GEN_METHOD.NOT_SELECTED"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-3">
+                                        <a href="/marketing/lead_gen_methods/lead_gen_project/id/{{bindedLEadGenProject.id}}">
+                                            <i>
+                                                <span translate="CUSTOMER.DETAILS.LEAD_GEN_METHOD.PROJECT.SHORT.NAME"></span>
+                                            </i>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <div fs-Select="" items=" leadGenProjectsForCurrentMethod  "
+                                             freetext="" class="col-xs-8"
+                                             ng-model="bindedLEadGenProject"
+                                        >
+                                                        <span ng-show="item"><span
+                                                                class="flag flag-{{ item['alpha-2'].toLowerCase() }}"></span>
+                                                            &nbsp;{{item.name}}  </span>
+                                            <span ng-hide="item">
+                                                 <span translate="CUSTOMER.DETAILS.LEAD_GEN_METHOD.NOT_SELECTED"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="padding-top: 5px;">
+                                    <div class="col-md-6">
+
+                                        <div ng-click="requestForAllPromoCodes(); showCodePromo = !showCodePromo">
+                                            <span>
+                                                <span translate="CUSTOMER.DETAILS.LEAD_GEN_METHOD.PROMO_CODE"></span>
+                                            </span>
+                                            <table class="{{$root.tableClasses}} "
+                                                   data-ng-show="showCodePromo">
+                                                <thead>
+                                                <tr>
+                                                    <td>
+                                                        <span translate="CUSTOMER.DETAILS.LEAD_GEN_METHOD.PROMO_CODE.CODE"></span>
+                                                    </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr class="table-striped" ng-repeat="promo in allPromoCodes">
+                                                    <td>{{promo}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <input type="text" ng-model="currentPromoCode"
+                                               data-ng-change="requestForAllPromoCodes()"
+                                               placeholder="{{'CUSTOMER.DETAILS.LEAD_GEN_METHOD.PROMO_CODE.CODE' | translate}}"
+                                               typeahead="state as state for state  in allPromoCodes | filter:$viewValue "
+                                               typeahead-on-select="findLeadGenProjectAndMethodByPromoCode()"
+                                               typeahead-template-url="customTemplate.html" class="form-control"
+                                               data-no-drag="">
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" id="tasksBox">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span class="badge"> {{allConnectedTasks.length}} </span>
+                                        <span translate="CUSTOMER.DETAILS.TASK_SECTION"></span>
+                                    </div>
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+
+                                    <div class="col-md-6">
+                                        <input type="text" ng-model="tasksNameFilter"
+                                               class="form-control background-input-color">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center">
+
+                                <div ng-if="allConnectedTasks.length ===  0">
+                                    <div class="callout callout-warning">
+                                        <h4>
+                                            <span translate="CUSTOMER.DETAILS.NO_TASK"></span>
+                                        </h4>
+                                        <p>
+                                            <span translate="CUSTOMER.DETAILS.NO_TASK_P"></span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="{{$root.tableClasses}} cf "
+                                           data-ng-show="allConnectedTasks.length > 0">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-md-4">
+                                                <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                            </th>
+                                            <th class="mini-col-md"></th>
+                                            <th>
+                                                <span translate="TASKS.START_DATE"></span>
+                                            </th>
+                                            <th>
+                                                <span translate="TASKS.FINAL_DATE"></span>
+                                            </th>
+                                            <th></th>
+                                            <th>
+                                                <span class="visible-lg">
+                                                    <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+                                                </span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <tr ng-repeat="project in allConnectedTasks | filter:tasksNameFilter track by project.id">
+                                            <td>
+                                                <div class="row nopadding">
+                                                    <div class="col-lg-12 col-md-12 nopadding">
+                                                        <a href="/task/details/{{project.id}}">
+                                                            <i class="fa fa-star" ng-if="project.favourite"
+                                                               style="color: grey;"></i>
+
+                                                            <i class="fa fa-circle" ng-if="!project.completed"
+                                                               style="color: green;"></i>
+                                                            {{project.name}} </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="pull-right">
+
+                                                    <div ng-if="project.priority==6">
+                                                        <span class="label label-danger"> 6 / 6</span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==5">
+                                                        <span class="label label-warning"> 5 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==4">
+                                                        <span class="label label-info"> 4 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==3">
+                                                        <span class="label label-success"> 3 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==2">
+                                                        <span class="label label-primary"> 2 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="project.priority==1">
+                                                        <span class="label label-default"> 1 / 6 </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td tooltip-placement="right" tooltip="{{project.startDate | timeAgo}}"
+                                                tooltip-append-to-body="true">
+                                                <small class="pull-right"> {{ printDate(project.startDate) }}
+                                                </small>
+                                            </td>
+                                            <td>
+                                                {{ printDate(project.finalDate) }}
+                                            <td>
+
+                                                <div data-ng-repeat="resp in project.responsibles.userAccountsIDs">
+                                                    <div class="col-md-6"
+                                                         tooltip-placement="right" tooltip="{{ printUser( resolveUser(resp) )}}" tooltip-append-to-body="true">
+                                                        <a href="/user_account/details/{{resp}}">
+                                                            <img class="img-rounded" width="30" height="30"
+                                                                 ng-src="{{getAvatarUrlByUser(resolveUser(resp))}}"/>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td tooltip-placement="right"
+                                                tooltip="{{project.createdInfo.createdDate | timeAgo}}"
+                                                tooltip-append-to-body="true">
+
+                                                <a ng-href="/user_account/details/{{::project.createdInfo.createdById}}">
+                                                    {{ printUser ( resolveUser ( project.createdInfo.createdById ) ) }}
+                                                </a>
+
+                                                <small class="pull-right">
+                                                    {{::printDate(project.createdInfo.createdDate) }}
+                                                </small>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row" id="sementsBox">
+                    <div class="col-md-6">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+
+                                <div class="row">
+                                    <div class="col-md-6" data-ng-click="showOnlyActive = !showOnlyActive"
+                                         tooltip-placement="right"
+                                         tooltip="{{'CUSTOMER.DETAILS.SEGMENTS.SHOW_ACTIVE.PLACEHOLDER' | translate}}"
+                                         tooltip-append-to-body="true"
+                                    >
+                                        <span class="badge">{{detailedCustomerInfo.staticSegmentsIDs.length}}</span>
+                                        <span translate="CUSTOMER.DETAILS.SEGMENTS.STATIC.HEADER"></span>
+                                    </div>
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+
+                                    <div class="col-md-6">
+                                        <input type="text"
+                                               ng-model="segmentNameFilter"
+                                               class="form-control background-input-color">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center"
+                                 style="padding-left: 5px; max-height: 500px; overflow: auto;">
+
+                                <div ng-if="::debugMode">
+                                    {{detailedCustomerInfo.staticSegmentsIDs}}
+                                </div>
+
+                                <table class="{{$root.tableClasses}}">
+                                    <thead ng-show="detailedCustomerInfo.staticSegmentsIDs.length > 0 || !showOnlyActive">
+                                    <tr>
+                                        <th class="mini-col-md">№</th>
+                                        <th class="">
+                                            <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                        </th>
+                                        <th class="">
+                                            <span translate="APP.COMMON.OBJECT.DESCRIPTION"></span>
+                                        </th>
+                                        <th class="mini-col-md"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr data-ng-repeat="project in allStaticSegments | filter:segmentNameFilter as allStatisSegments track by project.id"
+                                        ng-if="!showOnlyActive || isCustomerHaveStaticSegment(detailedCustomerInfo,project.id) "
+                                        data-ng-class="{'success' : isCustomerHaveStaticSegment(detailedCustomerInfo,project.id)}">
+                                        <td>
+                                            <a href="/segment/static/details/{{project.id}}">
+                                                {{$index+1}}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="/segment/static/details/{{project.id}}">
+                                                {{project.name || printEmptyField()}} </a>
+                                        </td>
+                                        <td> {{project.description || printEmptyField()}}</td>
+                                        <td ng-if="::!editMode">
+                                            <md-button ng-if="!isCustomerHaveStaticSegment(detailedCustomerInfo,project.id) "
+                                                       data-ng-click="addStaticSegment (project)">
+                                                <md-icon md-font-icon="add">add</md-icon>
+                                            </md-button>
+
+                                            <md-button class="" data-ng-if="isCustomerHaveStaticSegment(detailedCustomerInfo,project.id)" style="opacity: 0.5;"
+                                                       data-ng-click="deleteStaticSegment (project)">
+                                                <md-icon md-font-icon="delete">delete</md-icon>
+                                                <md-tooltip>
+                                                    <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                </md-tooltip>
+                                            </md-button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <a href="" data-ng-click="$parent.showOnlyActive = !$parent.showOnlyActive"
+                                   data-ng-if="showOnlyActive">
+                                    <span translate="CUSTOMER.DETAILS.SEGMENTS.SHOW_ALL"></span>
+                                </a>
+                                <a href="" data-ng-click="$parent.showOnlyActive = !$parent.showOnlyActive"
+                                   data-ng-if="!showOnlyActive">
+                                    <span translate="CUSTOMER.DETAILS.SEGMENTS.SHOW_ACTIVE"></span>
+                                </a>
+
+                                <div ng-if="::debugMode">
+                                    {{allStaticSegments | json}}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-md-6" style="">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="badge">  {{dynamicSegmentsForCurrentCustomer.length}} </span>
+                                        <span translate="CUSTOMER.DETAILS.SEGMENTS.DYNAMIC.HEADER"></span>
+                                        <small class="pull-right"
+                                               ng-show="::detailedCustomerInfo.dynamicSegmentsLastDate">
+                                            <span translate="CUSTOMER.DETAILS.SEGMENTS.DYNAMIC.FROM_DATE"></span>
+                                            {{::printDate(detailedCustomerInfo.dynamicSegmentsLastDate) }}
+                                        </small>
+                                    </div>
+
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center"
+                                 style="padding-left: 5px; max-height: 500px; overflow: auto;">
+
+                                <div class="callout callout-warning"
+                                     ng-if="dynamicSegmentsForCurrentCustomer.length === 0">
+                                    <h4>
+                                        <span translate="CUSTOMER.DETAILS.SEGMENTS.DYNAMIC.NO.P1"></span>
+                                    </h4>
+                                    <p>
+                                        <span translate="CUSTOMER.DETAILS.SEGMENTS.DYNAMIC.NO.P2"></span>
+                                    </p>
+                                </div>
+
+                                <table class="table table-bordered "
+                                       ng-if="dynamicSegmentsForCurrentCustomer.length > 0">
+                                    <thead>
+                                    <tr>
+                                        <th class="mini-col-md">
+                                            №
+                                        </th>
+                                        <th class="">
+                                            <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                        </th>
+                                        <th class="">
+                                            <span translate="APP.COMMON.OBJECT.DESCRIPTION"></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr data-ng-repeat="project in dynamicSegmentsForCurrentCustomer">
+                                        <td>
+                                            <a href='/customer/all/?dynamicSegmentsIDs=["{{::project.id}}"]'>
+                                                {{$index+1}}
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            <a href="/segment/dynamic/details/{{::project.id}}">
+                                                {{::project.name}} </a>
+                                        </td>
+
+                                        <td> {{::project.description || printEmptyField()}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <section class="panel panel-primary" id="opportunities">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span class="badge">  {{existingOpporunities.length}} </span>
+                                        <span translate="CUSTOMER.DETAILS.OPPORTUNITY_SECTION"></span>
+                                    </div>
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+                                    <div class="col-md-6">
+                                        <input type="text" ng-model="opporunitiesNameFilter"
+                                               class="form-control background-input-color">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center">
+                                <div class="panel-body text-center"
+                                     ng-if="existingOpporunities.length ===  0 && !showExistingOpportunitiesHeader">
+                                    <div class="callout callout-danger">
+                                        <h4>
+                                            <span translate="CUSTOMER.DETAILS.OPPORTUNITY.NO.P1"></span>
+                                        </h4>
+                                        <p>
+                                            <span translate="CUSTOMER.DETAILS.OPPORTUNITY.NO.P2"></span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="{{$root.tableClasses}}"
+                                           data-ng-show="showExistingOpportunitiesHeader || existingOpporunities.length > 0">
+                                        <thead>
+                                        <tr>
+                                            <th class="mini-col-md">
+                                                №
+                                            </th>
+                                            <th class="">
+                                                <span translate="CUSTOMER.DETAILS.OPPORTUNITY.STATUS.HEADER"></span>
+                                            </th>
+                                            <th class="">
+                                                <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                            </th>
+                                            <th class="">
+                                                <span translate="APP.COMMON.MONEY.AMOUNT"></span>
+                                            </th>
+                                            <th class="mini-col-md">
+                                                <span translate="CUSTOMER.DETAILS.OPPORTUNITY.PRIORITY.HEADER"></span>
+                                            </th>
+                                            <th ng-if="::!editMode" class="">
+                                                <span translate="APP.COMMON.ACTION"></span>
+                                            </th>
+                                            <th class="">
+                                                <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+                                            </th>
+                                            <th ng-show="::debugMode" class="">
+                                                <span translate="CUSTOMER.DETAILS.OPPORTUNITY.LEAD_GEN_PROJECT.HEADER"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <tr></tr>
+                                        <tr class="success"
+                                            data-ng-repeat="opportunity in existingOpporunities | filter:hideDeletedFilter | filter:opporunitiesNameFilter track by opportunity.id">
+                                            <td style="    background-color: white;">
+                                                <b> {{$index + 1}} </b>
+                                            </td>
+
+                                            <td data-ng-class="{ success : opportunity.active ===  true, danger: opportunity.active ===  false  }">
+                                         <span editable-select="opportunity.active" e-name="status" e-form="rowform"
+                                               e-ng-options="s.value as s.text for s in opportunityStatus">
+                                           <div ng-if="opportunity.active">
+                                               <span translate="CUSTOMER.DETAILS.OPPORTUNITY.ACTIVE"></span>
+                                           </div>
+                                           <div ng-if="!opportunity.active">
+                                               <span translate="CUSTOMER.DETAILS.OPPORTUNITY.INACTIVE"></span>
+                                           </div>
+                                        </span>
+                                            </td>
+
+                                            <td>
+                                                <span editable-text="opportunity.name" e-name="name" e-form="rowform"
+                                                      e-required>{{ opportunity.name  }} </span>
+                                            </td>
+
+                                            <td>
+                                                <span editable-number="opportunity.amount" e-name="amount"
+                                                      e-form="rowform">
+                                                <b> {{ printCurrencyPrintable(opportunity.amount)[0] }} </b>
+                                            <small> {{ printCurrencyPrintable(opportunity.amount)[1] }}</small>
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                    <span editable-select="opportunity.priority" e-name="priority"
+                                                          e-form="rowform"
+                                                          e-ng-options="s.value as s.text for s in priorities">
+
+                                                  <div ng-if="opportunity.priority==6">
+                                                      <span class="label label-danger"> 6 / 6</span>
+                                                  </div>
+
+                                                    <div ng-if="opportunity.priority==5">
+                                                        <span class="label label-warning"> 5 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="opportunity.priority==4">
+                                                        <span class="label label-info"> 4 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="opportunity.priority==3">
+                                                        <span class="label label-success"> 3 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="opportunity.priority==2">
+                                                        <span class="label label-primary"> 2 / 6 </span>
+                                                    </div>
+
+                                                    <div ng-if="opportunity.priority==1">
+                                                        <span class="label label-default"> 1 / 6 </span>
+                                                    </div>
+
+
+                                                   <div ng-if="!opportunity.priority">
+                                                       <span class="label label-primary"> 0 / 6 </span>
+                                                   </div>
+                                                    </span>
+                                            </td>
+
+                                            <td style="white-space: nowrap" ng-show="::!editMode">
+                                                <!-- form -->
+                                                <form editable-form name="rowform"
+                                                      onbeforesave="saveExistingOpporunity($data, opportunity.id)"
+                                                      ng-show="rowform.$visible" class="form-buttons form-inline"
+                                                      shown="newOpportunity ===  newMiniOpportunity">
+                                                    <button type="submit" ng-disabled="rowform.$waiting"
+                                                            class="btn btn-primary">
+                                                        <span translate="APP.COMMON.SAVE.BUTTON"></span>
+                                                    </button>
+                                                    <button type="button" ng-disabled="rowform.$waiting"
+                                                            ng-click="rowform.$cancel()" class="btn btn-default">
+                                                        <span translate="APP.COMMON.REVERT_CHANGES.BUTTON"></span>
+                                                    </button>
+                                                </form>
+                                                <div class="buttons" ng-show="!rowform.$visible">
+
+                                                    <div class="btn-group" dropdown>
+                                                        <button class="btn" ng-click="rowform.$show()">
+                                                            <span translate="APP.COMMON.EDIT.BUTTON"></span>
+                                                        </button>
+
+                                                        <md-menu>
+                                                            <button aria-label=" "
+                                                                    class="btn dropdown-toggle grouped-button"
+                                                                    style=" border-radius: 0px; !important; "
+                                                                    ng-click="openMenu($mdOpenMenu, $event)">
+                                                                <span class="caret"></span>
+                                                                <md-tooltip md-direction="left">
+                                                                    <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                                                </md-tooltip>
+                                                            </button>
+
+                                                            <md-menu-content width="4">
+
+                                                                <md-menu-item>
+                                                                    <md-button
+                                                                            ng-click="addDealFromOpportunity(opportunity.id, $index)">
+                                                                        <span translate="CUSTOMER.DETAILS.DEAL.CLOSE_OPPORTUNITY_AS_DEAL"></span>
+                                                                    </md-button>
+                                                                </md-menu-item>
+
+                                                                <md-menu-item>
+                                                                    <md-button
+                                                                            ng-click="deleteExistingOpporunityConfirmation($index)">
+                                                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                                    </md-button>
+                                                                </md-menu-item>
+
+                                                            </md-menu-content>
+                                                        </md-menu>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <a ng-href="/user_account/details/{{::opportunity.createdInfo.createdById}}">
+                                                    {{ printUser ( resolveUser ( opportunity.createdInfo.createdById ) ) }}
+                                                </a>
+                                                <b class="pull-right">
+                                                    {{ opportunity.createdInfo.createdDate | timeAgo }} </b>
+                                                <br/>
+                                                <small class="pull-right">
+                                                    {{ :: printDate(opportunity.createdInfo.createdDate) }}
+                                                </small>
+                                            </td>
+                                        </tr>
+
+                                        <!-- NEW-->
+                                        <tr class="success" data-ng-repeat="newMiniOpportunity in allNewOpportunities">
+
+                                            <td style="background-color: white;">
+                                                <b> {{$index+1}} </b>
+                                            </td>
+
+                                            <td>
+                                                {{newMiniOpportunity.status || 'Не сохранено'}}
+                                            </td>
+
+                                            <td>
+                                                <span editable-text="newMiniOpportunity.name" e-name="name"
+                                                      e-form="rowform"
+                                                      e-required>
+                                                  {{ newMiniOpportunity.name  }}
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <span editable-number="newMiniOpportunity.amount" e-name="amount"
+                                                      e-form="rowform">
+                                                        <b> {{ printCurrencyPrintable(newMiniOpportunity.amount)[0]  }} </b>
+                                                    <small> {{ printCurrencyPrintable(newMiniOpportunity.amount)[1] }}
+                                                    </small>
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                 <span editable-select="newMiniOpportunity.priority" e-name="priority"
+                                                       e-form="rowform"
+                                                       e-ng-options="s.value as s.text for s in priorities">
+                                                          {{ newMiniOpportunity.priority || 2 }}
+                                                        </span>
+                                            </td>
+
+                                            <td style="white-space: nowrap" ng-show="::!editMode">
+                                                <!-- form -->
+                                                <form editable-form name="rowform"
+                                                      onbeforesave="saveNewOpporunity($data, newMiniOpportunity.id)"
+                                                      ng-show="rowform.$visible" class="form-buttons form-inline"
+                                                      shown="newOpportunity ===  newMiniOpportunity">
+                                                    <button type="submit" ng-disabled="rowform.$waiting"
+                                                            class="btn btn-primary">
+                                                        <span translate="APP.COMMON.SAVE.BUTTON"></span>
+                                                    </button>
+                                                    <button type="button" ng-disabled="rowform.$waiting"
+                                                            ng-click="rowform.$cancel()" class="btn btn-default">
+                                                        <span translate="APP.COMMON.REVERT_CHANGES.BUTTON"></span>
+                                                    </button>
+                                                </form>
+                                                <div class="buttons" ng-show="!rowform.$visible">
+                                                    <button class="btn" ng-click="rowform.$show()">
+                                                        <span translate="APP.COMMON.EDIT.BUTTON"></span>
+                                                    </button>
+                                                    <button class="btn btn-danger" ng-click="removeUser($index)">
+                                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                    </button>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                {{ printDate(getDatetime)}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <md-button ng-click="addNewOpporunityToOpportunities(); showExistingOpportunitiesHeader=true;">
+                                        <md-icon md-font-icon="add">add</md-icon>
+                                    </md-button>
+
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" id="deals">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span class="badge"> {{existingDeals.length}} </span>
+                                        <span translate="CUSTOMER.DETAILS.DEALS.NAME.SECTION"></span>
+                                    </div>
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+
+                                    <div class="col-md-6">
+                                        <input type="text" ng-model="dealsNameFilter"
+                                               class="form-control background-input-color">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center">
+
+                                <div class="table-responsive">
+                                    <div ng-if="existingDeals.length ===  0 && !showExistingDealsHeader">
+                                        <div class="callout callout-warning">
+                                            <h4>
+                                                <span translate="CUSTOMER.DETAILS.DEAL.NO_DEALS.P1"></span>
+                                            </h4>
+                                            <p>
+                                                <span translate="CUSTOMER.DETAILS.DEAL.NO_DEALS.P2"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <table class="{{$root.tableClasses}}"
+                                           data-ng-show="existingDeals.length > 0 || showExistingDealsHeader">
+                                        <thead>
+                                        <tr>
+                                            <th class="mini-col-md">№</th>
+                                            <th class="">
+                                                <span translate="APP.COMMON.OBJECT.NAME"></span>
+                                            </th>
+                                            <th class="">
+                                                <span translate="APP.COMMON.MONEY.AMOUNT"></span>
+                                            </th>
+                                            <th ng-if="::!editMode" class="col-md-2">
+                                                <span translate="APP.COMMON.ACTION"></span>
+                                            </th>
+                                            <th class="">
+                                                <span translate="CUSTOMER.DETAILS.DEAL.FROM_OPPORTUNITY_HEADER"></span>
+                                            </th>
+                                            <th class="">
+                                                <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <tr ng-show="existingDeals.length > 0"></tr>
+
+                                        <tr class="success"
+                                            data-ng-repeat="deal in existingDeals | filter:dealsNameFilter track by deal.id">
+                                            <td style="background-color: white;">
+                                                <b> {{$index+1}} </b>
+                                            </td>
+
+                                            <td>
+                                                <span editable-text="deal.name" e-name="name" e-form="rowform2"
+                                                      e-required>{{ deal.name  }} </span>
+                                            </td>
+
+                                            <td>
+                                                        <span editable-number="deal.amount" e-name="amount"
+                                                              e-form="rowform2">
+                                                             <b> {{ printCurrencyPrintable(deal.amount)[0] }} </b>
+                                                             <small> {{ printCurrencyPrintable(deal.amount)[1] }}
+                                                             </small>
+                                                        </span>
+                                            </td>
+
+                                            <td style="white-space: nowrap" ng-show="::!editMode">
+                                                <!-- form -->
+                                                <form editable-form name="rowform2"
+                                                      onbeforesave="saveExistingDeal($data, deal.id)"
+                                                      ng-show="rowform2.$visible" class="form-buttons form-inline"
+                                                      shown="newdeal ===  deal">
+                                                    <button type="submit" ng-disabled="rowform2.$waiting"
+                                                            class="btn btn-primary">
+                                                        <span translate="APP.COMMON.SAVE.BUTTON"></span>
+                                                    </button>
+                                                    <button type="button" ng-disabled="rowform2.$waiting"
+                                                            ng-click="rowform2.$cancel()" class="btn btn-default">
+                                                        <span translate="APP.COMMON.REVERT_CHANGES.BUTTON"></span>
+                                                    </button>
+                                                </form>
+                                                <div class="buttons" ng-show="!rowform2.$visible">
+
+                                                    <div class="btn-group" dropdown>
+                                                        <button class="btn" ng-click="rowform2.$show()">
+                                                            <span translate="APP.COMMON.EDIT.BUTTON"></span>
+                                                        </button>
+
+                                                        <md-menu>
+                                                            <button aria-label=" "
+                                                                    class="btn dropdown-toggle grouped-button"
+                                                                    style=" border-radius: 0px; !important; "
+                                                                    ng-click="openMenu($mdOpenMenu, $event)">
+                                                                <span class="caret"></span>
+                                                                <md-tooltip md-direction="left">
+                                                                    <span translate="APP.COMMON.MORE.BUTTON"></span>
+                                                                </md-tooltip>
+                                                            </button>
+
+                                                            <md-menu-content width="4">
+
+                                                                <md-menu-item>
+                                                                    <md-button
+                                                                            ng-click="deleteExistingDealConfirmation($index)">
+                                                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                                    </md-button>
+                                                                </md-menu-item>
+
+                                                            </md-menu-content>
+                                                        </md-menu>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td data-ng-class="{'warning': !deal.opportunityCreatedDate}">
+
+                                                <div ng-if="deal.opportunityCreatedDate">
+
+                                                    <b class="pull-right">
+                                                        <span data-ng-if="deal.dealsCycle" tooltip-placement="right"
+                                                              tooltip="{{'CUSTOMER.DETAILS.DEALS_CYCLE.TOOLTIP' | translate}}"
+                                                              tooltip-append-to-body="true">
+                                                           <span translate="CUSTOMER.DETAILS.DEALS_CYCLE"></span>
+                                                            : {{deal.dealsCycle | amDurationFormat : 'millisecond' }}
+                                                        </span>
+                                                    </b>
+                                                    <br/>
+
+                                                    <small class="pull-left">
+                                                        <a ng-href="/user_account/details/{{deal.opportunityCreatedById}}">
+                                                            {{ printUser ( resolveUser ( deal.opportunityCreatedById ) )}}
+                                                        </a>
+                                                    </small>
+                                                    <small class="pull-right"> {{ printDate(deal.opportunityCreatedDate) }}
+                                                    </small>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <a ng-href="/user_account/details/{{::deal.createdInfo.createdById}}">
+                                                    {{ printUser ( resolveUser ( deal.createdInfo.createdById ) ) }}
+                                                </a>
+                                                <b class="pull-right"> {{ deal.createdInfo.createdDate | timeAgo }} </b>
+                                                <br/>
+                                                <small class="pull-right"> {{ :: printDate(deal.createdInfo.createdDate) }}
+                                                </small>
+                                            </td>
+                                        </tr>
+
+                                        <!-- NEW-->
+                                        <tr class="success" data-ng-repeat="newMinideal in allNewDeals">
+
+                                            <td style="background-color: white;">
+                                                <b> {{$index+1}} </b>
+                                            </td>
+
+                                            <td>
+                                                <span editable-text="newMinideal.name" e-name="name" e-form="rowform2"
+                                                      e-required>
+                                                  {{ newMinideal.name  }}
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <span editable-number="newMinideal.amount" e-name="amount"
+                                                      e-form="rowform2">
+                                                        <b> {{ printCurrencyPrintable(newMinideal.amount)[0] }} </b>
+                                                    <small> {{ printCurrencyPrintable(newMinideal.amount)[1] }}</small>
+                                                </span>
+                                            </td>
+
+                                            <td style="white-space: nowrap" ng-show="::!editMode">
+                                                <!-- form -->
+                                                <form editable-form name="rowform2"
+                                                      onbeforesave="saveNewDeal($data, newMinideal.id)"
+                                                      ng-show="rowform2.$visible" class="form-buttons form-inline"
+                                                      shown="newdeal ===  deal">
+                                                    <button type="submit" ng-disabled="rowform2.$waiting"
+                                                            class="btn btn-primary">
+                                                        <span translate="APP.COMMON.SAVE.BUTTON"></span>
+                                                    </button>
+                                                    <button type="button" ng-disabled="rowform2.$waiting"
+                                                            ng-click="rowform2.$cancel()" class="btn btn-default">
+                                                        <span translate="APP.COMMON.REVERT_CHANGES.BUTTON"></span>
+                                                    </button>
+                                                </form>
+                                                <div class="buttons" ng-show="!rowform2.$visible">
+                                                    <button class="btn" ng-click="rowform2.$show()">
+                                                        <span translate="APP.COMMON.EDIT.BUTTON"></span>
+                                                    </button>
+                                                    <button class="btn btn-danger" ng-click="removeDeal($index)">
+                                                        <span translate="APP.COMMON.DELETE.BUTTON"></span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td> {{ printDate(getDatetime)}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <md-button ng-click="addNewDealToOpportunities(); showExistingDealsHeader=true;">
+                                        <md-icon md-font-icon="add">add</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" id="files">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span class="badge">  {{detailedCustomerInfo.connectedInfo.connectedFiles.length}} </span>
+                                        <span translate="APP.COMMON.FILES.SECTION"></span>
+                                    </div>
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+                                    <div class="col-md-6">
+                                        <input type="text"
+                                               ng-model="documentsNameFilter"
+                                               class="form-control background-input-color">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <upload-file-biqa ng-model="detailedCustomerInfo.connectedInfo.connectedFiles"
+                                              before-upload-meta-info-interceptor="beforeUploadMetaInfoInterceptor"
+                                              files-uploaded-objects-array="allObjects"
+                                              documents-name-filter="documentsNameFilter"></upload-file-biqa>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" id="objecthistory">
+
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <span class="badge">  {{objectHistoryResultHolder.length}} </span>
+                                        <span translate="APP.COMMON.CHANGE_HISTORY.SECTION"></span>
+                                    </div>
+                                    <div class="col-sm-12 hidden-md hidden-lg"><br/></div>
+                                    <div class="col-md-6">
+                                        <input type="text"
+                                               ng-model="historyChangesFilter"
+                                               class="form-control background-input-color">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body text-center">
+                                <div ng-if="detailedCustomerInfo && detailedCustomerInfo.id">
+                                    <objects-history-shower-biqa object-id="detailedCustomerInfo.id"
+                                                                 result="objectHistoryResultHolder"
+                                                                 fields-name-filter="historyChangesFilter"
+                                                                 object-type="'CUSTOMER'">
+                                    </objects-history-shower-biqa>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12" id="client-analytics" ng-if="::debugMode">
+                        <section class="panel panel-primary">
+                            <div class="panel-heading">
+                                <span class="badge">  {{allAnalyticsRecords.length}} </span>
+                                <span translate="CUSTOMER.DETAILS.ANALYTIC.SECTION"></span>
+                            </div>
+                            <div class="panel-body text-center">
+
+                                <button data-ng-click="analyticsRecordShow()" class="btn btn-success">
+                                    <span translate="CUSTOMER.DETAILS.SHOW_WEB_ANALYTIC"></span>
+                                </button>
+
+                                <div class="col-md-12" data-ng-repeat="staff in allAnalyticsRecords">
+                                    <section class="panel panel-default">
+                                        <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>
+                                            {{:: printDate(staff.createdDate)}}
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="{{$root.tableClasses}}">
+                                                <thead>
+                                                <tr>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                <tr>
+                                                    <td> ID записи</td>
+                                                    <td>
+                                                        {{staff.id}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> utm_source</td>
+                                                    <td>
+                                                        {{staff.utm.utm_source}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> utm_medium</td>
+                                                    <td>
+                                                        {{staff.utm.utm_medium}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> utm_campaign</td>
+                                                    <td>
+                                                        {{staff.utm.utm_campaign}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> utm_content</td>
+                                                    <td>
+                                                        {{staff.utm.utm_content}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> utm_term</td>
+                                                    <td>
+                                                        {{staff.utm.utm_term}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr ng-if="staff.yandexDirectClick">
+                                                    <td> Данные по клику в Яндекс Директ</td>
+                                                    <td>
+                                                        {{staff.yandexDirectClick}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> Полный адрес</td>
+                                                    <td>
+                                                        {{staff.fullUrl}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> Относительный адрес</td>
+                                                    <td>
+                                                        {{staff.pathname}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <span translate="APP.COMMON.ACTION"></span>
+                                                    </td>
+                                                    <td>
+                                                        {{staff.action}}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> ID пользователя</td>
+                                                    <td>
+                                                        {{staff.userCookieId}}
+                                                    </td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <div class="ui-timline-container">
+                    <section class="ui-timeline">
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script type="text/ng-template" id="customTemplate.html">
+    <a data-no-drag="">
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+    </a>
+</script>
+
+<style>
+    .panel {
+        position: relative;
+    }
+
+    .ui-timline-container {
+        padding: 0px !important;
+    }
+
+    .ui-timline-container {
+        padding: 0px !important;
+    }
+</style>

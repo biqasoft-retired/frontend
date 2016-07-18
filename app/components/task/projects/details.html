@@ -1,0 +1,133 @@
+<div style="position: fixed;  bottom: 4px;  right: 20px; z-index: 999999999999999;">
+
+    <md-button class="md-fab md-primary"
+               tooltip-placement="left" tooltip="Обновить проект задач"
+               tooltip-append-to-body="true"
+               data-ng-click="updateTaskProject()"
+               aria-label="">
+        <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
+    </md-button>
+
+</div>
+
+<style>
+    .taskDone {
+        background-color: #dddddd;;
+        text-decoration: line-through;
+    }
+
+</style>
+
+<section class="page-form-ele page">
+    <div class="col-md-12 col-lg-6">
+        <section class="panel panel-primary">
+            <div class="panel-heading">
+                <!--<span class="glyphicon glyphicon-th"></span> -->
+                Проект {{ currentTaskProject.name || currentTaskProject.id }} </div>
+
+            <div class="panel-body">
+                <!--<div class="row">-->
+                    <table class="{{$root.tableClasses}}">
+                        <thead>
+                        <tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td> <span translate="APP.COMMON.OBJECT.NAME"></span> проекта</td>
+                            <td>
+                                <a href="#" editable-text="item.name">{{ currentTaskProject.name || printEmptyField() }}</a>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </section>
+    </div>
+
+    <section>
+        <div class="col-md-12 col-lg-12">
+            <section class="panel panel-primary">
+                <div class="panel-heading">
+                    <!--<span class="glyphicon glyphicon-th"></span>-->
+                    Задачи в проекте
+                    <!--{{currentTaskProject.name}}-->
+                </div>
+                <div class="panel-body">
+
+                    <div class="callout callout-warning" ng-if="currentTaskProject.tasks.length === 0">
+                        <h4>Задач нет</h4>
+                        <p>Добавьте задачи в проект</p>
+                    </div>
+
+                    <table class="{{$root.tableClasses}} " ng-show="currentTaskProject.tasks.length > 0">
+                        <thead>
+                        <tr>
+                            <td>№</td>
+                            <td><span translate="APP.COMMON.OBJECT.NAME"></span></td>
+                            <td>Дата начала</td>
+                            <td>Дата Конца</td>
+                            <td>Прогресс по чек-листам</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr data-ng-repeat="task in currentTaskProject.tasks track by task.id">
+
+                            <td>{{$index+1}}</td>
+
+                            <td>
+                                <a href="/task/details/{{task.id}}"> {{task.name}} </a>
+                            </td>
+
+                            <td ng-if="returnTimeDifferenceBetweenDate(task.startDate) ===  'null'" class="danger">
+                                <div>
+                                    Задача уже началась <br>
+                                    {{ printDate(task.startDate) }}
+                                </div>
+                            </td>
+
+                            <td ng-if="returnTimeDifferenceBetweenDate(task.startDate) != 'null'" class="success">
+                                <div class="success" ng-if="returnTimeDifferenceBetweenDate(task.startDate) != 'null'">
+                                    До начала {{returnTimeDifferenceBetweenDate(task.startDate)}} ч. <br>
+                                    {{ printDate(task.startDate) }}
+                                </div>
+                            </td>
+
+                            <td ng-if="returnTimeDifferenceBetweenDate(task.finalDate) ===  'null'" class="danger">
+                                <div>
+                                    Время на выполнение вышло
+                                </div>
+                            </td>
+
+                            <td ng-if="returnTimeDifferenceBetweenDate(task.finalDate) != 'null'" class="success">
+                                <div class="success" ng-if="returnTimeDifferenceBetweenDate(task.finalDate) != 'null'">
+                                    До конца {{returnTimeDifferenceBetweenDate(task.finalDate)}} ч. <br>
+                                    {{ printDate(task.finalDate) }}
+                                </div>
+                            </td>
+
+                            <td data-ng-class="{ danger : task.checkListItems.length ==0  }">
+
+                                <progressbar class="progressbar-sm progress-rounded progress-striped"
+                                             value="  countDoneCheckedListInTask(task) /  task.checkListItems.length    *100 "
+                                             type="info"></progressbar>
+
+                                <div class="row">
+                                    <div class="text-center">
+                                        <b> [ {{ countDoneCheckedListInTask(task) / task.checkListItems.length *100
+                                            |number:2 }} % ]</b>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </section>
+</section>

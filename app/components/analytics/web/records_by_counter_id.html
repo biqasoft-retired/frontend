@@ -1,0 +1,136 @@
+<section class="page-form-ele page">
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <section class="panel panel-default">
+                    <div class="panel-heading">
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-success" data-ng-click="reloadData()">
+                                    <span translate="ANALYTICS.WEB.COUNTERS.RECORDS.REFRESH"></span>
+                                </button>
+
+                            </div>
+                            <div class="col-md-6">
+                                <span translate="ANALYTICS.WEB.COUNTERS.RECORDS.NUMBER"></span>
+                                : {{allRecordsByCounterId.length}}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-md-12" data-ng-repeat="staff in allRecordsByCounterId track by staff.id">
+                <section class="panel panel-default">
+                    <div class="panel-heading">
+                        <b>
+                            <span translate="ANALYTICS.WEB.COUNTERS.RECORDS_ALL_BY_COUNTER.NUMBER"></span>
+                        </b>
+                    </div>
+                    <div class="panel-body">
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>ID</td>
+                                <td>
+                                    {{staff.id}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> utm_source</td>
+                                <td>
+                                    {{staff.utm.utm_source}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> utm_medium</td>
+                                <td>
+                                    {{staff.utm.utm_medium}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> utm_campaign</td>
+                                <td>
+                                    {{staff.utm.utm_campaign}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> utm_content</td>
+                                <td>
+                                    {{staff.utm.utm_content}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td> utm_term</td>
+                                <td>
+                                    {{staff.utm.utm_term}}
+                                </td>
+                            </tr>
+
+                            <tr ng-if="staff.yandexDirectClick">
+                                <td>
+                                    <span translate="ANALYTICS.WEB.COUNTERS.RECORDS_ALL_BY_COUNTER.YANDEX_DIRECT_CLICK"></span>
+                                </td>
+                                <td>
+                                    {{staff.yandexDirectClick}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="ANALYTICS.WEB.COUNTERS.RECORDS_ALL_BY_COUNTER.FULL_URL"></span>
+                                </td>
+                                <td>
+                                    {{staff.fullUrl}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="ANALYTICS.WEB.COUNTERS.RECORDS_ALL_BY_COUNTER.RELATIVE_URL"></span>
+                                </td>
+                                <td>
+                                    {{staff.pathname}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="ANALYTICS.WEB.COUNTERS.RECORDS_ALL_BY_COUNTER.ACTION"></span>
+                                </td>
+                                <td>
+                                    {{staff.action}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span translate="ANALYTICS.WEB.COUNTERS.RECORDS_ALL_BY_COUNTER.USER_ID"></span>
+                                </td>
+                                <td>
+                                    {{staff.userCookieId}}
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

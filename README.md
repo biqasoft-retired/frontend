@@ -82,9 +82,9 @@ Sync way
 Delete button
 
 ```html
-<md-button class="nopadding" data-ng-click="deleteParamByIndex($index)">
-    <md-icon md-font-icon="delete">delete</md-icon>
-    <md-tooltip>удалить</md-tooltip>
+<md-button class="" data-ng-click="deleteConfirmation(currentCompany)">
+	<md-icon md-font-icon="delete">delete</md-icon>
+  	<span translate="APP.COMMON.DELETE.BUTTON"></span>
 </md-button>
 ```
 
@@ -100,6 +100,13 @@ This is tooltip directive usage
 <span class="" tooltip-placement="right" tooltip="_текст_" tooltip-append-to-body="true">
      some text
 </span>
+```
+
+Add button
+```html
+<md-button data-ng-click="showNewProjectFlag = !showNewProjectFlag " style="opacity: 0.7;">
+    <md-icon md-font-icon="add">add</md-icon>
+</md-button>
 ```
        
 This is label

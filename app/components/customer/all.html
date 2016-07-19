@@ -14,13 +14,13 @@
 
                 <div class="row">
                     <div class="col-lg-5 col-md-6">
-                        <table class="table table-bordered">
+                        <table class="{{tableClasses}}">
 
                             <thead>
                             <tr>
-                                <td colspan="3" class="info">
+                                <th colspan="3">
                                     <b> {{ 'NAV.CUSTOMER_ALL.SCORING' | translate }}</b>
-                                </td>
+                                </th>
                             </tr>
 
                             </thead>
@@ -209,10 +209,10 @@
                             </tbody>
                         </table>
 
-                        <table class="table table-bordered">
+                        <table class="{{tableClasses}}">
                             <thead>
                             <tr>
-                                <td colspan="3" class="info"><b> Задачи </b></td>
+                                <th colspan="3"><b> Задачи </b></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -239,10 +239,10 @@
                     <div class="col-lg-5 col-md-6">
 
 
-                        <table class="table table-bordered">
+                        <table class="{{tableClasses}}">
                             <thead>
                             <tr>
-                                <td colspan="3" class="info"><b> Сделки </b></td>
+                                <th colspan="3"><b> Сделки </b></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -320,10 +320,10 @@
                             </tbody>
                         </table>
 
-                        <table class="table table-bordered">
+                        <table class="{{tableClasses}}">
                             <thead>
                             <tr>
-                                <td colspan="3" class="info"><b> Возможности </b></td>
+                                <th colspan="3" ><b> Возможности </b></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -401,7 +401,9 @@
                             </tbody>
                         </table>
 
-                        <table>
+                        <filter-class-abstract ng-model="customerAndLeadGetRequestCriteriaDao"></filter-class-abstract>
+
+                        <table class="{{tableClasses}}">
                             <tr>
                                 <td>
                                     <button class="btn btn-primary" data-ng-click=" pageChanged(currentPage)">Поиск
@@ -415,8 +417,6 @@
                                 </td>
                             </tr>
                         </table>
-
-                        <filter-class-abstract ng-model="customerAndLeadGetRequestCriteriaDao"></filter-class-abstract>
 
                     </div>
 

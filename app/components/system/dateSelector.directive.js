@@ -75,6 +75,12 @@ angular.module('app.directivesmy')
 
                 $scope.customerAndLeadGetRequestCriteriaDao = $scope.ngModel;
 
+                $scope.tableClasses = $rootScope.tableClasses;
+
+                $rootScope.$watch('tableClasses', function (newValue) {
+                    $scope.tableClasses = $rootScope.tableClasses;
+                });
+
                 $scope.$watch('ngModel', function (newValue) {
                     $scope.customerAndLeadGetRequestCriteriaDao = $scope.ngModel;
                 });

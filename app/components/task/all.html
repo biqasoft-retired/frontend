@@ -20,16 +20,11 @@
         <section class="panel panel-primary" ng-show="filterPanelShow">
             <div class="panel-heading"><span class="fa fa-filter"></span>
                 <span translate="APP.FILTER.HEADER"></span>
-                <button class="btn btn-primary btn-sm"
+                <md-button class="btn-sm"
                         ng-click="$parent.filterPanelShow=false"
                         ng-if="filterPanelShow ">
                     <span translate="APP.FILTER.HIDE"></span>
-                </button>
-                <button class="btn btn-primary btn-sm"
-                        ng-click="$parent.filterPanelShow=true;  "
-                        ng-if="!filterPanelShow ">
-                    <span translate="APP.COMMON.SHOW.BUTTON"></span>
-                </button>
+                </md-button>
             </div>
             <div class="panel-body text-center" data-ng-show="filterPanelShow">
 
@@ -351,18 +346,18 @@
                             <span class="badge">  {{allCustomersCount}}  </span>
                             Все задачи
 
-                            <button class="btn btn-primary btn-sm"
+                            <md-button class="btn-sm"
                                     ng-click="$parent.filterPanelShow=true;  "
                                     ng-if="!filterPanelShow ">фильтры
-                            </button>
+                            </md-button>
 
-                            <button class="btn btn-primary btn-sm" data-ng-show="taskQueryBuilder.useCustomSort"
+                            <md-button class="btn-sm" data-ng-show="taskQueryBuilder.useCustomSort"
                                     ng-click="taskQueryBuilder.useCustomSort = false;
                                                                           taskQueryBuilder.customSortField = '';
                                                                           pageChanged(currentPage);
                        ">
                                 отменить сортировку
-                            </button>
+                            </md-button>
                         </div>
 
                         <div class="col-md-4">
@@ -439,7 +434,7 @@
 
                                 </th>
 
-                                <th class="col-md-1 visible-lg">Проект</th>
+                                <th class="col-md-1 visible-lg" ng-if="::debugMode">Проект</th>
 
                                 <th class=""
                                     data-ng-class="{'danger' : taskQueryBuilder.customSortField ===  'startDate' }"
@@ -614,7 +609,7 @@
 
                                 </td>
 
-                                <td class="visible-lg " data-ng-class="{'warning' : !project.taskProject}">
+                                <td class="visible-lg " data-ng-class="{'warning' : !project.taskProject}" ng-if="::debugMode">
                                     <a href="/task/projects/details/{{project.taskProject.id}}">
                                         {{ project.taskProject.name}}
                                     </a>

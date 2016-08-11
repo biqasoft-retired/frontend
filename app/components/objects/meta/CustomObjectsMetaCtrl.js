@@ -1,11 +1,8 @@
 'use strict';
 
 angular.module('app.custom.objects.meta', ['ngRoute', 'LocalStorageModule'])
-    .controller('CustomObjectsMetaAllCtrl', ['$scope', '$rootScope', '$http', 'localStorageService', 'UserService', 'configurationService',
-        'companyService', 'logger', '$location', 'SystemService', 'hotkeys', 'customerService', 'customObjectsService',
-        function ($scope, $rootScope, $http, localStorageService, UserService, configurationService,
-                  companyService, logger, $location, SystemService, hotkeys, customerService, customObjectsService) {
-
+    .controller('CustomObjectsMetaAllCtrl', ['$scope', '$rootScope', 'logger', '$location', 'SystemService', 'hotkeys', 'customObjectsService',
+        function ($scope, $rootScope, logger, $location, SystemService, hotkeys, customObjectsService) {
             $scope.projects = [];
 
             $scope.itemsPerPage = 15; // this should match however many results your API puts on one page

@@ -23,15 +23,15 @@
                                            placeholder="{{'APP.LOGIN.PASSWORD_PLACEHOLDER' | translate}}"
                                            required>
 
-                                    <button ng-click="update()" class="btn btn-lg btn-primary btn-block">
+                                    <button ng-click="update()" class="btn btn-lg btn-primary btn-block" ng-disabled="!userName || !userPassword">
                                         <span translate="APP.LOGIN.ENTER"></span>
                                     </button>
 
                                     <br><br>
-                                    <button ng-click="EnterpriseClicked()"
+                                    <md-button ng-click="EnterpriseClicked()"
                                             class="btn btn-sm pull-right btn-warning2 btn-block2">
                                         <span translate="APP.LOGIN.ENTERPRISE"></span>
-                                    </button>
+                                    </md-button>
                                 </form>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                                         <a data-ng-click="selectAccount(account)"><span
                                                 class="glyphicon glyphicon-chevron-right"></span>
                                             {{account.email || account.username}} ( {{printUser(account)}} ),
-                                            <span translate="APP.COMMON.DOMAIN"></span>
+                                            <br>  <span translate="APP.COMMON.DOMAIN"></span>
                                             <b> {{account.domain}} </b>
                                         </a>
                                     </li>
@@ -52,9 +52,9 @@
                                 </ul>
                             </div>
                             <br>
-                            <button class="btn btn-primary3" data-ng-click="chooseAnotherAccount()">
+                            <md-button data-ng-click="chooseAnotherAccount()">
                                 <span translate="APP.LOGIN.CHANGE_PROFILE"></span>
-                            </button>
+                            </md-button>
                         </div>
                     </div>
                 </div>

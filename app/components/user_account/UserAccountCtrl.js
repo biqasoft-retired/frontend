@@ -2,9 +2,9 @@
 
 angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
 
-    .controller('UserAccountNewCtrl', ['$scope', '$rootScope', '$http', 'localStorageService', 'userAccountService', 'configurationService', 'logger', '$translate',
-        function ($scope, $rootScope, $http, localStorageService, userAccountService, configurationService, logger, $translate) {
-            
+    .controller('UserAccountNewCtrl', ['$scope', '$rootScope', 'userAccountService', 'logger', '$translate',
+        function ($scope, $rootScope, userAccountService, logger, $translate) {
+
             $scope.newUserAccount = {};
             $scope.newUserAccount.username = "";
             $scope.sendWelcomeEmail = true;
@@ -66,7 +66,7 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
             };
 
             $scope.updateProfile = function () {
-                logger.logSuccess( $translate.instant('USERACCOUNT.DETAILS.UPDATE.SUCCESSED') );
+                logger.logSuccess($translate.instant('USERACCOUNT.DETAILS.UPDATE.SUCCESSED'));
                 UserService.updateUserAccount($scope.account);
             };
 
@@ -105,12 +105,12 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
 
             $scope.newAuth = {};
             $scope.newAuth.roles = [];
-            
+
             $scope.allOauthTokens = [];
 
             self.getAllTokens = function () {
                 UserService.getOAuthTokens().then(function (data) {
-                    $scope.allOauthTokens  = data;
+                    $scope.allOauthTokens = data;
                 });
             };
             self.getAllTokens();
@@ -120,7 +120,7 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
                     $scope.allOauthTokens.splice(index, 1);
                 });
             };
-            
+
             $scope.currentUsername = localStorage['ls.userName'];
 
             // add plus sign to timezone view
@@ -135,29 +135,29 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
             };
 
             $scope.createHttpToken = function () {
-                UserService.createNewCredentialsWithRoles($scope.newAuth).then(function(data) {
-                    
+                UserService.createNewCredentialsWithRoles($scope.newAuth).then(function (data) {
+
                     $scope.newAuth.username = data.username;
                     $scope.newAuth.password = data.password;
                     $scope.newAuth.token = Base64.encode(data.username + ":" + data.password);
 
                     self.getAllTokens();
-                }, function(data) {
+                }, function (data) {
                     logger.logError($translate.instant('APP.COMMON.ERROR.REQUEST'));
                 });
             };
 
-            $scope.generateCredentials = function(ev) {
+            $scope.generateCredentials = function (ev) {
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
                     templateUrl: 'templates/modal/generate_credentials.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
-                    clickOutsideToClose:true
+                    clickOutsideToClose: true
                 })
-                    .then(function(answer) {
-                    }, function() {
+                    .then(function (answer) {
+                    }, function () {
                     });
             };
 

@@ -2,8 +2,8 @@
 
 angular.module('app.task.project', ['ngRoute', 'LocalStorageModule'])
 
-    .controller('ProjectsAllCtrl', ['$scope', '$http', 'localStorageService', 'UserService', 'configurationService', 'timeService', 'TaskService', '$location', 'logger', 'TaskStatisticService',
-        function($scope, $http, localStorageService, UserService, configurationService, timeService, TaskService, $location, logger, TaskStatisticService) {
+    .controller('ProjectsAllCtrl', ['$scope', 'timeService', 'TaskService', '$location', 'logger', 'TaskStatisticService',
+        function($scope, timeService, TaskService, $location, logger, TaskStatisticService) {
 
             $scope.allTasksProjects = [];
 

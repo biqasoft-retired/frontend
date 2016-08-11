@@ -1,11 +1,9 @@
 'use strict';
 angular.module('app.bpmn', ['ngRoute', 'LocalStorageModule', 'ngMaterial'])
 
-    .service('BPMNCodeExecutorService', ['logger', 'configurationServiceDate', '$timeout', 'localStorageService', 'widgetService', '$translate', '$rootScope',
-        function (logger, configurationServiceDate, $timeout, localStorageService, widgetService, $translate, $rootScope) {
-
+    .service('BPMNCodeExecutorService', ['logger', '$timeout', 'localStorageService', 'widgetService', '$translate', '$rootScope', '$injector',
+        function (logger, $timeout, localStorageService, widgetService, $translate, $rootScope, $injector) {
             var self = this;
-
             self.clientSideExecutorErrors = [];
 
             self.executeClientSideCode = function (data) {
@@ -44,11 +42,9 @@ angular.module('app.bpmn', ['ngRoute', 'LocalStorageModule', 'ngMaterial'])
             $scope.executeRequest = {};
             $scope.executeRequest.code = " function plusOneToNumber(a) {return a+1}; \n\n //expect 5 as script result\n plusOneToNumber(4);";
 
-
             $scope.clientSideCode = {};
             $scope.clientSideCode.location = "BACKGROUND";
             $scope.clientSideCode.jsExec = "var currentUserPretty = 'Hello,'+ $rootScope.printUser($rootScope.currentUser); \rlogger.logWarning(currentUserPretty); \rlogger.logSuccess($rootScope.printDate(new Date()));";
-
 
             $scope.result = {};
             $scope.lastClientSideExecuterError = {};

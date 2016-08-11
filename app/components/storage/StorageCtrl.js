@@ -2,11 +2,9 @@
 
 angular.module('app.documents.all', ['ngRoute', 'LocalStorageModule'])
 
-    .controller('DocumentsAllCtrl', ['$scope', '$rootScope', '$http', 'localStorageService', 'configurationService', 'storageService',
-        'UserService', '$upload', '$timeout', '$location', 'tokenService', '$mdDialog', 'SweetAlert', 'logger',
-        function ($scope, $rootScope, $http, localStorageService, configurationService, documentsService,
-                  UserService, $upload, $timeout, $location, tokenService, $mdDialog, SweetAlert, logger) {
-
+    .controller('DocumentsAllCtrl', ['$scope', '$rootScope', 'storageService', '$upload', '$timeout', '$location', 'tokenService', '$mdDialog', 'SweetAlert', 'logger',
+        'configurationService',
+        function ($scope, $rootScope, documentsService, $upload, $timeout, $location, tokenService, $mdDialog, SweetAlert, logger, configurationService) {
             $scope.defaultFolderPath = '/';
             $scope.contentProviderService = 'DEFAULT';
             $scope.contentProviderToken = {};
@@ -369,7 +367,7 @@ angular.module('app.documents.all', ['ngRoute', 'LocalStorageModule'])
                         console.log("id", addedBuilding.id, $scope.selectedFiles[index].name);
 
                         $scope.upload[index] = $upload.upload({
-                            url: configurationService.returnAPIhost() + "/storage/upload/send_with_pre_id/" + addedBuilding.id,
+                            url: configurationService.returnAPIhost() + "/v1/storage/upload/send_with_pre_id/" + addedBuilding.id,
                             method: 'POST',
                             data: {
                                 "Content-Type": $scope.selectedFiles[index].type === null || $scope.selectedFiles[index].type === '' ?

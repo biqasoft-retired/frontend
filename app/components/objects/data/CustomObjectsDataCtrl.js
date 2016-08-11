@@ -1,196 +1,193 @@
 'use strict';
 
 angular.module('app.custom.objects.data', ['ngRoute', 'LocalStorageModule'])
+    .controller('CustomObjectsDataAllCtrl', ['$scope', '$rootScope',
+        'companyService', 'logger', '$location', 'SystemService', 'hotkeys', 'customObjectsDataService', '$route', 'customObjectsService', '$filter', '$mdDialog',
+        function ($scope, $rootScope, companyService, logger, $location, SystemService, hotkeys, customObjectsDataService, $route, customObjectsService, $filter, $mdDialog) {
+            var self = this;
 
-    .controller('CustomObjectsDataAllCtrl', ['$scope', '$rootScope', '$http', 'localStorageService', 'UserService', 'configurationService',
-      'companyService', 'logger', '$location', 'SystemService', 'hotkeys', 'customerService', 'customObjectsDataService', '$route', 'customObjectsService', '$filter', '$mdDialog',
-      function($scope, $rootScope, $http, localStorageService, UserService, configurationService,
-               companyService, logger, $location, SystemService, hotkeys, customerService, customObjectsDataService, $route, customObjectsService, $filter, $mdDialog) {
+            $scope.collectionId = $route.current.params.id;
 
-          var self = this;
+            $scope.projects = [];
 
-          $scope.collectionId = $route.current.params.id;
+            $scope.itemsPerPage = 15; // this should match however many results your API puts on one page
+            $scope.currentPage = 1;
+            $scope.pagesNumbers = 1;
 
-          $scope.projects = [];
+            $scope.alltDynamicSegments = [];
 
-          $scope.itemsPerPage = 15; // this should match however many results your API puts on one page
-          $scope.currentPage = 1;
-          $scope.pagesNumbers = 1;
+            $scope.filterPanelShow = false;
 
-          $scope.alltDynamicSegments = [];
+            $scope.allCustomersCount = $rootScope.globalDomainStats.allCustomersCount;
 
-          $scope.filterPanelShow = false;
+            $scope.customObjectMeta = {};
 
-          $scope.allCustomersCount = $rootScope.globalDomainStats.allCustomersCount;
+            $scope.newCompany = {};
+            $scope.newCompany.collectionId = $scope.collectionId;
+            $scope.showOnlyWhenIamResponsible = false;
 
-          $scope.customObjectMeta = {};
+            $scope.addCompany = function () {
+                logger.logSuccess("Объект успешно добавлена!");
 
-          $scope.newCompany = {};
-          $scope.newCompany.collectionId = $scope.collectionId;
-          $scope.showOnlyWhenIamResponsible = false;
+                customObjectsDataService.addCustomObjectData($scope.newCompany).then(function (e) {
+                    $location.path('/objects/custom/data/object/details/id/' + e.id + '/collectionId/' + e.collectionId);
+                });
+            };
 
-          $scope.addCompany = function() {
-              logger.logSuccess("Объект успешно добавлена!");
+            hotkeys.add({
+                combo: 'shit+N',
+                description: '',
+                callback: function () {
+                    $scope.addCompany();
+                }
+            });
 
-              customObjectsDataService.addCustomObjectData($scope.newCompany).then(function(e) {
-                  $location.path('/objects/custom/data/object/details/id/' + e.id + '/collectionId/' + e.collectionId);
-              });
-          };
+            ////////////////////////////////////////////////////////////////
+            $scope.customerAndLeadGetRequestCriteriaDao = {};
+            $scope.customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate = true;
+            $scope.customerAndLeadGetRequestCriteriaDao.usePagination = true;
 
-          hotkeys.add({
-              combo: 'shit+N',
-              description: '',
-              callback: function() {
-                  $scope.addCompany();
-              }
-          });
+            $scope.customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom = false;
+            $scope.customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo = false;
 
-          ////////////////////////////////////////////////////////////////
-          $scope.customerAndLeadGetRequestCriteriaDao = {};
-          $scope.customerAndLeadGetRequestCriteriaDao.sortDESCbyCreatedDate = true;
-          $scope.customerAndLeadGetRequestCriteriaDao.usePagination = true;
+            $scope.customerAndLeadGetRequestCriteriaDao.collectionId = $scope.collectionId;
 
-          $scope.customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateFrom = false;
-          $scope.customerAndLeadGetRequestCriteriaDao.useRelativeCreatedDateTo = false;
+            ////////////////////////////////////////////////////////////////
 
-          $scope.customerAndLeadGetRequestCriteriaDao.collectionId = $scope.collectionId;
+            customObjectsDataService.getAllSegment().then(function (data) {
+                $scope.alltDynamicSegments = data;
+            });
 
-          ////////////////////////////////////////////////////////////////
+            $scope.pageChanged = function (newPage) {
 
-          customObjectsDataService.getAllSegment().then(function(data) {
-              $scope.alltDynamicSegments = data;
-          });
+                var fromRecord = (newPage - 1) * $scope.itemsPerPage;
+                var toRecord = newPage * $scope.itemsPerPage;
 
-          $scope.pageChanged = function(newPage) {
+                var customerBuilder = angular.copy($scope.customerAndLeadGetRequestCriteriaDao);
+                customerBuilder = SystemService.buildDataObjectBuilder(customerBuilder);
 
-              var fromRecord = (newPage - 1) * $scope.itemsPerPage;
-              var toRecord = newPage * $scope.itemsPerPage;
+                customerBuilder.recordFrom = fromRecord;
+                customerBuilder.recordTo = toRecord;
 
-              var customerBuilder = angular.copy($scope.customerAndLeadGetRequestCriteriaDao);
-              customerBuilder = SystemService.buildDataObjectBuilder(customerBuilder);
+                $scope.customersPromise = customObjectsDataService.getCustomObjectDataByBuilder
+                (customerBuilder).then(function (e) {
+                    $scope.projects = e.resultedObjects;
+                    $scope.allCustomersCount = e.entityNumber;
+                    $scope.lastRequestCount = e.entityNumber;
+                    $scope.pagesNumbers = Math.ceil($scope.allCustomersCount / $scope.itemsPerPage);
+                });
+            };
 
-              customerBuilder.recordFrom = fromRecord;
-              customerBuilder.recordTo = toRecord;
+            $scope.pageChanged(1);
 
-              $scope.customersPromise = customObjectsDataService.getCustomObjectDataByBuilder
-          (customerBuilder).then(function(e) {
-              $scope.projects = e.resultedObjects;
-              $scope.allCustomersCount = e.entityNumber;
-              $scope.lastRequestCount = e.entityNumber;
-              $scope.pagesNumbers = Math.ceil($scope.allCustomersCount / $scope.itemsPerPage);
-          });
-          };
+            customObjectsService.getCustomObjectsMetaById($scope.collectionId).then(function (data2) {
+                $scope.customObjectMeta = data2;
+                $rootScope.title = data2.name;
+            });
 
-          $scope.pageChanged(1);
+            hotkeys.add({
+                combo: 'ctrl+right',
+                description: '',
+                callback: function () {
+                    $scope.currentPage += 1;
+                    if ($scope.currentPage < 1)  $scope.currentPage = 1;
+                }
+            });
 
-          customObjectsService.getCustomObjectsMetaById($scope.collectionId).then(function(data2) {
-              $scope.customObjectMeta = data2;
-              $rootScope.title = data2.name;
-          });
+            hotkeys.add({
+                combo: 'ctrl+left',
+                description: '',
+                callback: function () {
+                    $scope.currentPage -= 1;
+                    if ($scope.currentPage < 1)  $scope.currentPage = 1;
+                }
+            });
 
-          hotkeys.add({
-              combo: 'ctrl+right',
-              description: '',
-              callback: function() {
-                  $scope.currentPage += 1;
-                  if ($scope.currentPage < 1)  $scope.currentPage = 1;
-              }
-          });
+            $scope.downloadFileExcel = function () {
+                var objectSend = angular.copy($scope.customerAndLeadGetRequestCriteriaDao);
+                objectSend = SystemService.buildDataObjectBuilder(objectSend);
 
-          hotkeys.add({
-              combo: 'ctrl+left',
-              description: '',
-              callback: function() {
-                  $scope.currentPage -= 1;
-                  if ($scope.currentPage < 1)  $scope.currentPage = 1;
-              }
-          });
+                objectSend.usePagination = false;
+                logger.logSuccess("Файл скоро будет загружен. Это может занять несколько минут.");
 
-          $scope.downloadFileExcel = function() {
-              var objectSend = angular.copy($scope.customerAndLeadGetRequestCriteriaDao);
-              objectSend = SystemService.buildDataObjectBuilder(objectSend);
+                customObjectsDataService.getExcelByFilter(objectSend).then(function (data) {
+                    var today = $rootScope.printDate(new Date());
+                    $rootScope.downloadFile({
+                        file: data, type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        filename: $scope.customObjectMeta.name + ' от ' + today + ' объекты biqa' + '.xlsx'
+                    })
+                })
+            };
 
-              objectSend.usePagination = false;
-              logger.logSuccess("Файл скоро будет загружен. Это может занять несколько минут.");
+            // add dynamic segment
+            $scope.addDynamicSegment = function () {
+                $scope.newDynamicSegment.customObjectsDataBuilder = angular.copy($scope.customerAndLeadGetRequestCriteriaDao);
+                $scope.newDynamicSegment.usePagination = false;
 
-              customObjectsDataService.getExcelByFilter(objectSend).then(function(data) {
-                  var today = $rootScope.printDate(new Date());
-                  $rootScope.downloadFile({
-                      file: data, type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                      filename: $scope.customObjectMeta.name + ' от ' + today + ' объекты biqa' + '.xlsx'
-                  })
-              })
-          };
+                customObjectsDataService.addSegment($scope.newDynamicSegment).then(function (data) {
+                    logger.logSuccess("Сегмент добавлен!");
+                    $mdDialog.hide();
+                    $scope.alltDynamicSegments.push(data);
+                })
+            };
 
-          // add dynamic segment
-          $scope.addDynamicSegment = function() {
-              $scope.newDynamicSegment.customObjectsDataBuilder = angular.copy($scope.customerAndLeadGetRequestCriteriaDao);
-              $scope.newDynamicSegment.usePagination = false;
+            $scope.saveAsDynamicSegment = function (ev) {
+                // new dynamic segment object from builder
+                $scope.newDynamicSegment = {};
+                $scope.newDynamicSegment.name = "Новый динамический сегмент";
+                $scope.newDynamicSegment.customerBuilder = {};
 
-              customObjectsDataService.addSegment($scope.newDynamicSegment).then(function(data) {
-                  logger.logSuccess("Сегмент добавлен!");
-                  $mdDialog.hide();
-                  $scope.alltDynamicSegments.push(data);
-              })
-          };
+                $mdDialog.show({
+                    scope: $scope,
+                    preserveScope: true,
+                    templateUrl: 'templates/modal/add_custom_object_dynamic_segment.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                })
+                    .then(function (answer) {
+                        console.log("qqq");
+                    }, function () {
+                        $scope.status = 'You cancelled the dialog.';
+                    });
+            };
 
-          $scope.saveAsDynamicSegment = function(ev) {
-              // new dynamic segment object from builder
-              $scope.newDynamicSegment = {};
-              $scope.newDynamicSegment.name = "Новый динамический сегмент";
-              $scope.newDynamicSegment.customerBuilder = {};
+            // flag to not add additional watcher
+            self.wahchedDynamicSegmentChanges = false;
 
-              $mdDialog.show({
-                      scope: $scope,
-                      preserveScope: true,
-                      templateUrl: 'templates/modal/add_custom_object_dynamic_segment.html',
-                      parent: angular.element(document.body),
-                      targetEvent: ev,
-                      clickOutsideToClose:true
-                  })
-                  .then(function(answer) {
-                      console.log("qqq");
-                  }, function() {
-                      $scope.status = 'You cancelled the dialog.';
-                  });
-          };
+            $scope.getByDynamicSegment = function (data) {
+                $scope.activeDynamicSegmentID = data.id;
+                $scope.currentDynamicSegment = data;
 
-          // flag to not add additional watcher
-          self.wahchedDynamicSegmentChanges = false;
+                $scope.customerAndLeadGetRequestCriteriaDao = data.customObjectsDataBuilder;
+                $scope.editedTimes = 0;
+                $scope.currentDynamicSegmentObjectEdited = false;
 
-          $scope.getByDynamicSegment = function(data) {
-              $scope.activeDynamicSegmentID = data.id;
-              $scope.currentDynamicSegment = data;
+                if (!self.wahchedDynamicSegmentChanges) {
+                    (function () {
+                        var i = $scope.editedTimes;
+                        $scope.$watch('customerAndLeadGetRequestCriteriaDao', function (data) {
+                            if (i > 0) {
+                                $scope.currentDynamicSegmentObjectEdited = true;
+                            }
 
-              $scope.customerAndLeadGetRequestCriteriaDao = data.customObjectsDataBuilder;
-              $scope.editedTimes = 0;
-              $scope.currentDynamicSegmentObjectEdited = false;
+                            console.log(i);
+                            i += 1;
+                        }, true);
+                    })();
+                    self.wahchedDynamicSegmentChanges = true;
+                }
 
-              if (!self.wahchedDynamicSegmentChanges) {
-                  (function() {
-                      var i = $scope.editedTimes;
-                      $scope.$watch('customerAndLeadGetRequestCriteriaDao', function(data) {
-                          if (i > 0) {
-                              $scope.currentDynamicSegmentObjectEdited = true;
-                          }
+                $scope.pageChanged(1, true);
 
-                          console.log(i);
-                          i += 1;
-                      }, true);
-                  })();
-                  self.wahchedDynamicSegmentChanges = true;
-              }
+            };
 
-              $scope.pageChanged(1, true);
+            $scope.saveUpdateDynamicSegment = function () {
+                customObjectsDataService.updateSegment($scope.currentDynamicSegment);
+                logger.logSuccess("Сегмент: " + $scope.currentDynamicSegment.name + " обновлен!");
+                $scope.currentDynamicSegmentObjectEdited = false;
+            };
 
-          };
-          
-          $scope.saveUpdateDynamicSegment = function() {
-              customObjectsDataService.updateSegment($scope.currentDynamicSegment);
-              logger.logSuccess("Сегмент: " + $scope.currentDynamicSegment.name + " обновлен!");
-              $scope.currentDynamicSegmentObjectEdited = false;
-          };
-
-      }
+        }
 
     ]);

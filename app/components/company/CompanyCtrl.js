@@ -2,8 +2,8 @@
 
 angular.module('app.company.all', ['ngRoute', 'LocalStorageModule'])
 
-    .controller('CompanyAllCtrl', ['$scope', '$rootScope', '$http', 'localStorageService', 'UserService', 'configurationService', 'companyService', 'logger', '$location', 'SystemService', 'hotkeys', 'customerService',
-        function ($scope, $rootScope, $http, localStorageService, UserService, configurationService, companyService, logger, $location, SystemService, hotkeys, customerService) {
+    .controller('CompanyAllCtrl', ['$scope', '$rootScope',  'UserService', 'configurationService', 'companyService', 'logger', '$location', 'SystemService', 'hotkeys', 'customerService',
+        function ($scope, $rootScope, UserService, configurationService, companyService, logger, $location, SystemService, hotkeys, customerService) {
 
             $scope.projects = [];
 

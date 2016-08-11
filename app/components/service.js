@@ -58,6 +58,7 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
             m.logged = true;
             var domain = document.domain.replace('cloud.', '');
 
+            $.removeCookie("biqaUserService");
             $.cookie('biqaUserService', m, {expires: 365, path: '/', domain: domain});
             console.log('biqa Cloud: Cookie refreshed');
 
@@ -105,41 +106,36 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
                 // if we set that we don't use cloud version
                 if (localStorageService.get('useEnterprise') === "true") {
                     apiURL = localStorageService.get('EnterpriseApiURL');
-                    return apiURL;
-                }
+                } else {
 
-                // otherwise - try to find correct url for
-                // production and development environment
-                switch (window.location.origin) {
-                    case "http://localhost":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:8080";
-                        break;
+                    // otherwise - try to find correct url for
+                    // production and development environment
+                    switch (window.location.origin) {
+                        case "http://localhost":
+                            window.productionMode = false;
+                            apiURL = "http://localhost:8080";
+                            break;
 
-                    case "http://cloud.biqasoft.com.dev":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:8080";
-                        break;
+                        case "http://cloud.biqasoft.com.dev":
+                            window.productionMode = false;
+                            apiURL = "http://localhost:8080";
+                            break;
 
-                    case "http://gulp.crm.biqasoft.com.dev":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:8080";
-                        break;
+                        // case "http://gulp.cloud.biqasoft.com.dev":
+                        //     window.productionMode = false;
+                        //     apiURL = "http://localhost:8080";
+                        //     break;
 
-                    case "https://cloud.biqasoft.com.dev":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:8080";
-                        break;
+                        case "https://cloud.biqasoft.com.dev":
+                            window.productionMode = false;
+                            apiURL = "http://localhost:8080";
+                            break;
 
-                    case "192.168.1.198":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:8080";
-                        break;
-
-                    default:
-                        window.productionMode = true;
-                        apiURL = "https://api.biqasoft.ru";
-                        break;
+                        default:
+                            window.productionMode = true;
+                            apiURL = "https://api.biqasoft.ru";
+                            break;
+                    }
                 }
 
                 // hide loading screen and show UI
@@ -215,7 +211,7 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
             console.info("------------------------------");
         }])
 
-    .service('commonService', ['localStorageService', '$http', '$rootScope', 'UserService', function (localStorageService, $http, $rootScope, UserService) {
+    .service('commonService', ['localStorageService', '$rootScope', 'UserService', function (localStorageService, $rootScope, UserService) {
 
         /**
          * if we have byte[]
@@ -325,7 +321,7 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
 
     }])
 
-    .service('cacheService', ['localStorageService', '$http', '$rootScope', function (localStorageService, $http, $rootScope) {
+    .service('cacheService', ['localStorageService', '$rootScope', function (localStorageService, $rootScope) {
         var self = this;
         this.init = function () {
         };

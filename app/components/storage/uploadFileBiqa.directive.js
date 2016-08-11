@@ -28,8 +28,8 @@ angular.module('app.directivesmy')
                 beforeUploadMetaInfoInterceptor: "="
             },
             templateUrl: 'templates/document_file/upload_file_biqa.html',
-            controller: ['$scope', '$rootScope', '$http', 'timeService', '$timeout', 'SystemService', '$upload', 'storageService', 'configurationService', 'logger', '$translate',
-                function ($scope, $rootScope, $http, timeService, $timeout, SystemService, $upload, documentsService, configurationService, logger, $translate) {
+            controller: ['$scope', '$rootScope', 'timeService', '$timeout', 'SystemService', '$upload', 'storageService', 'configurationService', 'logger', '$translate',
+                function ($scope, $rootScope, timeService, $timeout, SystemService, $upload, documentsService, configurationService, logger, $translate) {
 
                     $scope.filesUploadedObjectsArray = [];
 
@@ -140,7 +140,7 @@ angular.module('app.directivesmy')
                             documentsService.sendMetaInformation($scope.getNewDocumentMetaModelRequest()).then(function (addedBuilding) {
 
                                 $scope.upload[index] = $upload.upload({
-                                    url: configurationService.returnAPIhost() + "/storage/upload/send_with_pre_id/" + addedBuilding.id,
+                                    url: configurationService.returnAPIhost() + "/v1/storage/upload/send_with_pre_id/" + addedBuilding.id,
                                     method: 'POST',
                                     data: {
                                         "Content-Type": $scope.selectedFiles[index].type === null || $scope.selectedFiles[index].type === '' ?

@@ -12,7 +12,7 @@ angular.module('app.directivesmy')
                 ngChange: "&"
             },
             templateUrl: 'templates/date_selector.html',
-            controller: ['$scope', '$rootScope', '$http', 'timeService', function ($scope, $rootScope, $http, timeService) {
+            controller: ['$scope', '$rootScope', 'timeService', function ($scope, $rootScope, timeService) {
 
                 $scope.customerAndLeadGetRequestCriteriaDao = {};
                 $scope.objDateModel = null;
@@ -71,7 +71,7 @@ angular.module('app.directivesmy')
                 searchFunc: "&"
             },
             templateUrl: 'templates/filter_class_abstract.html',
-            controller: ['$scope', '$rootScope', '$http', 'timeService', function ($scope, $rootScope, $http, timeService) {
+            controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
 
                 $scope.customerAndLeadGetRequestCriteriaDao = $scope.ngModel;
 
@@ -101,7 +101,7 @@ angular.module('app.directivesmy')
                 ngChange: "&"
             },
             templateUrl: 'templates/from_to_selector.html',
-            controller: ['$scope', '$rootScope', '$http', 'timeService', function ($scope, $rootScope, $http, timeService) {
+            controller: ['$scope', function ($scope) {
 
                 $scope.$watch('object', function (newValue) {
 

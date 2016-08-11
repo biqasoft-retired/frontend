@@ -65,7 +65,7 @@ gulp.task('copyCheckmarkImage', function () {
 });
 
 gulp.task('copyFlagImage', function () {
-    return gulp.src(['./assets/css/ui/images/flags.png']).pipe(gulp.dest('./build/build/assets/css/ui/images/flags.png'));
+    return gulp.src(['./assets/css/ui/images/flags.png']).pipe(gulp.dest('./build/build/ui/images'));
 });
 
 gulp.task('copyAssets', function () {

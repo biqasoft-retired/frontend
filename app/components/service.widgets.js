@@ -3,9 +3,7 @@
 angular.module('app.services.widget', ['LocalStorageModule', 'ngRoute', 'app.services'])
 
     .service('widgetContextHolder', [function () {
-
         var self = this;
-
         self.templates = {};
     }])
 

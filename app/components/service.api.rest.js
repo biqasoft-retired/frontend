@@ -5,13 +5,15 @@ angular.module('app.services')
             $http.defaults.headers.common["Accept"] = "application/json";
             $http.defaults.headers.common["Content-Type"] = "application/json";
 
+            var self = this;
+
             $rootScope.isCacheMode = function () {
                 return localStorageService.get('cacheMode') === "true";
             };
             var defaultCacheMode = $rootScope.isCacheMode();
             $rootScope.cacheMode = defaultCacheMode;
 
-            var baseUrl = configurationService.returnAPIhost();
+            self.baseUrl = configurationService.returnAPIhost();
 
             // count server connection number
             // to show on page
@@ -67,7 +69,7 @@ angular.module('app.services')
 
                     config.headers['X-Date'] = new Date().toUTCString();
 
-                    promise = $http.get(baseUrl + "/" + relUrl, config).then(function (response) {
+                    promise = $http.get(self.baseUrl + "/" + relUrl, config).then(function (response) {
                         $rootScope.serversConnectionsActive--;
 
                         // see trick on  'leadGenMethod/all' on server
@@ -87,7 +89,7 @@ angular.module('app.services')
 
             this.put = function (relUrl, object) {
                 $rootScope.serversConnectionsActive++;
-                var promise = $http.put(baseUrl + "/" + relUrl, object).then(function (response) {
+                var promise = $http.put(self.baseUrl + "/" + relUrl, object).then(function (response) {
                     // The then function here is an opportunity to modify the response
                     //console.log(response);
                     // The return value gets picked up by the then in the controller.
@@ -138,14 +140,14 @@ angular.module('app.services')
                     cacheService.setEmptyKey(key);
 
                     if (optionsParams.responseType) {
-                        var promise = $http.post(baseUrl + "/" + relUrl, object, optionsParams).then(function (response) {
+                        var promise = $http.post(self.baseUrl + "/" + relUrl, object, optionsParams).then(function (response) {
                             if ($rootScope.cacheMode) cacheService.setObjectByKey(key, response.data);
                             $rootScope.serversConnectionsActive--;
                             return response.data;
                         });
 
                     } else {
-                        var promise = $http.post(baseUrl + "/" + relUrl, object).then(function (response) {
+                        var promise = $http.post(self.baseUrl + "/" + relUrl, object).then(function (response) {
                             if ($rootScope.cacheMode) cacheService.setObjectByKey(key, response.data);
                             $rootScope.serversConnectionsActive--;
 
@@ -163,7 +165,7 @@ angular.module('app.services')
             this.delete = function (relUrl) {
                 $rootScope.serversConnectionsActive++;
 
-                var promise = $http.delete(baseUrl + "/" + relUrl).then(function (response) {
+                var promise = $http.delete(self.baseUrl + "/" + relUrl).then(function (response) {
                     // The then function here is an opportunity to modify the response
                     //console.log(response);
                     // The return value gets picked up by the then in the controller.
@@ -179,8 +181,11 @@ angular.module('app.services')
         }])
 
     // intercept some errors
-    .factory('authHttpResponseInterceptor', ['$q', '$location', 'logger', 'configurationServiceDate', '$translate', 'authService',
-        function ($q, $location, logger, configurationServiceDate, $translate, authService) {
+    .factory('authHttpResponseInterceptor', ['$q', '$location', 'logger', 'configurationServiceDate', '$translate', 'authService', 'logger',
+        function ($q, $location, logger, configurationServiceDate, $translate, authService, logger) {
+            var self = this;
+            self.lastShowAuthError = null;
+
             return {
                 response: function (response) {
                     configurationServiceDate.onlineStatus.connectedToApiServer = true;
@@ -193,6 +198,13 @@ angular.module('app.services')
                         console.log("Response Error 401", rejection);
                         authService.deauthorize();
 
+                        if (rejection && rejection.data && rejection.data.message) {
+                            if (self.lastShowAuthError === null || ((new Date() - self.lastShowAuthError) > 1500)) {
+                                logger.logError(rejection.data.code + "<br>" + rejection.data.message);
+                                self.lastShowAuthError = new Date();
+                            }
+                        }
+
                         // redirect to login page
                         $location.path('login/login').search('returnTo', $location.path());
                     }
@@ -204,9 +216,13 @@ angular.module('app.services')
 
                     if (rejection.status === 503 || rejection.status === -1) {
                         console.log("Response Error 503", rejection);
-                        configurationServiceDate.onlineStatus.connectedToApiServer = false;
 
-                        $location.path('pages/503').search('returnTo', $location.path());
+                        if (rejection && rejection.config && rejection.config.url && rejection.config.url.endsWith("v1/myaccount/set_online")) {
+                        } else {
+                            $location.path('pages/503').search('returnTo', $location.path());
+                        }
+
+                        configurationServiceDate.onlineStatus.connectedToApiServer = false;
                     }
 
                     if (rejection.status === 500) {

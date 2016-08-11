@@ -13,9 +13,8 @@ angular.module('app.directivesmy')
                 ngChange: "&"
             },
             templateUrl: 'templates/user_accounts_selector.html',
-            controller: ['$scope', '$rootScope', '$http', 'timeService', 'UserService', 'commonService', '$timeout', 'logger',
-                function ($scope, $rootScope, $http, timeService, UserService, commonService, $timeout, logger) {
-
+            controller: ['$scope', '$rootScope', 'timeService', 'UserService', 'commonService', '$timeout', 'logger',
+                function ($scope, $rootScope, timeService, UserService, commonService, $timeout, logger) {
                     $scope.allContacts = [];
                     $scope.contacts = [];
                     $scope.filterSelected = true;

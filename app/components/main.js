@@ -2,12 +2,12 @@
     'use strict';
     angular.module('app.controllers', [])
         .controller('AppCtrl', [
-            '$scope', '$rootScope', 'UserService', '$location', 'configurationServiceDate',
+            '$scope', '$rootScope', 'UserService', '$location', 'configurationService', 'configurationServiceDate',
             'localStorageService', '$timeout', 'statsRepositoryService', 'timeService', 'domainService',
             'SalesFunnelService', 'widgetService', 'SystemService', 'logger', 'NotificationsService',
             'customerService', 'companyService', 'hotkeys', '$modal', '$translate', 'commonService', '$mdDialog', 'customObjectsService',
             '$sce', 'storageService', '$filter', 'ColorService', 'asyncService', 'HistoryLocationService', 'globalHotkeys', 'timeAgoSettings', 'authService', 'BPMNCodeExecutorService',
-            function ($scope, $rootScope, UserService, $location, configurationServiceDate,
+            function ($scope, $rootScope, UserService, $location, configurationService, configurationServiceDate,
                       localStorageService, $timeout, statsRepositoryService, timeService, domainService,
                       SalesFunnelService, widgetService, SystemService, logger, NotificationsService,
                       customerService, companyService, hotkeys, $modal, $translate, commonService, $mdDialog, customObjectsService, $sce,

@@ -77,7 +77,7 @@ angular.module('app.customer.new')
                 } else {
                     //s3 upload
                     $scope.upload[index] = $upload.upload({
-                        url: configurationService.returnAPIhost() + "/customer/parse_excel_to_json", //upload.php script, node.js route, or servlet url
+                        url: configurationService.returnAPIhost() + "v1//customer/parse_excel_to_json", //upload.php script, node.js route, or servlet url
                         method: 'POST',
                         data: {
                             "Content-Type": $scope.selectedFiles[index].type === null || $scope.selectedFiles[index].type === '' ?

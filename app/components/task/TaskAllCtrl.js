@@ -2,10 +2,8 @@
 
 angular.module('app.task.all', ['ngRoute', 'LocalStorageModule'])
 
-    .controller('TasksDetailsCtrl', ['$scope', '$rootScope', '$route', '$http', 'localStorageService', '$timeout', 'timeService', 'customerService', '$location', '$anchorScroll', '$filter',
-        'opportunityService', 'TaskService', 'UserService', 'logger', 'storageService', 'SweetAlert', '$mdDialog', 'TaskStatisticService',
-        function ($scope, $rootScope, $route, $http, localStorageService, $timeout, timeService, customerService, $location, $anchorScroll, $filter,
-                  opportunityService, TaskService, UserService, logger, documentsService, SweetAlert, $mdDialog, TaskStatisticService) {
+    .controller('TasksDetailsCtrl', ['$scope', '$rootScope', '$route', 'timeService', '$location', '$filter', 'TaskService', 'logger', 'SweetAlert', 'TaskStatisticService',
+        function ($scope, $rootScope, $route, timeService, $location, $filter, TaskService, logger, SweetAlert, TaskStatisticService) {
 
             if (!$route.current || !$route.current.params || !$route.current.params.id) {
                 $scope.currentTaskId = $rootScope.miniObjectDetailsID;
@@ -225,10 +223,8 @@ angular.module('app.task.all', ['ngRoute', 'LocalStorageModule'])
 
         }])
 
-    .controller('TaskAllCtrl', ['$scope', '$rootScope', 'localStorageService',
-        'timeService', 'TaskService', 'UserService', 'SystemService', '$location', '$modal', 'logger', '$mdDialog', 'TaskStatisticService',
-        function ($scope, $rootScope, localStorageService, timeService, TaskService, UserService, SystemService, $location, $modal, logger, $mdDialog, TaskStatisticService) {
-
+    .controller('TaskAllCtrl', ['$scope', '$rootScope', 'timeService', 'TaskService', 'SystemService', '$location', '$modal', 'logger', '$mdDialog', 'TaskStatisticService',
+        function ($scope, $rootScope, timeService, TaskService, SystemService, $location, $modal, logger, $mdDialog, TaskStatisticService) {
             $scope.itemsPerPage = 25; // this should match however many results your API puts on one page
             $scope.currentPage = 1;
             $scope.lastRequestCount = 0;
@@ -485,15 +481,11 @@ angular.module('app.task.all', ['ngRoute', 'LocalStorageModule'])
 
         }])
 
-    .controller('TaskNewCtrl', ['$scope', '$http', 'localStorageService', 'configurationService', 'timeService', 'TaskService', 'logger',
-        'UserService', '$upload', '$location', '$rootScope', 'hotkeys', '$mdDialog', '$translate',
-        function ($scope, $http, localStorageService, configurationService, timeService, TaskService, logger, UserService, $upload,
-                  $location, $rootScope, hotkeys, $mdDialog, $translate) {
-
+    .controller('TaskNewCtrl', ['$scope', 'timeService', 'TaskService', 'logger', '$location', '$rootScope', 'hotkeys', '$mdDialog', '$translate',
+        function ($scope, timeService, TaskService, logger, $location, $rootScope, hotkeys, $mdDialog, $translate) {
             $rootScope.title = $translate.instant('APP.PAGES.TITLES.TASK.NEW');
 
             $scope.allTasksProjects = [];
-
             $scope.createNewProject = false;
 
             // TASK OBJECT START

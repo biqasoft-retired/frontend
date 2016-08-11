@@ -2,36 +2,42 @@
 
 angular.module('app.login', ['ngRoute', 'LocalStorageModule'])
 
-    .controller('LoginCtrl', ['$scope', '$rootScope', 'localStorageService', 'UserService', 'logger', 'configurationService',
-        function ($scope, $rootScope, localStorageService, UserService, logger, configurationService) {
-
+    .controller('LoginCtrl', ['$scope', '$rootScope', 'localStorageService', 'UserService', 'logger', 'configurationService', 'serverRequestService',
+        function ($scope, $rootScope, localStorageService, UserService, logger, configurationService, serverRequestService) {
             $scope.EnterpriseApiURL = "http://";
             $scope.userName = "";
             $scope.useEnterprise = false;
 
+            // all users that login in browser
             $scope.allUserAccounts = localStorageService.get('allUserAccounts');
 
-            $scope.update = function () {
-                localStorageService.set('useEnterprise', false);
+            // if we have username and password in GET location (?username=..& password=...) - delete from url
+            // to prevent override
+            $scope.chooseAnotherAccount = function () {
+                window.location = window.location.pathname;
+            };
 
+            // try to auth user
+            $scope.update = function () {
                 if ($scope.useEnterprise) {
                     localStorageService.set('useEnterprise', true);
-
-                    console.log($scope.EnterpriseApiURL);
                     localStorageService.set('EnterpriseApiURL', $scope.EnterpriseApiURL);
+                    serverRequestService.baseUrl = $scope.EnterpriseApiURL;
+                } else {
+                    localStorageService.set('useEnterprise', false);
                 }
 
+                // auth with login and password in REST API
                 configurationService.authentificateUserWithLoginAndPassword($scope.userName, $scope.userPassword);
 
+                // we do not want to auth with login and password futher (it's slower) -> get token from server
                 UserService.createNewCredentials().then(function (data) {
-                    console.log(data);
                     configurationService.authentificateUserWithLoginAndPassword(data.username, data.password);
-                    window.location = window.location.pathname;
-
+                    $scope.chooseAnotherAccount();
                 }, function (data) {
-                    logger.logError("Неправильный логин или пароль!");
+                    // error will be processed by global error interceptor factory (for 401 code)
+                    // and will be shown message
                 });
-
             };
 
             $scope.selectAccount = function (account) {
@@ -52,9 +58,6 @@ angular.module('app.login', ['ngRoute', 'LocalStorageModule'])
                 $scope.useEnterprise = false;
             };
 
-            $scope.chooseAnotherAccount = function () {
-                window.location = window.location.pathname;
-            };
 
         }])
 ;

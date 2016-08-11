@@ -3,8 +3,8 @@
 angular.module('app.segments', ['ngRoute', 'LocalStorageModule'])
     .controller('AllStaticSegments', ['$scope', 'logger', 'customerService', 'hotkeys', function ($scope, logger, customerService, hotkeys) {
 
-        $scope.allSegmentsCustomers = new Array();
-        $scope.allSegmentsStats = new Array();
+        $scope.allSegmentsCustomers = [];
+        $scope.allSegmentsStats = [];
         $scope.newStaticSegment = {};
 
         $scope.allSegments = [];

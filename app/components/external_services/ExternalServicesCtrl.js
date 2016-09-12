@@ -64,7 +64,7 @@ angular.module('app.externalServices', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/direct_add_modal.html',
+                    templateUrl: 'app/components/external_services/modal/direct_add_modal.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true
@@ -79,7 +79,7 @@ angular.module('app.externalServices', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/modal/webdav_new.html',
+                    templateUrl: 'app/components/external_services/modal/webdav_new.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true
@@ -99,7 +99,7 @@ angular.module('app.externalServices', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/modal/webdav_new.html',
+                    templateUrl: 'app/components/external_services/modal/webdav_new.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true

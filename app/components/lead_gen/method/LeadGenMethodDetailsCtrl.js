@@ -438,7 +438,7 @@ angular.module('app.leadGenMethod.methodById', ['ngRoute', 'LocalStorageModule']
                 $mdDialog.show({
                         scope: $scope,
                         preserveScope: true,
-                        templateUrl: 'templates/modal/edit_sales_funnel_status.html',
+                        templateUrl: 'app/components/lead_gen/modal/edit_sales_funnel_status.html',
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose:true

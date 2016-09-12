@@ -63,7 +63,7 @@ angular.module('app.hotkeys', [])
             $rootScope.showNewTaskFoo = function (ev) {
                 $mdDialog.show({
                     controller: 'TaskNewCtrl',
-                    templateUrl: 'templates/modal/add_new_task.html',
+                    templateUrl: 'app/components/task/modal/add_new_task.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true
@@ -77,7 +77,6 @@ angular.module('app.hotkeys', [])
 
                 if (params) newCustomer = params;
 
-                newCustomer.temp = true;
                 customerService.addCustomer(newCustomer).then(function (addedBuilding) {
                     logger.logSuccess($translate.instant('CUSTOMER.ADD.SUCCESSFULLY.TOAST'));
                     $location.path('/customer/details/' + addedBuilding.id);
@@ -91,7 +90,6 @@ angular.module('app.hotkeys', [])
 
                 if (params) newCustomer = params;
 
-                newCustomer.temp = true;
                 companyService.addCompany(newCustomer).then(function (addedBuilding) {
                     logger.logSuccess($translate.instant('COMPANY.ADD.SUCCESSFULLY.TOAST'));
                     $location.path('/company/details/' + addedBuilding.id);

@@ -240,8 +240,10 @@ angular.module('app.customer.details', ['ngRoute', 'LocalStorageModule'])
                     logger.logWarning("Нет ответственного менеджера!");
                 }
 
-                customerService.updateCustomer($scope.detailedCustomerInfo);
-                $rootScope.hasUnsavedEdits = false;
+                customerService.updateCustomer($scope.detailedCustomerInfo).then(function (data) {
+                    $scope.detailedCustomerInfo = data;
+                    $rootScope.hasUnsavedEdits = false;
+                });
                 if (!$rootScope.autoSaveObjects) {
                     logger.logSuccess("Изменения успешно сохранены!");
                 }
@@ -472,7 +474,7 @@ angular.module('app.customer.details', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/modal/customer_profile.html',
+                    templateUrl: 'app/components/customer/modal/customer_profile.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true
@@ -491,7 +493,7 @@ angular.module('app.customer.details', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/modal/add_new_task.html',
+                    templateUrl: 'app/components/task/modal/add_new_task.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true

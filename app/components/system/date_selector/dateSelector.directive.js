@@ -11,7 +11,7 @@ angular.module('app.directivesmy')
                 ngModel: '=',
                 ngChange: "&"
             },
-            templateUrl: 'templates/date_selector.html',
+            templateUrl: 'app/components/system/date_selector/date_selector.html',
             controller: ['$scope', '$rootScope', 'timeService', function ($scope, $rootScope, timeService) {
 
                 $scope.customerAndLeadGetRequestCriteriaDao = {};
@@ -100,7 +100,7 @@ angular.module('app.directivesmy')
                 toUse: '=',
                 ngChange: "&"
             },
-            templateUrl: 'templates/from_to_selector.html',
+            templateUrl: 'app/components/system/date_selector/from_to_selector.html',
             controller: ['$scope', function ($scope) {
 
                 $scope.$watch('object', function (newValue) {

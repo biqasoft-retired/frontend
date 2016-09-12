@@ -12,7 +12,7 @@ angular.module('app.directivesmy')
                 ngChange: "&",
                 pageChanged: "="
             },
-            templateUrl: 'templates/show_floating_pagination_panel.html',
+            templateUrl: 'app/components/system/floating_pagination_panel_directive.html',
             controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
 
                 $scope.settings = {};

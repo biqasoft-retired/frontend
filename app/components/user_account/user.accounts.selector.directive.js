@@ -12,7 +12,7 @@ angular.module('app.directivesmy')
                 accountOptions: '=?',
                 ngChange: "&"
             },
-            templateUrl: 'templates/user_accounts_selector.html',
+            templateUrl: 'app/components/user_account/user_accounts_selector.html',
             controller: ['$scope', '$rootScope', 'timeService', 'UserService', 'commonService', '$timeout', 'logger',
                 function ($scope, $rootScope, timeService, UserService, commonService, $timeout, logger) {
                     $scope.allContacts = [];

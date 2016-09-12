@@ -399,7 +399,7 @@ angular.module('app.customer.new', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/modal/add_dynamic_segment.html',
+                    templateUrl: 'app/components/customer/modal/add_dynamic_segment.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true

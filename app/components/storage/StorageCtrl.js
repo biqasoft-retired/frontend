@@ -175,7 +175,7 @@ angular.module('app.documents.all', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/document_file/new_folder_window.html',
+                    templateUrl: 'app/components/storage/new_folder_window.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true
@@ -227,7 +227,7 @@ angular.module('app.documents.all', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/document_file/document_file_settings.html',
+                    templateUrl: 'app/components/storage/document_file_settings.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true

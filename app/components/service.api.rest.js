@@ -214,6 +214,11 @@ angular.module('app.services')
                         logger.logError($translate.instant('APP.RESPONSE.ERROR.ACCESS_DENY'));
                     }
 
+                    if (rejection.status === 400) {
+                        console.log("Response Error 400", rejection);
+                        logger.logError($translate.instant('APP.RESPONSE.ERROR.INVALID_REQUEST'));
+                    }
+
                     if (rejection.status === 503 || rejection.status === -1) {
                         console.log("Response Error 503", rejection);
 

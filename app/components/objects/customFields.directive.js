@@ -22,6 +22,7 @@ angular.module('app.directivesmy')
                     $scope.customFieldTypes = SystemService.customFieldTypes;
                     $scope.customFieldStringStyles = SystemService.customFieldStringStyles;
                     $scope.customFieldDateStyles = SystemService.customFieldDateStyles;
+                    $scope.debugMode = $rootScope.debugMode;
 
                     // this need to work if we change object (in controller -> this will change object reference)
                     $scope.$watch('ngModel', function () {
@@ -29,45 +30,43 @@ angular.module('app.directivesmy')
                         $scope.ngChange();
                     });
 
-                    angular.extend($scope, {
-                        map: {
-                            center: {
-                                latitude: 42.3349940452867,
-                                longitude: -71.0353168884369
-                            },
-                            zoom: 11,
-                            markers: [],
-                            events: {
-                                click: function (map, eventName, originalEventArgs) {
-                                    var e = originalEventArgs[0];
-                                    var lat = e.latLng.lat(), lon = e.latLng.lng();
-                                    var marker = {
-                                        id: Date.now(),
-                                        coords: {
-                                            latitude: lat,
-                                            longitude: lon
-                                        }
-                                    };
-                                    $scope.map.markers.push(marker);
-                                    console.log($scope.map.markers);
-                                    $scope.$apply();
-                                }
-                            }
-                        }
-                    });
+                    // Angular map
+                    //
+                    // angular.extend($scope, {
+                    //     map: {
+                    //         center: {
+                    //             latitude: 42.3349940452867,
+                    //             longitude: -71.0353168884369
+                    //         },
+                    //         zoom: 11,
+                    //         markers: [],
+                    //         events: {
+                    //             click: function (map, eventName, originalEventArgs) {
+                    //                 var e = originalEventArgs[0];
+                    //                 var lat = e.latLng.lat(), lon = e.latLng.lng();
+                    //                 var marker = {
+                    //                     id: Date.now(),
+                    //                     coords: {
+                    //                         latitude: lat,
+                    //                         longitude: lon
+                    //                     }
+                    //                 };
+                    //                 $scope.map.markers.push(marker);
+                    //                 console.log($scope.map.markers);
+                    //                 $scope.$apply();
+                    //             }
+                    //         }
+                    //     }
+                    // });
 
                     //
                     $scope.checkModel = function () {
-                        console.warn($scope.ngModel);
+                        console.warn("Try custom field", $scope.ngModel);
 
                         if (typeof $scope.ngModel === 'undefined' || !$scope.ngModel) {
                             $timeout($scope.checkModel, 1000);
                             return;
                         }
-
-                        //var fields = $scope.ngModel.filter(function (data) {
-                        //    if (data.hidde)
-                        //});
 
                         $scope.currentCompany.customFields = $scope.ngModel;
                     };
@@ -85,14 +84,14 @@ angular.module('app.directivesmy')
                         $scope.currentCompany.customFields.push(a);
                     };
 
-                    $scope.delteAField = function (index) {
+                    $scope.deleteCustomField = function (index) {
                         $scope.currentCompany.customFields.splice(index, 1);
-                        console.log(index);
+                        console.log("Deleted custom field index", index);
                     };
 
                     $scope.deleteAdditionalFieldDictionary = function (index, object) {
-                        //console.log("Delete additional field by index: " + index );
                         object.value.dictVal.values.splice(index, 1);
+                        console.log("Delete additional field by index: " + index );
                     };
 
                     $scope.addAdditionalFieldDictionary = function (object) {
@@ -158,6 +157,7 @@ angular.module('app.directivesmy')
                     $scope.defaultOptions = {};
                     $scope.defaultOptions.editableFields = true;
                     $scope.printEmptyField = $rootScope.printEmptyField;
+                    $scope.debugMode = $rootScope.debugMode;
                     //
 
                     if (typeof $scope.showDeleteButton === 'boolean' && $scope.showDeleteButton) {
@@ -182,9 +182,11 @@ angular.module('app.directivesmy')
 
                     // this need to work if we change object (in controller -> this will change object reference)
                     $scope.$watch('ngModel', function () {
-                        $scope.currentCompany.customFields = $scope.ngModel;
-                        $scope.ngChange();
-                    }, true);
+                        if (!isUndefinedOrNullOrEmpty($scope.ngModel)){
+                            $scope.currentCompany.customFields = $scope.ngModel;
+                            $scope.ngChange();
+                        }
+                    });
 
                     $scope.$watch('fieldsOption', function () {
                         if (!isUndefinedOrNull($scope.fieldsOption)) {

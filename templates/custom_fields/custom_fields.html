@@ -1,4 +1,7 @@
 <div>
+    <span ng-if="::debugMode">
+        {{currentCompany}}
+    </span>
     <div ng-if="currentCompany.customFields.length   == 0">
         <div class="callout callout-warning">
             <h4>
@@ -120,6 +123,10 @@
                                 <input ng-model="item.value.intVal" class="form-control" type="number">
                             </div>
 
+                            <div ng-if="item.type == 'LONG'">
+                                <input ng-model="item.value.longVal" class="form-control" type="number">
+                            </div>
+
                             <div ng-if="item.type == 'DOCUMENT_FILE'">
                                 <span translate="CUSTOM_FIELDS.SET_UP.CUSTOM_FIELDS.DOCUMENT_FILE.EXAMPLE"></span>
                             </div>
@@ -216,7 +223,7 @@
                                     </md-menu-item>
 
                                     <md-menu-item>
-                                        <md-button class="" data-ng-click="delteAField($index)">
+                                        <md-button class="" data-ng-click="deleteCustomField($index)">
                                             <md-icon md-font-icon="delete">delete</md-icon>
                                             <span translate="APP.COMMON.DELETE.BUTTON"></span>
                                         </md-button>

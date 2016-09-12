@@ -87,8 +87,13 @@ angular.module('app.domain.system', ['ngRoute', 'LocalStorageModule'])
 
         }])
 
-    .controller('DomainCustomFieldsCtrl', ['$scope', '$rootScope', 'logger', 'domainService',
-        function ($rootScope, $scope, logger, domainService) {
+    .controller('DomainCustomFieldsCtrl', ['$scope', '$rootScope', 'logger', 'domainService', '$translate',
+        function ($rootScope, $scope, logger, domainService, $translate) {
+
+            var self = this;
+
+            // custom field types to ignore in UI
+            self.ignoreCustomFields = ['ANALYTICRECORD', 'OAUTH2APPLICATION'];
 
             $scope.domainSettings = {};
             $scope.updateCurrentAdditionalFields = true;
@@ -110,6 +115,14 @@ angular.module('app.domain.system', ['ngRoute', 'LocalStorageModule'])
                     $scope.domainSettings = data;
                 });
                 logger.logSuccess("Домен обновлен!");
+            };
+
+            $scope.translateBiqa = function (name) {
+                return $translate.instant("OBJECT.BIQA." + name);
+            };
+
+            $scope.isHidden = function (name) {
+                return self.ignoreCustomFields.indexOf(name) > -1;
             };
 
         }])

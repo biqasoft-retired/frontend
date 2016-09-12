@@ -507,51 +507,51 @@ angular.module('app.services.api', ['LocalStorageModule', 'ngRoute', 'app.servic
         this.allWidgetsTemplates = [
             {
                 'name': 'DATA_SOURCE_ONE_DATA_STYLE1',
-                'url': 'templates/widgets/DATA_SOURCE_ONE_DATA_STYLE_1.html'
+                'url': 'app/components/widgets/templates/DATA_SOURCE_ONE_DATA_STYLE_1.html'
             },
             {
                 'name': 'IFRAME',
-                'url': 'templates/widgets/IFRAME.html'
+                'url': 'app/components/widgets/templates/IFRAME.html'
             },
             {
                 'name': 'MANAGER_LEADS_CUSTOMERS_BAR',
-                'url': 'templates/widgets/MANAGER_LEADS_CUSTOMERS_BAR.html'
+                'url': 'app/components/widgets/templates/MANAGER_LEADS_CUSTOMERS_BAR.html'
             },
             {
                 'name': 'DATA_SOURCE_ONE_DATA_STYLE2',
-                'url': 'templates/widgets/DATA_SOURCE_ONE_DATA_STYLE_2.html'
+                'url': 'app/components/widgets/templates/DATA_SOURCE_ONE_DATA_STYLE_2.html'
             },
             {
                 'name': 'DATA_SOURCE_COMPLEX_DATA_PIE',
-                'url': 'templates/widgets/DATA_SOURCE_COMPLEX_DATA_PIE.html'
+                'url': 'app/components/widgets/templates/DATA_SOURCE_COMPLEX_DATA_PIE.html'
             },
             {
                 'name': 'DATA_SOURCE_COMPLEX_DATA_COLUMN',
-                'url': 'templates/widgets/DATA_SOURCE_COMPLEX_DATA_COLUMN.html'
+                'url': 'app/components/widgets/templates/DATA_SOURCE_COMPLEX_DATA_COLUMN.html'
             },
             {
                 'name': 'TASKS_MINI',
-                'url': 'templates/widgets/TASKS_MINI.html'
+                'url': 'app/components/widgets/templates/TASKS_MINI.html'
             },
             {
                 'name': 'LEADS_LASTS',
-                'url': 'templates/widgets/LEADS_LASTS.html'
+                'url': 'app/components/widgets/templates/LEADS_LASTS.html'
             },
             {
                 'name': 'COLD_CALL',
-                'url': 'templates/widgets/COLD_CALL.html'
+                'url': 'app/components/widgets/templates/COLD_CALL.html'
             },
             {
                 'name': 'COMPANY_AIM_GAUGE',
-                'url': 'templates/widgets/COMPANY_AIM_GAUGE.html'
+                'url': 'app/components/widgets/templates/COMPANY_AIM_GAUGE.html'
             },
             {
                 'name': 'MANAGER_PAYMENTS_BUBBLE',
-                'url': 'templates/widgets/MANAGER_PAYMENTS_BUBBLE.html'
+                'url': 'app/components/widgets/templates/MANAGER_PAYMENTS_BUBBLE.html'
             },
             {
                 'name': 'MANAGER_PAYMENTS_PIE',
-                'url': 'templates/widgets/MANAGER_PAYMENTS_PIE.html'
+                'url': 'app/components/widgets/templates/MANAGER_PAYMENTS_PIE.html'
             }
 
         ];

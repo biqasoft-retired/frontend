@@ -87,6 +87,10 @@ angular.module('app.services.api')
                 'value': 'INTEGER'
             },
             {
+                'name': 'CUSTOM_FIELDS.TYPES.LONG.NAME',
+                'value': 'LONG'
+            },
+            {
                 'name': 'CUSTOM_FIELDS.TYPES.DOUBLE.NAME',
                 'value': 'DOUBLE'
             },

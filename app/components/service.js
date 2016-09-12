@@ -31,22 +31,37 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
         };
 
         this.getAuthAPItokenWithoutBasic = function () {
-            return self.wrapUserNameAndPasswordToToken(localStorageService.get('userName'), localStorageService.get('userPassword'));
+            return self.wrapUserNameAndPasswordToToken(self.getLocalStorageUserCredentials().username, self.getLocalStorageUserCredentials().password);
         };
-
 
         /**
          * deauthorize user.
          * Do not delete any saved credentials to localstorage
          */
         this.deauthorize = function () {
+            localStorage.clear();
             var m = {};
             m.logged = false;
-            var domain = document.domain;
-            domain = domain.replace("cloud.", "");
+            var domain = document.domain.replace("cloud.", "");
 
             $.removeCookie("biqaUserService");
             $.cookie('biqaUserService', m, {expires: 365, path: '/', domain: domain});
+        };
+
+        this.getLocalStorageUserCredentials = function () {
+            var credentials = localStorage['ls.current.user.credentials'];
+            if (isUndefinedOrNullOrEmpty(credentials)){
+                return null;
+            }
+            return JSON.parse(Base64.decode(credentials));
+        };
+
+        this.setLocalStorageUserCredentials = function (username, password) {
+            var obj = {};
+            obj.username = username;
+            obj.password = password;
+            // store in base64 because if credentials starts with `{}` client angularjs localstorage think that this is json
+            localStorage['ls.current.user.credentials'] = Base64.encode(JSON.stringify(obj));
         };
 
         this.authorize = function (c) {
@@ -61,7 +76,6 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
             $.removeCookie("biqaUserService");
             $.cookie('biqaUserService', m, {expires: 365, path: '/', domain: domain});
             console.log('biqa Cloud: Cookie refreshed');
-
         };
 
     }])
@@ -77,8 +91,7 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
              * @param password
              */
             this.authentificateUserWithLoginAndPassword = function (username, password) {
-                localStorageService.set('userName', username);
-                localStorageService.set('userPassword', password);
+                authService.setLocalStorageUserCredentials(username, password);
 
                 var basicAuth = "Basic " + authService.wrapUserNameAndPasswordToToken(username, password);
                 localStorageService.set('token', basicAuth);
@@ -171,10 +184,10 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
                         apiURL = "http://localhost:9096";
                         break;
 
-                    case "http://gulp.biqasoft.com.dev":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:9096";
-                        break;
+                    // case "http://gulp.biqasoft.com.dev":
+                    //     window.productionMode = false;
+                    //     apiURL = "http://localhost:9096";
+                    //     break;
 
                     case "https://cloud.biqasoft.com.dev":
                         window.productionMode = false;
@@ -298,7 +311,7 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
          * @returns {boolean}
          */
         this.hasRole = function (role) {
-            if (typeof $rootScope.currentUser === 'undefined') return false;
+            if (isUndefinedOrNullOrEmpty($rootScope.currentUser)) return false;
 
             var rolesArray = [];
 
@@ -321,6 +334,9 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
 
     }])
 
+    /**
+     * Alpha
+     */
     .service('cacheService', ['localStorageService', '$rootScope', function (localStorageService, $rootScope) {
         var self = this;
         this.init = function () {

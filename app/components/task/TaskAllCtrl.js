@@ -452,7 +452,7 @@ angular.module('app.task.all', ['ngRoute', 'LocalStorageModule'])
                     scope: $scope,
                     html: true,
                     show: false,
-                    contentTemplate: 'templates/modal/add_task_template.html'
+                    contentTemplate: 'app/components/task/modal/add_task_template.html'
                 });
 
                 // new dynamic segment object from builder

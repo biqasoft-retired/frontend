@@ -29,16 +29,15 @@ gulp.task('gitRevision', function (done) {
 });
 
 gulp.task('clean', function () {
-    return gulp.src(['build/*'], {read: false})
-        .pipe(clean());
+    return gulp.src(['build/*'], {read: false}).pipe(clean());
 });
 
 gulp.task('usemin', function () {
     return gulp.src('index.html')
         .pipe(usemin({
-            css: [cleanCSS(), 'concat'],
+            css:  [cleanCSS(), 'concat'],
             html: [minifyHtml({empty: true})],
-            js: [uglify({mangle: true})]
+            js:   [uglify({mangle: true})]
         }))
         .pipe(replace('GLOBAL_CONSTANTS.GIT_REVISION=null', 'GLOBAL_CONSTANTS.GIT_REVISION="' + gitRevision + '"'))
         .pipe(gulp.dest('./build/'));

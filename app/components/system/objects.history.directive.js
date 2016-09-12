@@ -13,7 +13,7 @@ angular.module('app.historyobjects', [])
                 result: "=?",
                 fieldsNameFilter: "=?"
             },
-            templateUrl: 'templates/objects_history.html',
+            templateUrl: 'app/components/system/objects_history.html',
             controller: ['$scope', '$rootScope', '$timeout', 'SystemService', 'logger', 'objectsHistoryService', '$translate', '$filter',
                 function ($scope, $rootScope, $timeout, SystemService, logger, objectsHistoryService, $translate, $filter) {
 

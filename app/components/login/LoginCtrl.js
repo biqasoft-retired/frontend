@@ -30,23 +30,32 @@ angular.module('app.login', ['ngRoute', 'LocalStorageModule'])
                 // auth with login and password in REST API
                 configurationService.authentificateUserWithLoginAndPassword($scope.userName, $scope.userPassword);
 
-                // we do not want to auth with login and password futher (it's slower) -> get token from server
-                UserService.createNewCredentials().then(function (data) {
-                    configurationService.authentificateUserWithLoginAndPassword(data.username, data.password);
+                if ($scope.userName.startsWith("OAUTH2")){
+                    configurationService.authentificateUserWithLoginAndPassword($scope.userName, $scope.userPassword);
                     $scope.chooseAnotherAccount();
-                }, function (data) {
-                    // error will be processed by global error interceptor factory (for 401 code)
-                    // and will be shown message
-                });
+                }else{
+                    // we do not want to auth with login and password futher (it's slower) -> get token from server
+                    UserService.createNewCredentials().then(function (data) {
+                        configurationService.authentificateUserWithLoginAndPassword(data.username, data.password);
+                        $scope.chooseAnotherAccount();
+                    }, function (data) {
+                        // error will be processed by global error interceptor factory (for 401 code)
+                        // and will be shown message
+                    });
+                }
             };
 
             $scope.selectAccount = function (account) {
-                console.log(account);
+                console.log("Selected account", account);
                 configurationService.authentificateUserWithLoginAndPassword(account.username, account.password);
             };
 
             $scope.isCurrentUserActive = function (account) {
-                if (account.username === localStorageService.get('userName')) return true;
+                if (!account || !$rootScope.currentUser){
+                    return false;
+                }
+
+                if (account.username === $rootScope.currentUser.username) return true;
                 return false;
             };
 

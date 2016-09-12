@@ -140,7 +140,7 @@ angular.module('app.custom.objects.data', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/modal/add_custom_object_dynamic_segment.html',
+                    templateUrl: 'app/components/objects/modal/add_custom_object_dynamic_segment.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true

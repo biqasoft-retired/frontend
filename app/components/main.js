@@ -238,22 +238,25 @@
 
                     if (isUndefinedOrNull(allUserAccounts) || allUserAccounts.length === 0) {
                         allUserAccounts = [];
-                        c.password = localStorage['ls.userPassword'];
-                        c.username = localStorage['ls.userName'];
+                        c.password = authService.getLocalStorageUserCredentials().password;
+                        c.username = authService.getLocalStorageUserCredentials().username;
                         allUserAccounts.push(c);
                     } else {
                         var hasThisAccount = false;
+                        var userPassword = authService.getLocalStorageUserCredentials().password;
+                        var userName = authService.getLocalStorageUserCredentials().password;
+
                         for (var i = 0; i < allUserAccounts.length; i++) {
                             if (allUserAccounts[i].id === c.id) {
                                 allUserAccounts[i] = c;
 
                                 // OAUTH2_ is a special prefix for all oauth created tokens by backend
-                                if (!localStorage['ls.userName'].startsWith('OAUTH2_')) {
-                                    allUserAccounts[i].password = localStorage['ls.userPassword'];
+                                if (!userName.startsWith('OAUTH2_')) {
+                                    allUserAccounts[i].password = userPassword;
                                     hasThisAccount = true;
                                 } else {
-                                    allUserAccounts[i].username = localStorage['ls.userName'];
-                                    allUserAccounts[i].password = localStorage['ls.userPassword'];
+                                    allUserAccounts[i].username = userName;
+                                    allUserAccounts[i].password = userPassword;
                                     hasThisAccount = true;
                                 }
                                 break;
@@ -261,8 +264,8 @@
                         }
 
                         if (!hasThisAccount) {
-                            c.password = localStorage['ls.userPassword'];
-                            c.username = localStorage['ls.userName'];
+                            c.password = userPassword;
+                            c.username = userName;
 
                             if (c.password) {
                                 allUserAccounts.push(c);
@@ -419,10 +422,24 @@
                     }
 
                     window.biqaConfig.unsavedDataConfig = params;
-                    var obj = $scope2.$watch(modelName, function () {
+                    var obj = $scope2.$watch(modelName, function (oldVal, newVal) {
+
                         if (window.changedTimes > window.biqaConfig.unsavedDataConfig.timesBefore) {
+
+                            // optimistic lock
+                            if (!isUndefinedOrNullOrEmpty(oldVal) && !isUndefinedOrNullOrEmpty(newVal)){
+                                var oldValNulledVersion = angular.copy(oldVal);
+                                var newValNulledVersion = angular.copy(newVal);
+                                oldValNulledVersion.version = null;
+                                newValNulledVersion.version = null;
+
+                                if (angular.equals(oldValNulledVersion, newValNulledVersion)){
+                                    return;
+                                }
+                            }
+
                             $rootScope.hasUnsavedEdits = true;
-                            console.log('OBJECT' + modelName + ' EDITED!: ' + window.changedTimes + ' times !');
+                            console.log('OBJECT ' + modelName + ' EDITED ' + window.changedTimes + ' times ');
 
                             if ($rootScope.autoSaveObjects) {
                                 params.autoSaveFunction();
@@ -480,9 +497,9 @@
                  * log out from current user
                  */
                 $rootScope.logout = function () {
-                    localStorage.clear();
                     authService.deauthorize();
-                    $.removeCookie('biqaUserService', {domain: domain, path: '/'});
+                    window.location.pathname = "/login/login";
+                    window.location.search = "";
                     window.location.reload();
                     logger.logSuccess($translate.instant('APP.USERACCOUNT.EXIT_SUCCESSED'));
                 };
@@ -591,95 +608,5 @@
             function ($scope, $rootScope, SearchService, logger, $timeout, documentsService, HistoryLocationService) {
                 $scope.allLocations = HistoryLocationService.allLocations;
             }])
-
-        .controller('HeaderCtrl', ['$scope', '$rootScope', 'SearchService', 'logger', '$timeout', 'storageService', 'Fullscreen',
-            function ($scope, $rootScope, SearchService, logger, $timeout, documentsService, Fullscreen) {
-
-                var self = this;
-
-                // hack to show/hide search bar for mobile devices
-                $scope.showSearchBox = false;
-                self.hiddenSearchClasses = "visible-lg hidden-md";
-
-                $scope.showSearchBoxClicked = function () {
-                    if (!$scope.showSearchBox) {
-                        $("#search-box-li").removeClass(self.hiddenSearchClasses);
-                    } else {
-                        $("#search-box-li").addClass(self.hiddenSearchClasses);
-                    }
-                    $scope.showSearchBox = !$scope.showSearchBox;
-                };
-
-                // search result from server
-                $scope.searchResult = {};
-
-                $scope.downloadFile = function (documentFile) {
-                    documentsService.downloadFile(documentFile.id);
-                };
-
-                $scope.clear = function () {
-                    $scope.searchResult = {};
-                    $rootScope.showDisplay = true;
-                    $scope.lll = '';
-                };
-                $scope.clear();
-
-                $scope.goFullscreen = function () {
-                    if (Fullscreen.isEnabled())
-                        Fullscreen.cancel();
-                    else
-                        Fullscreen.all();
-
-                    // Set Fullscreen to a specific element (bad practice)
-                    // Fullscreen.enable( document.getElementById('img') )
-                };
-
-                /**
-                 * search text box in the head of page - called in when text is changed
-                 */
-                $scope.seaechClicked = function () {
-                    $scope.searchResult = {};
-                    $rootScope.showDisplay = false;
-
-                    if ($scope.lll.length === 0) {
-                        logger.logWarning($translate.instant('APP.SEARCH.EMPTY_REQUEST'));
-                        return;
-                    }
-
-                    self.searchBlockSelector = $('#search');
-                    self.searchBlockSelector.addClass('open');
-                    self.searchBlockSelector.find('> form > input[type="search"]').focus();
-
-                    console.log("Search:" + $scope.lll);
-                    SearchService.allSearch($scope.lll).then(function (data) {
-                        $scope.searchResult = data;
-
-                        if (data.resultNumber > 0) {
-                            $rootScope.showDisplay = false;
-                        } else {
-                            $rootScope.showDisplay = true;
-                        }
-
-                    });
-                };
-
-                $rootScope.closeSearchTimeout = function () {
-                    $timeout(function () {
-                        $rootScope.showDisplay = true;
-                        $scope.searchResult = {};
-                        $scope.lll = '';
-                    }, 1500);
-                };
-
-
-                $scope.allBookmarks = [];
-                $scope.allBookmarks.push({name: "name1", link: "/customer/all"});
-                $scope.allBookmarks.push({name: "name2", link: "/customer/all"});
-                $scope.allBookmarks.push({name: "name3", link: "/customer/all"});
-                $scope.allBookmarks.push({name: "name4", link: "/customer/all"});
-                $scope.allBookmarks.push({name: "name5", link: "/customer/all"});
-
-
-            }]);
 
 }).call(this);

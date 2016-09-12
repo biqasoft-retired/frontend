@@ -47,7 +47,7 @@
                     $mdDialog.show({
                         scope: $scope,
                         preserveScope: true,
-                        templateUrl: 'templates/modal/edit_widget.html',
+                        templateUrl: 'app/components/widgets/modal/edit_widget.html',
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose: true

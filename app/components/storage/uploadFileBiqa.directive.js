@@ -27,7 +27,7 @@ angular.module('app.directivesmy')
                 uploadedAllCallback: "&",
                 beforeUploadMetaInfoInterceptor: "="
             },
-            templateUrl: 'templates/document_file/upload_file_biqa.html',
+            templateUrl: 'app/components/storage/upload_file_biqa.html',
             controller: ['$scope', '$rootScope', 'timeService', '$timeout', 'SystemService', '$upload', 'storageService', 'configurationService', 'logger', '$translate',
                 function ($scope, $rootScope, timeService, $timeout, SystemService, $upload, documentsService, configurationService, logger, $translate) {
 

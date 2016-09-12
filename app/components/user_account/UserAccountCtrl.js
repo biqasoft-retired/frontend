@@ -74,7 +74,7 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/modal/change_password_for_hr.html',
+                    templateUrl: 'app/components/user_account/modal/change_password_for_hr.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true
@@ -86,8 +86,8 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
 
         }])
 
-    .controller('MyAccountCtrl', ['$scope', '$rootScope', 'logger', 'UserService', 'ColorService', '$mdDialog', '$translate',
-        function ($scope, $rootScope, logger, UserService, ColorService, $mdDialog, $translate) {
+    .controller('MyAccountCtrl', ['$scope', '$rootScope', 'logger', 'UserService', 'ColorService', '$mdDialog', '$translate', 'authService',
+        function ($scope, $rootScope, logger, UserService, ColorService, $mdDialog, $translate, authService) {
 
             var self = this;
 
@@ -108,6 +108,8 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
 
             $scope.allOauthTokens = [];
 
+            $scope.currentActiveToken = authService.getLocalStorageUserCredentials().username;
+
             self.getAllTokens = function () {
                 UserService.getOAuthTokens().then(function (data) {
                     $scope.allOauthTokens = data;
@@ -120,8 +122,6 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
                     $scope.allOauthTokens.splice(index, 1);
                 });
             };
-
-            $scope.currentUsername = localStorage['ls.userName'];
 
             // add plus sign to timezone view
             $scope.timeZone = new Date().getTimezoneOffset() / -60;
@@ -151,7 +151,7 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/modal/generate_credentials.html',
+                    templateUrl: 'app/components/user_account/modal/generate_credentials.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose: true

@@ -1,4 +1,8 @@
 <div>
+       <span ng-if="::debugMode">
+        {{currentCompany}}
+       </span>
+
     <div class="panel-body text-center"
          ng-if="currentCompany.customFields.length == 0 && showNoCustomFieldsSc">
         <div class="callout callout-warning" style="margin: 0px;">
@@ -37,6 +41,18 @@
 
                     <span ng-if="!defaultOptions.editableFields">
                     {{addFiels.value.intVal || '-'}}
+                </span>
+
+                </div>
+
+                <div ng-if=" addFiels.type == 'LONG'">
+                    <input ng-if="defaultOptions.editableFields"
+                           ng-model="addFiels.value.longVal"
+                           type="number"
+                           class="form-control">
+
+                    <span ng-if="!defaultOptions.editableFields">
+                    {{addFiels.value.longVal || '-'}}
                 </span>
 
                 </div>

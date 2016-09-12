@@ -41,59 +41,10 @@
                         <div ng-cloak>
                             <md-content>
                                 <md-tabs md-dynamic-height md-border-bottom>
-                                    <md-tab label="Клиенты">
+                                    <md-tab ng-repeat="(K,V) in  domainSettings.defaultCustomFields" label="{{translateBiqa(K)}}" ng-if="!isHidden(K)">
                                         <md-content class="md-padding">
                                             <custom-fields-selector
-                                                    ng-model="domainSettings.customFieldsCustomer"></custom-fields-selector>
-                                        </md-content>
-                                    </md-tab>
-
-                                    <md-tab label="Контрагенты">
-                                        <md-content class="md-padding">
-                                            <custom-fields-selector
-                                                    ng-model="domainSettings.customFieldsCompany"></custom-fields-selector>
-                                        </md-content>
-                                    </md-tab>
-
-                                    <md-tab label="Сделки">
-                                        <md-content class="md-padding">
-                                            <custom-fields-selector
-                                                    ng-model="domainSettings.customFieldsDeals"></custom-fields-selector>
-                                        </md-content>
-                                    </md-tab>
-
-                                    <md-tab label="Возможности">
-                                        <md-content class="md-padding">
-                                            <custom-fields-selector
-                                                    ng-model="domainSettings.customFieldsOpportunity"></custom-fields-selector>
-                                        </md-content>
-                                    </md-tab>
-
-                                    <md-tab label="Затраты">
-                                        <md-content class="md-padding">
-                                            <custom-fields-selector
-                                                    ng-model="domainSettings.customFieldsCosts"></custom-fields-selector>
-                                        </md-content>
-                                    </md-tab>
-
-                                    <md-tab label="Сотрудник">
-                                        <md-content class="md-padding">
-                                            <custom-fields-selector
-                                                    ng-model="domainSettings.customFieldsUserAccount"></custom-fields-selector>
-                                        </md-content>
-                                    </md-tab>
-
-                                    <md-tab label="Задача">
-                                        <md-content class="md-padding">
-                                            <custom-fields-selector
-                                                    ng-model="domainSettings.customFieldsTask"></custom-fields-selector>
-                                        </md-content>
-                                    </md-tab>
-
-                                    <md-tab label="Проект задач">
-                                        <md-content class="md-padding">
-                                            <custom-fields-selector
-                                                    ng-model="domainSettings.customFieldsTaskProject"></custom-fields-selector>
+                                                    ng-model="domainSettings.defaultCustomFields[K]"></custom-fields-selector>
                                         </md-content>
                                     </md-tab>
                                 </md-tabs>

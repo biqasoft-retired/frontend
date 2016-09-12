@@ -10,7 +10,7 @@ angular.module('app.directivesmy')
             scope: {
                 ngModel: '='
             },
-            templateUrl: 'templates/role_security_selector.html',
+            templateUrl: 'app/components/user_account/role_security_selector.html',
             controller: ['$scope', function($scope) {
 
                 $scope.roles = {};

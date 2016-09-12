@@ -115,7 +115,7 @@ angular.module('app.leadGenMethod.projectById', ['ngRoute', 'LocalStorageModule'
                 $mdDialog.show({
                         scope: $scope,
                         preserveScope: true,
-                        templateUrl: 'templates/modal/utm.html',
+                        templateUrl: 'app/components/lead_gen/modal/utm.html',
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose:true

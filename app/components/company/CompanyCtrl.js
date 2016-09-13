@@ -197,7 +197,9 @@ angular.module('app.company.all', ['ngRoute', 'LocalStorageModule'])
                     $scope.currentCompany.responsibleManagerID = $scope.responsibleManager.id;
                 }
 
-                companyService.updateCompany($scope.currentCompany);
+                companyService.updateCompany($scope.currentCompany).then(function (data) {
+                    $scope.currentCompany = data;
+                });
                 logger.logSuccess("Данные о компании успешно обновлены!");
             };
 

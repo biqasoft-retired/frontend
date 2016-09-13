@@ -112,7 +112,7 @@ angular.module('app.datasource', ['ngRoute', 'LocalStorageModule'])
                 $mdDialog.show({
                     scope: $scope,
                     preserveScope: true,
-                    templateUrl: 'templates/data_source/data_source_new.html',
+                    templateUrl: 'app/components/data_source/modal/data_source_new.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose:true
@@ -246,14 +246,14 @@ angular.module('app.datasource', ['ngRoute', 'LocalStorageModule'])
                             SweetAlert.swal("Отмена", "error");
                         }
                     }
-
-                )
+                );
             };
 
             $scope.updateDataSource = function() {
-                SalesFunnelService.updateDataSource($scope.currentDataSource).then(function(e) {
+                SalesFunnelService.updateDataSource($scope.currentDataSource).then(function(response) {
+                    $scope.currentDataSource = response;
                     logger.logSuccess("Обновлен");
-                })
+                });
             };
 
             $scope.addParameterToParametres = function() {

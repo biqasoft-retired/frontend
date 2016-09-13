@@ -36,6 +36,7 @@
                 <div ng-if=" addFiels.type == 'INTEGER'">
                     <input ng-if="defaultOptions.editableFields"
                            ng-model="addFiels.value.intVal"
+                           ng-model-options="{ debounce: 600 }"
                            type="number"
                            class="form-control">
 
@@ -48,6 +49,7 @@
                 <div ng-if=" addFiels.type == 'LONG'">
                     <input ng-if="defaultOptions.editableFields"
                            ng-model="addFiels.value.longVal"
+                           ng-model-options="{ debounce: 600 }"
                            type="number"
                            class="form-control">
 
@@ -80,6 +82,7 @@
                     <input ng-if="defaultOptions.editableFields"
                            type="number"
                            ng-model="addFiels.value.doubleVal"
+                           ng-model-options="{ debounce: 600 }"
                            class="form-control">
 
                     <span ng-if="!defaultOptions.editableFields">

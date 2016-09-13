@@ -346,10 +346,10 @@ angular.module('app.leadGenMethod.methodById', ['ngRoute', 'LocalStorageModule']
             /**
              * update current leadGenMethod
              */
-            $scope.addNewProject = function() {
+            $scope.saveMethod = function() {
                 LeadGenService.updateLeadGenLeadGenMethod($scope.currentLeadGenMethod).then(function(b) {
                     logger.logSuccess("Метод лидгена <b>" + b.name + " </b> успешно обновлен!");
-
+                    $scope.currentLeadGenMethod = b;
                     $rootScope.hasUnsavedEdits = false;
                     if (!$rootScope.autoSaveObjects) {
                         logger.logSuccess("Изменения успешно сохранены!");

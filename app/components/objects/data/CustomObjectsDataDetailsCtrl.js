@@ -58,7 +58,6 @@ angular.module('app.custom.objects.data')
               if (param && param.beforeTimes) beforeTimes = param.beforeTimes;
               return $rootScope.defineUnsavedData($scope, 'currentCompany', {
                   autoSaveFunction: function() {
-
                   },
                   timesBefore: beforeTimes
               });

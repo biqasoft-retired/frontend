@@ -100,62 +100,16 @@
                             </tr>
                             </tbody>
                         </table>
-                        <custom-fields-shower ng-model="currentCompany.customFields"></custom-fields-shower>
                     </div>
                 </section>
             </div>
 
             <div class="col-md-12 col-lg-6">
-
                 <section class="panel panel-primary">
                     <div class="panel-heading">
-                        <span translate="COMPANY.REQUISITES"></span>
                     </div>
                     <div class="panel-body">
-                        <table class="{{$root.tableClasses}}">
-                            <thead>
-                            <tr>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <tr>
-                                <td> ОГРН</td>
-                                <td>
-                                    <a href="#" editable-text="currentCompany.requisites.ogrn">{{ currentCompany.requisites.ogrn || printEmptyField() }}</a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td> ИНН</td>
-                                <td>
-                                    <a href="#" editable-text="currentCompany.requisites.inn">{{ currentCompany.requisites.inn || printEmptyField() }}</a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td> КПП</td>
-                                <td>
-                                    <a href="#" editable-text="currentCompany.requisites.kpp">{{ currentCompany.requisites.kpp || printEmptyField() }}</a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td> ОКПО</td>
-                                <td>
-                                    <a href="#" editable-text="currentCompany.requisites.okpo">{{ currentCompany.requisites.okpo || printEmptyField() }}</a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td> БИК</td>
-                                <td>
-                                    <a href="#" editable-text="currentCompany.requisites.bik">{{ currentCompany.requisites.bik || printEmptyField() }}</a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <custom-fields-shower ng-model="currentCompany.customFields"></custom-fields-shower>
                     </div>
                 </section>
             </div>

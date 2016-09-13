@@ -10,7 +10,7 @@
 <div style="position: fixed;  bottom: 4px;  right: 85px; z-index: 999999999999999;" ng-if="!editMode"
      tooltip-placement="left" tooltip="сохранить"
      tooltip-append-to-body="true"
-     ng-click="addNewProject()">
+     ng-click="saveMethod()">
 
     <md-button class="md-fab md-primary animation-hiding-1-5" aria-label="" ng-if="!editMode">
         <md-icon md-svg-src="assets/ic_save_white_36px.svg"></md-icon>
@@ -228,7 +228,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" ng-click="addNewProject()" class="btn btn-primary">Сохранить изменения
+                        <button type="submit" ng-click="saveMethod()" class="btn btn-primary">Сохранить изменения
                         </button>
                     </div>
                 </section>

@@ -21,16 +21,15 @@ angular.module('app.custom.objects.meta')
                 if (param && param.beforeTimes) beforeTimes = param.beforeTimes;
                 return $rootScope.defineUnsavedData($scope, 'currentCompany', {
                     autoSaveFunction: function () {
-
                     },
                     timesBefore: beforeTimes
                 });
             };
 
-            customObjectsService.getCustomObjectsMetaById($scope.currentCompanyId).then(function (e) {
-                    $scope.currentCompany = e;
+            customObjectsService.getCustomObjectsMetaById($scope.currentCompanyId).then(function (response) {
+                    $scope.currentCompany = response;
                     $scope.definerUnsafe();
-                    $rootScope.title = e.name || $rootScope.printEmptyField();
+                    $rootScope.title = response.name || $rootScope.printEmptyField();
                 }
             );
 
@@ -43,7 +42,9 @@ angular.module('app.custom.objects.meta')
             };
 
             $scope.updateCompany = function (e) {
-                customObjectsService.updateCustomObjectMeta($scope.currentCompany);
+                customObjectsService.updateCustomObjectMeta($scope.currentCompany).then(function (response) {
+                    $scope.currentCompany = response;
+                });
                 logger.logSuccess("Данные об объекте успешно обновлены!");
                 $rootScope.hasUnsavedEdits = false;
             };

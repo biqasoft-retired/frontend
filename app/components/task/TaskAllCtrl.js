@@ -42,7 +42,8 @@ angular.module('app.task.all', ['ngRoute', 'LocalStorageModule'])
             };
 
             $scope.updateTask = function () {
-                TaskService.updateTask($scope.currentTask).then(function (account) {
+                TaskService.updateTask($scope.currentTask).then(function (task) {
+                    $scope.currentTask = task;
                     $rootScope.hasUnsavedEdits = false;
                     if (!$rootScope.autoSaveObjects) {
                         logger.logSuccess("Задача обновлена!");

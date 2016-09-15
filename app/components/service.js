@@ -50,7 +50,7 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
 
         this.getLocalStorageUserCredentials = function () {
             var credentials = localStorage['ls.current.user.credentials'];
-            if (isUndefinedOrNullOrEmpty(credentials)){
+            if (isUndefinedOrNullOrEmpty(credentials)) {
                 return null;
             }
             return JSON.parse(Base64.decode(credentials));

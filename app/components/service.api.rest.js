@@ -198,10 +198,13 @@ angular.module('app.services')
                         console.log("Response Error 401", rejection);
                         authService.deauthorize();
 
-                        if (rejection && rejection.data && rejection.data.message) {
-                            if (self.lastShowAuthError === null || ((new Date() - self.lastShowAuthError) > 1500)) {
-                                logger.logError(rejection.data.code + "<br>" + rejection.data.message);
-                                self.lastShowAuthError = new Date();
+                        if (rejection && rejection.config && rejection.config.url && rejection.config.url.endsWith("v1/myaccount/set_online")) {
+                        } else {
+                            if (rejection && rejection.data && rejection.data.message) {
+                                if (self.lastShowAuthError === null || ((new Date() - self.lastShowAuthError) > 1500)) {
+                                    logger.logError(rejection.data.code + "<br>" + rejection.data.message);
+                                    self.lastShowAuthError = new Date();
+                                }
                             }
                         }
 

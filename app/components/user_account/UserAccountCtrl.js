@@ -19,15 +19,14 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
                 var objToSend = {};
                 objToSend.sendWelcomeEmail = $scope.sendWelcomeEmail;
                 objToSend.userAccount = $scope.newUserAccount;
+                objToSend.password = $scope.password;
 
                 userAccountService.addAccount(objToSend).then(function (data) {
                     logger.logSuccess($translate.instant('USERACCOUNT.NEW.ADD_SUCCESSED'));
                 }, function (data) {
                     console.log(data);
                     if (data.data.message === 'USER WITH THIS USERNAME ALREADY EXIST') {
-                        logger.logError($translate.instant('USERACCOUNT.NEW.USERNAME_WITH_THIS_EMAIL_ALREADY_EXIST'));
-                    } else {
-                        logger.logError(translate.instant('USERACCOUNT.NEW.ADD_ERROR'));
+                        logger.logError(data.data.message);
                     }
                 });
             }

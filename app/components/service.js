@@ -157,60 +157,8 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
                 return apiURL;
             };
 
-            /**
-             * Get ASYNC WEBSOCKET API URL
-             * @returns {string}
-             */
-            this.returnAsyncAPIhost = function () {
-
-                var apiURL = "";
-
-                // if we set that we don't use cloud version
-                if (localStorageService.get('useEnterprise') === "true") {
-                    apiURL = localStorageService.get('EnterpriseAsyncApiURL');
-                    return apiURL;
-                }
-
-                // otherwise - try to find correct url for
-                // production and development environment
-                switch (window.location.origin) {
-                    case "http://localhost":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:9096";
-                        break;
-
-                    case "http://cloud.biqasoft.com.dev":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:9096";
-                        break;
-
-                    // case "http://gulp.biqasoft.com.dev":
-                    //     window.productionMode = false;
-                    //     apiURL = "http://localhost:9096";
-                    //     break;
-
-                    case "https://cloud.biqasoft.com.dev":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:9096";
-                        break;
-
-                    case "192.168.1.198":
-                        window.productionMode = false;
-                        apiURL = "http://localhost:9096";
-                        break;
-
-                    default:
-                        window.productionMode = true;
-                        apiURL = "https://async.api.biqasoft.com";
-                        break;
-                }
-
-                return apiURL;
-            };
-
             this.getOnlineStatus = function () {
-                configurationServiceDate.serversURLs.restAPIserverURL = this.returnAPIhost();
-                configurationServiceDate.serversURLs.asyncAPIserverURL = this.returnAsyncAPIhost();
+                configurationServiceDate.serversURLs.restAPIserverURL = this.returnAPIhost()
             };
             this.getOnlineStatus();
 
@@ -220,8 +168,6 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
             console.info("STATIC: " + configurationServiceDate.onlineStatus.connectedToStaticServer);
             console.info("       API SERVER ADDRESS");
             console.info("Address: " + this.returnAPIhost());
-            console.info("ASYNC Address: " + configurationServiceDate.serversURLs.asyncAPIserverURL);
-            console.info("------------------------------");
         }])
 
     .service('commonService', ['localStorageService', '$rootScope', 'UserService', function (localStorageService, $rootScope, UserService) {

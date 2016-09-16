@@ -19,9 +19,6 @@ angular.module('app.services')
             // to show on page
             $rootScope.serversConnectionsActive = 0;
 
-            $rootScope.smartCache = true;
-            $rootScope.sendObjectVersionToServer = true;
-
             /**
              * HTTP biqa API 'GET' METHOD
              *  by default
@@ -60,12 +57,13 @@ angular.module('app.services')
                 } else {
                     $rootScope.serversConnectionsActive++;
 
-                    var hash = cacheService.haveCached(key) ? cacheService.getObjectWithMetaData(key).md5Hash : "";
+                    // var hash = cacheService.haveCached(key) ? cacheService.getObjectWithMetaData(key).md5Hash : "";
 
                     var config = {};
-                    config.headers = {
-                        'X-biqa-Version-Hash': hash
-                    };
+                    config.headers = {};
+                    // config.headers = {
+                    //     'X-biqa-Version-Hash': hash
+                    // };
 
                     config.headers['X-Date'] = new Date().toUTCString();
 
@@ -73,12 +71,12 @@ angular.module('app.services')
                         $rootScope.serversConnectionsActive--;
 
                         // see trick on  'leadGenMethod/all' on server
-                        if (response.headers("X-biqa-Object-Equals-Hash") != null && response.headers("X-biqa-Object-Equals-Hash") === "TRUE") {
-                            return cacheService.getObjectWithMetaData(key).data;
-                        } else {
-                            cacheService.setObjectByKey(key, response.data, response.headers('X-biqa-Version-Hash'));
-                            return response.data;
-                        }
+                        // if (response.headers("X-biqa-Object-Equals-Hash") != null && response.headers("X-biqa-Object-Equals-Hash") === "TRUE") {
+                        //     return cacheService.getObjectWithMetaData(key).data;
+                        // } else {
+                        //     cacheService.setObjectByKey(key, response.data, response.headers('X-biqa-Version-Hash'));
+                        return response.data;
+                        // }
                     });
                     console.info("Get: " + key + " from server");
                 }
@@ -181,8 +179,8 @@ angular.module('app.services')
         }])
 
     // intercept some errors
-    .factory('authHttpResponseInterceptor', ['$q', '$location', 'logger', 'configurationServiceDate', '$translate', 'authService', 'logger',
-        function ($q, $location, logger, configurationServiceDate, $translate, authService, logger) {
+    .factory('authHttpResponseInterceptor', ['$q', '$location', 'configurationServiceDate', '$translate', 'authService', 'logger',
+        function ($q, $location, configurationServiceDate, $translate, authService, logger) {
             var self = this;
             self.lastShowAuthError = null;
 
@@ -196,7 +194,6 @@ angular.module('app.services')
 
                     if (rejection.status === 401) {
                         console.log("Response Error 401", rejection);
-                        authService.deauthorize();
 
                         if (rejection && rejection.config && rejection.config.url && rejection.config.url.endsWith("v1/myaccount/set_online")) {
                         } else {
@@ -204,8 +201,17 @@ angular.module('app.services')
                                 if (self.lastShowAuthError === null || ((new Date() - self.lastShowAuthError) > 1500)) {
                                     logger.logError(rejection.data.code + "<br>" + rejection.data.message);
                                     self.lastShowAuthError = new Date();
+                                    return;
                                 }
                             }
+                        }
+
+                        if (rejection && rejection.data && rejection.data.idErrorMessage === "auth.exception.failed.limit") {
+                            // do not deauthorize (delete localstorage & cookie) on password fail error
+                            // because we can open in another browser, get limit error(for example by IP), and will have reset auth in first browser
+                            // where all is OK
+                        } else {
+                            authService.deauthorize();
                         }
 
                         // redirect to login page

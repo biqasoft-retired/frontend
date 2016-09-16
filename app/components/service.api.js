@@ -754,6 +754,12 @@ angular.module('app.services.api', ['LocalStorageModule', 'ngRoute', 'app.servic
 
     }])
 
+    .service('systemSettingsGatewayService', ['serverRequestService', function (serverRequestService) {
+        this.getAsyncUrl = function () {
+            return serverRequestService.get('');
+        };
+    }])
+
     .service('domainService', ['serverRequestService', function (serverRequestService) {
         this.getMyDomainSettings = function () {
             return serverRequestService.get('v1/domain_settings/my');

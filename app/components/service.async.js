@@ -3,27 +3,53 @@
  * All Rights Reserved
  */
 angular.module('app.services.api')
-    .service('asyncService', ['serverRequestService', 'configurationServiceDate', '$timeout', 'localStorageService', 'authService',
-        function (serverRequestService, configurationServiceDate, $timeout, localStorageService, authService) {
+    .service('asyncService', ['serverRequestService', 'configurationServiceDate', '$timeout', 'localStorageService', 'authService', 'systemSettingsGatewayService',
+        function (serverRequestService, configurationServiceDate, $timeout, localStorageService, authService, systemSettingsGatewayService) {
 
             var self = this;
 
+            // WebSocket object
             self.socket = null;
 
             self.connected = {};
 
             // prevent concurrent rewrite connection    
             self.connected.initSocketLock = false;
-
-            self.nextTryOnerrorMillias = 1000;
-
             self.connected.connectTries = 0;
 
+            // pause between retry on fail
+            self.nextTryOnerrorMillias = 1000;
+            self.nextTryOnerrorMilliasProgressStep = 1000;
+
+            // array of functions which will be executed on every message from server
+            // todo: observer
             self.subscribers = [];
 
             configurationServiceDate.onlineStatus.connectedToAsyncServer = false;
 
-            self.baseUrl = configurationServiceDate.serversURLs.asyncAPIserverURL + "/ws";
+            // WebSocket url
+            self.baseUrl = null;
+            self.haveBaseUrlRequest = false;
+
+            self.tryResolveBaseUrl = function () {
+                if (!isUndefinedOrNullOrEmpty(self.baseUrl)) {
+                    return self.baseUrl;
+                }
+
+                if (self.haveBaseUrlRequest) {
+                    return;
+                }
+                self.haveBaseUrlRequest = true;
+
+                systemSettingsGatewayService.getAsyncUrl().then(function (data) {
+                    self.baseUrl = data.asyncGateway;
+                    console.info("ASYNC Address: " + self.baseUrl);
+                    console.info("------------------------------");
+                    self.haveBaseUrlRequest = false;
+                });
+            };
+
+            self.tryResolveBaseUrl();
 
             /**
              * Internal method to connect to server to anync via websocket
@@ -32,17 +58,26 @@ angular.module('app.services.api')
              */
             self.initSocket = function () {
 
-                if (self.connected.initSocketLock) {
+                if (self.connected.initSocketLock || configurationServiceDate.onlineStatus.connectedToAsyncServer) {
+                    if (self.connected.reconnectWindow != null) {
+                        clearInterval(self.connected.reconnectWindow);
+                    }
                     return;
                 }
+
+                if (self.baseUrl === null) {
+                    self.tryResolveBaseUrl();
+                    self.reconnectOnError();
+                    return;
+                }
+
                 self.connected.initSocketLock = true;
 
-                if (self.socket != null) {
+                if (self.socket !== null) {
                     self.socket.close();
                 }
 
-                self.socket = null;
-                self.socket = new SockJS(self.baseUrl + "/?token=" + authService.getAuthAPItokenWithoutBasic());
+                self.socket = new WebSocket(self.baseUrl + "?token=" + authService.getAuthAPItokenWithoutBasic());
 
                 self.socket.onmessage = function (e) {
                     console.log('message', e.data);
@@ -59,7 +94,9 @@ angular.module('app.services.api')
                 };
 
                 self.socket.onopen = function (e) {
-                    console.log('open');
+                    self.connected.initSocketLock = false;
+
+                    console.log('open websocket');
                     configurationServiceDate.onlineStatus.connectedToAsyncServer = true;
 
                     var testObject = {};
@@ -69,28 +106,28 @@ angular.module('app.services.api')
                 };
 
                 self.socket.onclose = function (e) {
+                    self.connected.initSocketLock = false;
                     configurationServiceDate.onlineStatus.connectedToAsyncServer = false;
                     console.log('close websocket', e);
                     self.reconnectOnError();
                 };
 
-                self.connected.initSocketLock = false;
             };
 
-            self.subscribeToAllEvents = function (recieverArray, options) {
+            self.subscribeToAllEvents = function (receiverArray, options) {
                 var _options = options || {scope: null};
 
-                var resiever = function (obj) {
-                    recieverArray.push(JSON.parse(obj.data));
+                var receiver = function (obj) {
+                    receiverArray.push(JSON.parse(obj.data));
 
-                    if (_options.scope != null) {
+                    if (_options.scope !== null) {
                         _options.scope.$applyAsync();
                     }
                 };
 
-                self.subscribers.push(resiever);
+                self.subscribers.push(receiver);
 
-                if (self.socket == null) {
+                if (self.socket === null) {
                     self.initSocket();
                 }
             };
@@ -98,24 +135,40 @@ angular.module('app.services.api')
             self.reconnectOnError = function () {
                 clearInterval(self.connected.reconnectWindow);
 
-                self.tryToRecconect = function () {
+                self.tryToReconnect = function () {
                     if (configurationServiceDate.onlineStatus.connectedToAsyncServer == true) {
                         clearInterval(self.connected.reconnectWindow);
                         return;
                     }
 
                     $timeout(function () {
-                        console.warn("Trying to reconnect to WS, URL", self.baseUrl);
+                        if (configurationServiceDate.onlineStatus.connectedToAsyncServer) {
+                            clearInterval(self.connected.reconnectWindow);
+                            return;
+                        } else {
+                            self.connected.reconnectWindow = window.setInterval(self.tryToReconnect, self.nextTryOnerrorMillias);
+                        }
+
+                        if (self.connected.connectTries === 0) {
+                            console.warn("Trying to connect to WS, URL", self.baseUrl);
+                        } else {
+                            console.warn("Trying to reconnect to WS, URL", self.baseUrl);
+                        }
+
                         self.initSocket();
-                        self.nextTryOnerrorMillias += 1000;
+                        self.nextTryOnerrorMillias += self.nextTryOnerrorMilliasProgressStep;
                         self.connected.connectTries++;
 
-                        clearInterval(self.connected.reconnectWindow);
-                        self.connected.reconnectWindow = window.setInterval(self.tryToRecconect, self.nextTryOnerrorMillias);
+                        if (configurationServiceDate.onlineStatus.connectedToAsyncServer) {
+                            clearInterval(self.connected.reconnectWindow);
+                        } else {
+                            self.connected.reconnectWindow = window.setInterval(self.tryToReconnect, self.nextTryOnerrorMillias);
+                        }
+
                     }, self.nextTryOnerrorMillias);
 
                 };
-                self.connected.reconnectWindow = window.setInterval(self.tryToRecconect, self.nextTryOnerrorMillias);
+                self.tryToReconnect();
             };
 
         }]);

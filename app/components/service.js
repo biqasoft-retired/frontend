@@ -98,6 +98,18 @@ angular.module('app.services', ['LocalStorageModule', 'ngRoute'])
                 $http.defaults.headers.common.Authorization = authService.getAuthAPItoken();
             };
 
+            this.authentificateUserWithLoginAndPasswordAndTwoStepCode = function (username, password, twoStepCode) {
+                authService.setLocalStorageUserCredentials(username, password);
+
+                var obj = {};
+                obj.username = username;
+                obj.password = password;
+                obj.twoStepCode = twoStepCode;
+
+                var basicAuth = "Biqa " + Base64.encode(JSON.stringify(obj));
+                $http.defaults.headers.common.Authorization = basicAuth;
+            };
+
             /**
              * Get REST API URL
              * @returns {string}

@@ -32,15 +32,6 @@
                                style="width: 100%">
 
                         <br>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <a href="https://support.biqasoft.com/#/view2" class="btn btn-warning"
-                                   target="_blank">
-                                    <span translate="USERACCOUNT.DETAILS.EDIT.CHANGE_PASSWORD"></span>
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </section>
             </div>
@@ -347,6 +338,8 @@
                     <div class="panel-heading">
                         <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY"></span>
                     </div>
+
+
                     <div class="panel-body">
                         <table class="{{$root.tableClasses}}">
                             <thead>
@@ -357,6 +350,40 @@
 
                             <tr>
                                 <td>
+                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.TWO_STEP_AUTH"></span>
+                                </td>
+                                <td>
+                                    <md-button ng-click="tryToAdd2StepAuthButton()" ng-show="!currentUser.twoStepEnabled">
+                                        <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.TWO_STEP_AUTH.GET_CODE"></span>
+                                    </md-button>
+
+                                    <div ng-show="try_add_2step_auth_response != ''">
+                                        <input ng-model="twoStepConfirmationCode" placeholder="enter code from Google Authenticator">
+                                        <br>
+
+                                        <md-button ng-click="enableTwoStepAuthButton()">
+                                            <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.TWO_STEP_AUTH.ENABLE"></span>
+                                        </md-button>
+                                    </div>
+
+                                    <md-button ng-click="disableTwoStepAuthAuthButton()" ng-show="currentUser.twoStepEnabled">
+                                        <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.TWO_STEP_AUTH.DISABLE"></span>
+                                    </md-button>
+                                </td>
+
+                                <td>
+                                    <img ng-src="{{try_add_2step_auth_response}}"/>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                            </tr>
+
+                            <tr>
+                                <td>
                                     <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.GENERATE_CREDENTIALS"></span>
                                 </td>
                                 <td>
@@ -364,23 +391,51 @@
                                         <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.GENERATE_CREDENTIALS.CREATE.BUTTON"></span>
                                     </md-button>
                                 </td>
+
                             </tr>
 
                             <tr>
+                                <td>
+
+                                <md-button href="/login/password_reset_request">
+                                    <span translate="USERACCOUNT.DETAILS.EDIT.CHANGE_PASSWORD"></span>
+                                </md-button>
+                                </td>
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <br><br>
+
+                    <div class="panel-body">
+                        <table class="{{$root.tableClasses}}">
+                            <thead>
+                            <tr>
                                 <th>
-                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.APP"></span>
+                                    APP ID
                                 </th>
+
                                 <th>
-                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.USERNAME"></span>
+                                    token id
                                 </th>
+
                                 <th>
-                                    <span translate="USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.OAUTH2.EXPIRE"></span>
+
                                 </th>
-                                <th></th>
+
                                 <th>
-                                    <span translate="APP.COMMON.CREATED_DATE.SECTION"></span>
+
+                                </th>
+
+                                <th>
+                                    created
                                 </th>
                             </tr>
+                            </thead>
+                            <tbody>
 
                             <tr ng-repeat="token in allOauthTokens">
                                 <td>

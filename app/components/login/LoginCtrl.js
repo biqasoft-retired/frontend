@@ -7,6 +7,7 @@ angular.module('app.login', ['ngRoute', 'LocalStorageModule'])
             $scope.EnterpriseApiURL = "http://";
             $scope.userName = "";
             $scope.useEnterprise = false;
+            $scope.require2StepAuth = false;
 
             // all users that login in browser
             $scope.allUserAccounts = localStorageService.get('allUserAccounts');
@@ -30,6 +31,10 @@ angular.module('app.login', ['ngRoute', 'LocalStorageModule'])
                 // auth with login and password in REST API
                 configurationService.authentificateUserWithLoginAndPassword($scope.userName, $scope.userPassword);
 
+                if ($scope.require2StepAuth){
+                    configurationService.authentificateUserWithLoginAndPasswordAndTwoStepCode($scope.userName, $scope.userPassword, $scope.twoStepAuthCode);
+                }
+
                 if ($scope.userName.startsWith("OAUTH2")){
                     configurationService.authentificateUserWithLoginAndPassword($scope.userName, $scope.userPassword);
                     $scope.chooseAnotherAccount();
@@ -39,6 +44,9 @@ angular.module('app.login', ['ngRoute', 'LocalStorageModule'])
                         configurationService.authentificateUserWithLoginAndPassword(data.username, data.password);
                         $scope.chooseAnotherAccount();
                     }, function (data) {
+                        if (data.data.idErrorMessage === 'auth.exception.two_step_require'){
+                            $scope.require2StepAuth = true;
+                        }
                         // error will be processed by global error interceptor factory (for 401 code)
                         // and will be shown message
                     });

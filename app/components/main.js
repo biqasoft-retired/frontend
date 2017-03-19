@@ -106,6 +106,8 @@
                     } else {
                         $rootScope.domainSettings.logoText = 'biqasoft';
                     }
+                }, function (err) {
+
                 });
 
                 /**
@@ -202,7 +204,7 @@
                         // we should manually init some params, such as language
 
                         self.setLanguage(GLOBAL_CONSTANTS.LANGUAGE);
-                        BPMNCodeExecutorService.executeFirstRunCode();
+                        // BPMNCodeExecutorService.executeFirstRunCode();
                     });
                 };
                 self.initCurrentUser();

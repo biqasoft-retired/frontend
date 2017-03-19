@@ -131,6 +131,16 @@ angular.module('app.services.api', ['LocalStorageModule', 'ngRoute', 'app.servic
 
     .service('UserService', ['serverRequestService', function (serverRequestService) {
 
+        this.requestResetPassword = function (email) {
+            var a = {};
+            a.email = email;
+            return serverRequestService.post('v1/public/reset_password_request', a);
+        };
+
+        this.requestResetPasswordWithToken = function (data) {
+            return serverRequestService.post('v1/public/reset_password', data);
+        };
+
         this.getAllUsers = function () {
             return serverRequestService.get('v1/account');
         };
@@ -155,6 +165,18 @@ angular.module('app.services.api', ['LocalStorageModule', 'ngRoute', 'app.servic
         // we have our credentials in Authorization header
         this.createNewCredentials = function () {
             return serverRequestService.post('v1/myaccount/oauth/create_new_credentials', {});
+        };
+
+        this.requestSecretCode = function () {
+            return serverRequestService.post('v1/myaccount/2step/request_secret_code', {});
+        };
+
+        this.enableTwoStepAuth = function (twoStepConfirmationCode) {
+            return serverRequestService.post('v1/myaccount/2step/enable', {code: twoStepConfirmationCode});
+        };
+
+        this.disableTwoStepAuth = function () {
+            return serverRequestService.post('v1/myaccount/2step/disable', {});
         };
 
         this.createNewCredentialsWithRoles = function (roles) {

@@ -77,6 +77,7 @@
         'app.userAccount.groups',
         'app.directivesmy',
         'app.hotkeys',
+        'app.resetPassword',
 
         'textAngular',
         'jsonFormatter',

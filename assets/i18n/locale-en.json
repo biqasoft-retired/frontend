@@ -96,6 +96,7 @@
   "APP.LOGIN.ENTER_HEADER": "Enter to ",
   "APP.LOGIN.USERNAME_PLACEHOLDER": "Email / username",
   "APP.LOGIN.PASSWORD_PLACEHOLDER": "Password",
+  "APP.LOGIN.2STEP_AUTH_PLACEHOLDER":"two step auth code",
   "APP.LOGIN.ENTER": "Enter",
   "APP.LOGIN.ENTERPRISE": "Enterprise enter",
   "APP.LOGIN.ENTERPRISE_ENTER_HEADER": "Enter to Enterprise domain",

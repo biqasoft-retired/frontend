@@ -56,7 +56,6 @@ angular.module('app.services')
 
                 } else {
                     $rootScope.serversConnectionsActive++;
-
                     // var hash = cacheService.haveCached(key) ? cacheService.getObjectWithMetaData(key).md5Hash : "";
 
                     var config = {};
@@ -75,8 +74,12 @@ angular.module('app.services')
                         //     return cacheService.getObjectWithMetaData(key).data;
                         // } else {
                         //     cacheService.setObjectByKey(key, response.data, response.headers('X-biqa-Version-Hash'));
-                        return response.data;
+                            return response.data;
+
                         // }
+                    }, function (err) {
+                        // return err;
+                        return $q.reject(err);
                     });
                     console.info("Get: " + key + " from server");
                 }
@@ -201,7 +204,7 @@ angular.module('app.services')
                                 if (self.lastShowAuthError === null || ((new Date() - self.lastShowAuthError) > 1500)) {
                                     logger.logError(rejection.data.code + "<br>" + rejection.data.message);
                                     self.lastShowAuthError = new Date();
-                                    return;
+                                    return $q.reject(rejection);
                                 }
                             }
                         }

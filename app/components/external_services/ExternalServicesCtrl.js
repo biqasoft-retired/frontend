@@ -75,6 +75,25 @@ angular.module('app.externalServices', ['ngRoute', 'LocalStorageModule'])
                     });
             };
 
+            $scope.addS3Compatible = function (ev) {
+                $mdDialog.show({
+                    scope: $scope,
+                    preserveScope: true,
+                    templateUrl: 'app/components/external_services/modal/s3_compatible_add.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                })
+                    .then(function (answer) {
+
+                    }, function () {
+                    });
+
+                $scope.newToken = {};
+                $scope.newToken.name = "Новый S3_COMPATIBLE";
+                $scope.newToken.type = "S3_COMPATIBLE";
+            };
+
             $scope.addWebdav = function (ev) {
                 $mdDialog.show({
                     scope: $scope,
@@ -114,6 +133,9 @@ angular.module('app.externalServices', ['ngRoute', 'LocalStorageModule'])
                 $scope.newToken.type = "WEBDAV";
             };
 
+            /**
+             * add any new token to server
+             */
             $scope.addWebdavToServer = function () {
                 tokenService.addToken($scope.newToken);
             };

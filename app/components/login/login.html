@@ -23,15 +23,32 @@
                                            placeholder="{{'APP.LOGIN.PASSWORD_PLACEHOLDER' | translate}}"
                                            required>
 
+                                    <input type="password" class="form-control" ng-model="twoStepAuthCode" placeholder="{{'APP.LOGIN.2STEP_AUTH_PLACEHOLDER' | translate}}"
+                                           ng-show="require2StepAuth"
+                                           required>
+
                                     <button ng-click="update()" class="btn btn-lg btn-primary btn-block" ng-disabled="!userName || !userPassword">
                                         <span translate="APP.LOGIN.ENTER"></span>
                                     </button>
 
                                     <br><br>
-                                    <md-button ng-click="EnterpriseClicked()"
-                                            class="btn btn-sm pull-right btn-warning2 btn-block2">
-                                        <span translate="APP.LOGIN.ENTERPRISE"></span>
-                                    </md-button>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <md-button ng-click="EnterpriseClicked()"  >
+                                                <span translate="APP.LOGIN.ENTERPRISE"></span>
+                                            </md-button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <md-button href="/login/password_reset_request">
+                                                <span translate="USERACCOUNT.DETAILS.EDIT.CHANGE_PASSWORD"></span>
+                                            </md-button>
+                                        </div>
+                                    </div>
+
+
+
+
                                 </form>
                             </div>
                         </div>
@@ -78,6 +95,10 @@
                             <input type="password" class="form-control" ng-model="userPassword" placeholder="{{'APP.LOGIN.PASSWORD_PLACEHOLDER' | translate}}"
                                    required>
 
+                            <input type="password" class="form-control" ng-model="twoStepAuthCode" placeholder="{{'APP.LOGIN.2STEP_AUTH_PLACEHOLDER' | translate}}"
+                                   ng-show="require2StepAuth"
+                                   required>
+
                             <button ng-click="update()" class="btn btn-lg btn-primary btn-block">
                                 <span translate="APP.LOGIN.ENTER"></span>
                             </button>
@@ -86,6 +107,11 @@
                             <button ng-click="CloudClicked()" class="btn btn-lg btn-btn-warning btn-block">
                                 <span translate="APP.LOGIN.ENTERPRISE.TO_CLOUD"></span>
                             </button>
+
+                            <md-button href="/login/password_reset_request">
+                                <span translate="USERACCOUNT.DETAILS.EDIT.CHANGE_PASSWORD"></span>
+                            </md-button>
+
                         </form>
                     </div>
                 </div>
@@ -127,7 +153,6 @@
     }
 
     .form-signin {
-        max-width: 330px;
         padding: 15px;
         margin: 0 auto;
     }

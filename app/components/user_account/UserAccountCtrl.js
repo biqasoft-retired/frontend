@@ -109,6 +109,29 @@ angular.module('app.userAccount.details', ['ngRoute', 'LocalStorageModule'])
 
             $scope.currentActiveToken = authService.getLocalStorageUserCredentials().username;
 
+            $scope.try_add_2step_auth_response = "";
+            $scope.twoStepConfirmationCode = "";
+
+            $scope.tryToAdd2StepAuthButton = function () {
+                UserService.requestSecretCode().then(function (data) {
+                    $scope.try_add_2step_auth_response = data.image;
+                });
+            };
+
+            $scope.enableTwoStepAuthButton = function () {
+                UserService.enableTwoStepAuth($scope.twoStepConfirmationCode).then(function (data) {
+                    logger.logError($translate.instant('USERACCOUNT.MYACCOUNT.PERSONAL_SETTINGS.SECURITY.TWO_STEP_AUTH.CONNECTED.SUCCESSFULLY'));
+                },function (data) {
+
+                });
+            };
+
+            $scope.disableTwoStepAuthAuthButton = function () {
+                UserService.disableTwoStepAuth().then(function (data) {
+                    $rootScope.currentUser.twoStepEnabled = false;
+                });
+            };
+
             self.getAllTokens = function () {
                 UserService.getOAuthTokens().then(function (data) {
                     $scope.allOauthTokens = data;

@@ -12,13 +12,13 @@
         <div class="row">
 
             <div ng-if="::debugMode">
-                {{domainSettings}}
+                {{domainSettingsDto}}
             </div>
             <div class="col-lg-6 col-md-12">
 
                 <section class="panel panel-primary">
                     <div class="panel-heading"><span class="fa fa-database"></span>
-                        Настройки домена <b>{{domainSettings.id}}</b>
+                        Настройки домена <b>{{domainSettingsDto.id}}</b>
                     </div>
                     <div class="panel-body text-center">
                         <div class="row">
@@ -27,7 +27,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <input type="text" class="form-control" ng-model="domainSettings.defaultEmail">
+                                <input type="text" class="form-control" ng-model="domainSettingsDto.defaultEmail">
                             </div>
 
                             <div class="col-md-6">
@@ -41,7 +41,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <input type="text" class="form-control" ng-model="domainSettings.logoText"
+                                <input type="text" class="form-control" ng-model="domainSettingsDto.logoText"
                                        data-ng-change="changeDomainTextLogo()">
                             </div>
 
@@ -52,7 +52,7 @@
                             </div>
 
                             <div class="col-md-6" ng-if="::debugMode">
-                                <select ng-model="domainSettings.timeZoneOffset" class="form-control"
+                                <select ng-model="domainSettingsDto.timeZoneOffset" class="form-control"
                                         ng-options="field.value as field.name for field in timeZoneOffset">
                                 </select>
                             </div>
@@ -69,7 +69,7 @@
 
                                 <div class="col-md-6">
                                     <input type="text" class="form-control"
-                                           ng-model="domainSettings.defaultIDSalesFunnelLG" disabled>
+                                           ng-model="domainSettingsDto.defaultIDSalesFunnelLG" disabled>
                                 </div>
 
                                 <div class="col-md-6">
@@ -78,7 +78,7 @@
 
                                 <div class="col-md-6">
                                     <input type="text" class="form-control"
-                                           ng-model="domainSettings.defaultIDSalesFunnelLC" disabled>
+                                           ng-model="domainSettingsDto.defaultIDSalesFunnelLC" disabled>
                                 </div>
 
                                 <div class="col-md-6">
@@ -87,7 +87,7 @@
 
                                 <div class="col-md-6">
                                     <input type="text" class="form-control"
-                                           ng-model="domainSettings.defaultIDSalesFunnelAM" disabled>
+                                           ng-model="domainSettingsDto.defaultIDSalesFunnelAM" disabled>
                                 </div>
 
                                 <div class="col-md-6">
@@ -96,7 +96,7 @@
 
                                 <div class="col-md-6">
                                     <input type="text" class="form-control"
-                                           ng-model="domainSettings.defaultLeadGenMethodID" disabled>
+                                           ng-model="domainSettingsDto.defaultLeadGenMethodID" disabled>
                                 </div>
 
                                 <div class="col-md-6">
@@ -105,7 +105,7 @@
 
                                 <div class="col-md-6">
                                     <input type="text" class="form-control"
-                                           ng-model="domainSettings.defaultLeadGenProjectID" disabled>
+                                           ng-model="domainSettingsDto.defaultLeadGenProjectID" disabled>
                                 </div>
 
                                 <div class="col-md-12"><br/><br/></div>
@@ -116,7 +116,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <select ng-model="domainSettings.currency" class="form-control"
+                                <select ng-model="domainSettingsDto.currency" class="form-control"
                                         ng-options="field.value as field.name for field in allCurrency">
                                 </select>
                             </div>
@@ -204,7 +204,7 @@
                         <div class="col-md-6">
                             <md-checkbox class="nopadding md-primary"
                                          type="checkbox"
-                                         ng-model="domainSettings.allowCompleteTaskWithoutCheckList">
+                                         ng-model="domainSettingsDto.allowCompleteTaskWithoutCheckList">
                             </md-checkbox>
                         </div>
                     </div>

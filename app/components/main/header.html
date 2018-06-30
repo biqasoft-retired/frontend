@@ -3,12 +3,12 @@
     <!-- Logo -->
     <div class="logo">
         <a href="/">
-            <span ng-if="!domainSettings.logoText.startsWith('http://') && !domainSettings.logoText.startsWith('https://')">
-                {{domainSettings.logoText || 'biqasoft.com'}}
+            <span ng-if="!domainSettingsDto.logoText.startsWith('http://') && !domainSettingsDto.logoText.startsWith('https://')">
+                {{domainSettingsDto.logoText || 'biqasoft.com'}}
             </span>
 
-            <img ng-if="domainSettings.logoText.startsWith('http://') || domainSettings.logoText.startsWith('https://')"
-                 ng-src="{{domainSettings.logoText}}" class="img-responsive"/>
+            <img ng-if="domainSettingsDto.logoText.startsWith('http://') || domainSettingsDto.logoText.startsWith('https://')"
+                 ng-src="{{domainSettingsDto.logoText}}" class="img-responsive"/>
         </a>
 
         <span class="hidden-lg hidden-md">
@@ -520,7 +520,7 @@
                             <i class="fa fa-database"></i>
                             <span>
                                  <span translate="APP.COMMON.DOMAIN"></span>
-                                : <b>{{domainSettings.id}}</b> </span>
+                                : <b>{{domainSettingsDto.id}}</b> </span>
                         </a>
                     </li>
 
